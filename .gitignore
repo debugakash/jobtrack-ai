@@ -1,0 +1,26 @@
+# Node
+node_modules/
+
+# Environment Variables
+.env
+.env.local
+
+# Build
+dist/
+build/
+
+# Logs
+*.log
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/settings.json
+
+# Coverage
+coverage/
+
+# Prisma
+prisma/dev.db
