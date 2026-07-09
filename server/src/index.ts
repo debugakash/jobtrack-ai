@@ -1,13 +1,6 @@
-import express from "express";
+import app from "./app.js";
+import { env } from "./config/env.js";
 
-const app = express();
-
-const PORT = 5000;
-
-app.get("/", (_req, res) => {
-  res.send("🚀 JobTrack AI API is running!");
-});
-
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(Number(env.PORT), () => {
+  console.log(`🚀 Server running on http://localhost:${env.PORT}`);
 });
