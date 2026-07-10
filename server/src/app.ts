@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import routes from "./routes/index.js";
 
 const app = express();
 
@@ -13,5 +14,7 @@ app.get("/", (_req, res) => {
     version: "1.0.0",
   });
 });
+
+app.use("/api", routes);
 
 export default app;
