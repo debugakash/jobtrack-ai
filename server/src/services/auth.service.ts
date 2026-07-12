@@ -7,12 +7,17 @@ import {
 import { hashPassword } from "../utils/hash.js";
 import { LoginInput, RegisterInput } from "../validators/auth.validator.js";
 import { generateAccessToken } from "../utils/jwt.js";
+import {
+  ConflictError,
+  NotFoundError,
+  UnauthorizedError,
+} from "../errors/index.js";
 
 export async function registerUser(data: RegisterInput) {
   const existingUser = await findUserByEmail(data.email);
 
   if (existingUser) {
-    throw new Error("User with this email already exists");
+    throw new ConflictError("User with this email already exists");
   }
 
   const passwordHash = await hashPassword(data.password);
@@ -31,7 +36,7 @@ export async function loginUser(data: LoginInput) {
   const user = await findUserByEmail(data.email);
 
   if (!user) {
-    throw new Error("Invalid email or password");
+    throw new UnauthorizedError("Invalid email or password");
   }
 
   const isPasswordValid = await bcrypt.compare(
@@ -40,7 +45,7 @@ export async function loginUser(data: LoginInput) {
   );
 
   if (!isPasswordValid) {
-    throw new Error("Invalid email or password");
+    throw new UnauthorizedError("Invalid email or password");
   }
 
   const accessToken = generateAccessToken({
@@ -54,7 +59,7 @@ export async function loginUser(data: LoginInput) {
 export async function getCurrentUser(userId: string) {
   const user = await findUserById(userId);
   if (!user) {
-    throw new Error("User not found");
+    throw new NotFoundError("User not found");
   }
   return user;
 }

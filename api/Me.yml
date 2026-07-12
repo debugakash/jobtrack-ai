@@ -8,7 +8,7 @@ http:
   url: "{{BASE_URL}}/api/auth/me"
   headers:
     - name: Authorization
-      value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbXJnNDlkaG4wMDAwdTAxenlkY3l6ZTlxIiwiZW1haWwiOiJicnVuby5tYXJzQGdtYWlsLmNvbSIsImlhdCI6MTc4Mzc1OTM3MCwiZXhwIjoxNzg0MzY0MTcwfQ.mpL6UjZVp2cLElivld6FBxT-cePsTpujixXOzsJhJUc
+      value: Bearer abc123
   auth: inherit
 
 settings:
