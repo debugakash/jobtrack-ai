@@ -1,3 +1,4 @@
+import { JobStatus, JobType, WorkMode, JobSource } from "@prisma/client";
 import z from "zod";
 
 export const createJobSchema = z.object({
@@ -6,27 +7,22 @@ export const createJobSchema = z.object({
 
   location: z.string().optional(),
 
-  jobType: z.enum(["FULL_TIME", "PART_TIME", "CONTRACT", "INTERN"]),
+  jobType: z.enum(JobType),
 
-  workMode: z.enum(["REMOTE", "HYBRID", "ONSITE"]),
+  workMode: z.enum(WorkMode),
+
+  status: z.enum(JobStatus).optional(),
 
   salaryMin: z.number().int().optional(),
   salaryMax: z.number().int().optional(),
 
-  source: z
-    .enum([
-      "LINKEDIN",
-      "NAUKRI",
-      "INDEED",
-      "REFERRAL",
-      "COMPANY_WEBSITE",
-      "OTHER",
-    ])
-    .optional(),
+  source: z.enum(JobSource).optional(),
 
   jobUrl: z.string().url().optional(),
 
   notes: z.string().optional(),
 });
+
+export const updateJobSchema = createJobSchema.partial();
 
 export type CreateJobInput = z.infer<typeof createJobSchema>;

@@ -1,4 +1,5 @@
 import prisma from "../config/prisma.js";
+import { Prisma } from "@prisma/client";
 
 export function createJob(data: {
   company: string;
@@ -45,5 +46,19 @@ export function getJobById(userId: string, jobId: string) {
       id: jobId,
       userId,
     },
+  });
+}
+
+export function updateJob(
+  userId: string,
+  jobId: string,
+  data: Prisma.JobUpdateInput,
+) {
+  return prisma.job.updateMany({
+    where: {
+      id: jobId,
+      userId,
+    },
+    data,
   });
 }

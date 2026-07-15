@@ -1,9 +1,13 @@
 import { Request, Response } from "express";
-import { createJobSchema } from "../validators/job.validator.js";
+import {
+  createJobSchema,
+  updateJobSchema,
+} from "../validators/job.validator.js";
 import {
   createJobService,
   getJobByIdService,
   getJobsService,
+  updateJobService,
 } from "../services/job.service.js";
 
 export async function createJob(req: Request, res: Response) {
@@ -30,6 +34,21 @@ export async function getJobs(req: Request, res: Response) {
 export async function getJobById(req: Request, res: Response) {
   const jobId = req.params.id as string;
   const job = await getJobByIdService(req.user!.userId, jobId);
+
+  res.status(200).json({
+    success: true,
+    data: job,
+  });
+}
+
+export async function updateJob(req: Request, res: Response) {
+  const validatedData = updateJobSchema.parse(req.body);
+
+  const job = await updateJobService(
+    req.user!.userId,
+    req.params.id as string,
+    validatedData,
+  );
 
   res.status(200).json({
     success: true,

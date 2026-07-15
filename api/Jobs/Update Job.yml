@@ -1,0 +1,27 @@
+info:
+  name: Update Job
+  type: http
+  seq: 4
+
+http:
+  method: PATCH
+  url: "{{BASE_URL}}/api/jobs/{{jobId}}"
+  headers:
+    - name: Authorization
+      value: Bearer {{accessToken}}
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "status": "APPLIED",
+        "notes": "Applied on company website."
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
