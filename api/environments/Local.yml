@@ -2,3 +2,7 @@ name: Local
 variables:
   - secret: true
     name: BASE_URL
+  - secret: true
+    name: accessToken
+  - secret: true
+    name: jobId

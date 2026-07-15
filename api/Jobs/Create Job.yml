@@ -1,0 +1,47 @@
+info:
+  name: Create Job
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/api/jobs"
+  headers:
+    - name: Authorization
+      value: Bearer {{accessToken}}
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "company": "Microsoft",
+        "jobTitle": "Frontend Developer",
+        "location": "Hyderabad",
+        "jobType": "FULL_TIME",
+        "workMode": "HYBRID",
+        "salaryMin": 1200000,
+        "salaryMax": 1800000,
+        "source": "LINKEDIN",
+        "jobUrl": "https://careers.microsoft.com",
+        "notes": "Applied through LinkedIn"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        if (res.status === 201) {
+          const body = res.getBody();
+
+          bru.setEnvVar("jobId", body.data.id);
+
+          console.log("Job ID saved.");
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

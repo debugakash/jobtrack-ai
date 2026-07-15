@@ -7,23 +7,76 @@ datasource db {
 }
 
 model User {
-  id              String    @id @default(cuid())
-
-  firstName       String
-  lastName        String
-
-  email           String    @unique
-  passwordHash    String
-
-  avatar          String?
-
-  isActive        Boolean   @default(true)
-  emailVerified   Boolean   @default(false)
-
-  lastLogin       DateTime?
-
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id            String    @id @default(cuid())
+  firstName     String
+  lastName      String
+  email         String    @unique
+  passwordHash  String
+  isActive      Boolean   @default(true)
+  emailVerified Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  avatar        String?
+  lastLogin     DateTime?
+  jobs          Job[]
 
   @@map("users")
+}
+
+model Job {
+  id        String     @id @default(cuid())
+  company   String
+  jobTitle  String
+  location  String?
+  jobType   JobType
+  workMode  WorkMode
+  salaryMin Int?
+  salaryMax Int?
+  status    JobStatus  @default(WISHLIST)
+  source    JobSource?
+  jobUrl    String?
+  notes     String?
+  appliedAt DateTime?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@index([company])
+  @@index([createdAt])
+  @@map("jobs")
+}
+
+enum JobStatus {
+  WISHLIST
+  APPLIED
+  SCREENING
+  INTERVIEW
+  OFFER
+  REJECTED
+  ACCEPTED
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERN
+}
+
+enum WorkMode {
+  REMOTE
+  HYBRID
+  ONSITE
+}
+
+enum JobSource {
+  LINKEDIN
+  NAUKRI
+  INDEED
+  REFERRAL
+  COMPANY_WEBSITE
+  OTHER
 }
