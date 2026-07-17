@@ -25,4 +25,29 @@ export const createJobSchema = z.object({
 
 export const updateJobSchema = createJobSchema.partial();
 
+export const getJobsQuerySchema = z.object({
+  search: z.string().trim().optional(),
+
+  status: z.enum(JobStatus).optional(),
+
+  jobType: z.enum(JobType).optional(),
+
+  workMode: z.enum(WorkMode).optional(),
+
+  sort: z
+    .enum([
+      "newest",
+      "oldest",
+      "company_asc",
+      "company_desc",
+      "salary_asc",
+      "salary_desc",
+    ])
+    .optional(),
+
+  page: z.coerce.number().int().positive().default(1),
+
+  limit: z.coerce.number().int().positive().max(100).default(10),
+});
+
 export type CreateJobInput = z.infer<typeof createJobSchema>;

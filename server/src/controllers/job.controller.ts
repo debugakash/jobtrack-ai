@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
 import {
   createJobSchema,
+  getJobsQuerySchema,
   updateJobSchema,
 } from "../validators/job.validator.js";
 import {
   createJobService,
+  deleteJobService,
   getJobByIdService,
   getJobsService,
   updateJobService,
@@ -23,11 +25,25 @@ export async function createJob(req: Request, res: Response) {
 }
 
 export async function getJobs(req: Request, res: Response) {
-  const jobs = await getJobsService(req.user!.userId);
+  const query = getJobsQuerySchema.parse(req.query);
+
+  const result = await getJobsService(req.user!.userId, query);
+
+  const totalPages = Math.ceil(result.total / query.limit);
 
   res.status(200).json({
     success: true,
-    data: jobs,
+
+    data: result.jobs,
+
+    pagination: {
+      page: query.page,
+      limit: query.limit,
+      total: result.total,
+      totalPages,
+      hasNextPage: query.page < totalPages,
+      hasPreviousPage: query.page > 1,
+    },
   });
 }
 
@@ -53,5 +69,14 @@ export async function updateJob(req: Request, res: Response) {
   res.status(200).json({
     success: true,
     data: job,
+  });
+}
+
+export async function deleteJob(req: Request, res: Response) {
+  await deleteJobService(req.user!.userId, req.params.id as string);
+
+  res.status(200).json({
+    success: true,
+    message: "Job deleted successfully",
   });
 }
