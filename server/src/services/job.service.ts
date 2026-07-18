@@ -80,6 +80,33 @@ export async function updateJobService(
     );
   }
 
+  if (data.status === "INTERVIEW") {
+    await addJobActivity(
+      jobId,
+      "INTERVIEW",
+      "Interview Scheduled",
+      "Interview stage reached.",
+    );
+  }
+
+  if (data.status === "OFFER") {
+    await addJobActivity(
+      jobId,
+      "OFFER",
+      "Offer Received",
+      "Congratulations! An offer has been received.",
+    );
+  }
+
+  if (data.status === "REJECTED") {
+    await addJobActivity(
+      jobId,
+      "REJECTED",
+      "Application Rejected",
+      "Application moved to the rejected stage.",
+    );
+  }
+
   return updatedJob;
 }
 
