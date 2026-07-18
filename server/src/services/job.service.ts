@@ -12,9 +12,11 @@ import {
   GetJobsQueryDto,
   UpdateJobDto,
 } from "../dtos/job.dto.js";
+import { JobActivityType } from "@prisma/client";
+import { addJobActivity } from "./job-activity.service.js";
 
 export async function createJobService(userId: string, data: CreateJobDto) {
-  return createJob({
+  const job = await createJob({
     ...data,
     user: {
       connect: {
@@ -22,6 +24,15 @@ export async function createJobService(userId: string, data: CreateJobDto) {
       },
     },
   });
+
+  await addJobActivity(
+    job.id,
+    JobActivityType.CREATED,
+    `Added ${job.company}`,
+    `Job "${job.jobTitle}" was added to the tracker.`,
+  );
+
+  return job;
 }
 
 export async function getJobsService(userId: string, query: GetJobsQueryDto) {

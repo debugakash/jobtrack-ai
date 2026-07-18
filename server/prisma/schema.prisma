@@ -41,12 +41,35 @@ model Job {
   updatedAt DateTime   @updatedAt
   userId    String
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activities JobActivity[]
 
   @@index([userId])
   @@index([status])
   @@index([company])
   @@index([createdAt])
   @@map("jobs")
+}
+
+model JobActivity {
+  id          String          @id @default(cuid())
+
+  type        JobActivityType
+
+  title       String
+
+  description String?
+
+  eventDate   DateTime
+
+  createdAt   DateTime        @default(now())
+
+  jobId        String
+  job          Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+  @@index([eventDate])
+
+  @@map("job_activities")
 }
 
 enum JobStatus {
@@ -78,5 +101,16 @@ enum JobSource {
   INDEED
   REFERRAL
   COMPANY_WEBSITE
+  OTHER
+}
+
+enum JobActivityType {
+  CREATED
+  STATUS_CHANGED
+  NOTE
+  FOLLOW_UP
+  INTERVIEW
+  OFFER
+  REJECTED
   OTHER
 }
