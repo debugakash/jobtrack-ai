@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import routes from "./routes/index.js";
 import { errorHandler } from "./middleware/error.middleware.js";
+import dashboardRoutes from "./routes/dashboard.routes.js";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/api", routes);
+app.use("/api/dashboard", dashboardRoutes);
 
 app.use(errorHandler);
 
