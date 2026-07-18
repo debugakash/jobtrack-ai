@@ -64,3 +64,35 @@ export async function getStatusDistribution(userId: string) {
     },
   });
 }
+
+export async function getMonthlyApplications(userId: string) {
+  return prisma.job.findMany({
+    where: { userId },
+    select: {
+      createdAt: true,
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+}
+
+export function getTopCompanies(userId: string) {
+  return prisma.job.groupBy({
+    by: ["company"],
+
+    where: { userId },
+
+    _count: {
+      company: true,
+    },
+
+    orderBy: {
+      _count: {
+        company: "desc",
+      },
+    },
+
+    take: 5,
+  });
+}

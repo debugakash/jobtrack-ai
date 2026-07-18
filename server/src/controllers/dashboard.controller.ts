@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import {
   getDashboardStatsService,
+  getMonthlyApplicationsService,
   getStatusDistributionService,
+  getTopCompaniesService,
 } from "../services/dashboard.service.js";
 
 export async function getDashboardStats(req: Request, res: Response) {
@@ -24,5 +26,25 @@ export async function getStatusDistribution(req: Request, res: Response) {
   res.status(200).json({
     success: true,
     data: formattedDistribution,
+  });
+}
+
+export async function getMonthlyApplications(req: Request, res: Response) {
+  const monthlyApplications = await getMonthlyApplicationsService(
+    req.user!.userId,
+  );
+
+  res.status(200).json({
+    success: true,
+    data: monthlyApplications,
+  });
+}
+
+export async function getTopCompanies(req: Request, res: Response) {
+  const companies = await getTopCompaniesService(req.user!.userId);
+
+  res.status(200).json({
+    success: true,
+    data: companies,
   });
 }
