@@ -54,6 +54,15 @@ export async function updateJobService(
   jobId: string,
   data: UpdateJobDto,
 ) {
+  const existingJob = await getJobById(userId, jobId);
+
+  if (!existingJob) {
+    throw new NotFoundError("Job not found");
+  }
+
+  const statusChanged =
+    data.status !== undefined && data.status !== existingJob.status;
+
   const result = await updateJob(userId, jobId, data);
 
   if (result.count === 0) {
@@ -61,6 +70,15 @@ export async function updateJobService(
   }
 
   const updatedJob = await getJobById(userId, jobId);
+
+  if (statusChanged) {
+    await addJobActivity(
+      jobId,
+      "STATUS_CHANGED",
+      `Status changed to ${data.status}`,
+      `Status changed from ${existingJob.status} to ${data.status}`,
+    );
+  }
 
   return updatedJob;
 }
