@@ -48,3 +48,19 @@ export async function getDashboardStats(userId: string) {
     rejected,
   };
 }
+
+export async function getStatusDistribution(userId: string) {
+  return prisma.job.groupBy({
+    by: ["status"],
+
+    where: { userId },
+
+    _count: {
+      status: true,
+    },
+
+    orderBy: {
+      status: "asc",
+    },
+  });
+}
