@@ -19,6 +19,8 @@ export function createJob(data: {
     | "OTHER";
   jobUrl?: string;
   notes?: string;
+  followUpDate?: Date;
+  followUpDone?: boolean;
   user: {
     connect: {
       id: string;

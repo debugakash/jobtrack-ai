@@ -1,6 +1,7 @@
 import {
   getDashboardStats,
   getMonthlyApplications,
+  getPendingFollowUps,
   getStatusDistribution,
   getTopCompanies,
 } from "../repositories/dashboard.repository.js";
@@ -40,4 +41,8 @@ export async function getTopCompaniesService(userId: string) {
     company: company.company,
     count: company._count.company,
   }));
+}
+
+export async function getPendingFollowUpsService(userId: string) {
+  return getPendingFollowUps(userId);
 }

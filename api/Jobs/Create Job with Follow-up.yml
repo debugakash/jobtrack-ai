@@ -1,0 +1,40 @@
+info:
+  name: Create Job with Follow-up
+  type: http
+  seq: 7
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/api/jobs"
+  headers:
+    - name: Authorization
+      value: Bearer {{accessToken}}
+    - name: Content-Type
+      value: application/json
+  params:
+    - name: ""
+      value: ""
+      type: query
+  body:
+    type: json
+    data: |-
+      {
+        "company": "Amazon",
+        "jobTitle": "Software Development Engineer",
+        "location": "Bangalore",
+        "jobType": "FULL_TIME",
+        "workMode": "HYBRID",
+        "salaryMin": 1800000,
+        "salaryMax": 2500000,
+        "source": "LINKEDIN",
+        "jobUrl": "https://amazon.jobs",
+        "notes": "Recruiter reached out on LinkedIn.",
+        "followUpDate": "2026-07-25T00:00:00.000Z"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

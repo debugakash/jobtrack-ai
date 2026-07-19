@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import {
   getDashboardStatsService,
   getMonthlyApplicationsService,
+  getPendingFollowUpsService,
   getStatusDistributionService,
   getTopCompaniesService,
 } from "../services/dashboard.service.js";
@@ -46,5 +47,17 @@ export async function getTopCompanies(req: Request, res: Response) {
   res.status(200).json({
     success: true,
     data: companies,
+  });
+}
+
+export async function getPendingFollowUpsController(
+  req: Request,
+  res: Response,
+) {
+  const data = await getPendingFollowUpsService(req.user!.userId);
+
+  return res.json({
+    success: true,
+    data,
   });
 }

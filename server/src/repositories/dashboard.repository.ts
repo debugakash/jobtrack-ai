@@ -96,3 +96,27 @@ export function getTopCompanies(userId: string) {
     take: 5,
   });
 }
+
+export function getPendingFollowUps(userId: string) {
+  return prisma.job.findMany({
+    where: {
+      userId,
+      followUpDone: false,
+      followUpDate: {
+        not: null,
+      },
+    },
+
+    orderBy: {
+      followUpDate: "asc",
+    },
+
+    select: {
+      id: true,
+      company: true,
+      jobTitle: true,
+      status: true,
+      followUpDate: true,
+    },
+  });
+}

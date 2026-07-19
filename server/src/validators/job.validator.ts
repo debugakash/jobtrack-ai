@@ -21,6 +21,10 @@ export const createJobSchema = z.object({
   jobUrl: z.string().url().optional(),
 
   notes: z.string().optional(),
+
+  followUpDate: z.coerce.date().optional(),
+
+  followUpDone: z.boolean().optional(),
 });
 
 export const updateJobSchema = createJobSchema.partial();

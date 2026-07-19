@@ -13,7 +13,10 @@ import {
   UpdateJobDto,
 } from "../dtos/job.dto.js";
 import { JobActivityType } from "@prisma/client";
-import { addJobActivity } from "./job-activity.service.js";
+import {
+  addJobActivity,
+  handleStatusChangeActivity,
+} from "./job-activity.service.js";
 
 export async function createJobService(userId: string, data: CreateJobDto) {
   const job = await createJob({
@@ -72,39 +75,7 @@ export async function updateJobService(
   const updatedJob = await getJobById(userId, jobId);
 
   if (statusChanged) {
-    await addJobActivity(
-      jobId,
-      "STATUS_CHANGED",
-      `Status changed to ${data.status}`,
-      `Status changed from ${existingJob.status} to ${data.status}`,
-    );
-  }
-
-  if (data.status === "INTERVIEW") {
-    await addJobActivity(
-      jobId,
-      "INTERVIEW",
-      "Interview Scheduled",
-      "Interview stage reached.",
-    );
-  }
-
-  if (data.status === "OFFER") {
-    await addJobActivity(
-      jobId,
-      "OFFER",
-      "Offer Received",
-      "Congratulations! An offer has been received.",
-    );
-  }
-
-  if (data.status === "REJECTED") {
-    await addJobActivity(
-      jobId,
-      "REJECTED",
-      "Application Rejected",
-      "Application moved to the rejected stage.",
-    );
+    await handleStatusChangeActivity(jobId, existingJob.status, data.status!);
   }
 
   return updatedJob;
