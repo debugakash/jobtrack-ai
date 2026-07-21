@@ -100,3 +100,13 @@ export async function deleteResumeService(userId: string, resumeId: string) {
 
   await deleteResume(userId, resumeId);
 }
+
+export async function downloadResumeService(userId: string, resumeId: string) {
+  const resume = await getResumeById(userId, resumeId);
+
+  if (!resume) {
+    throw new NotFoundError("Resume not found.");
+  }
+
+  return resume;
+}

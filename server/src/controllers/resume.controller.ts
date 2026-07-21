@@ -8,6 +8,7 @@ import {
 import {
   createResumeService,
   deleteResumeService,
+  downloadResumeService,
   getResumeByIdService,
   getResumesService,
   updateResumeService,
@@ -69,4 +70,12 @@ export async function deleteResumeController(req: Request, res: Response) {
   await deleteResumeService(req.user!.userId, resumeId);
 
   return res.status(204).send();
+}
+
+export async function downloadResumeController(req: Request, res: Response) {
+  const resumeId = req.params.id as string;
+
+  const resume = await downloadResumeService(req.user!.userId, resumeId);
+
+  return res.download(resume.filePath, resume.originalName);
 }

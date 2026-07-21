@@ -7,6 +7,7 @@ import { asyncHandler } from "../utils/async-handler.js";
 import {
   createResumeController,
   deleteResumeController,
+  downloadResumeController,
   getResumeByIdController,
   getResumesController,
   updateResumeController,
@@ -15,6 +16,12 @@ import {
 const router = Router();
 
 router.get("/", authenticate, asyncHandler(getResumesController));
+
+router.get(
+  "/:id/download",
+  authenticate,
+  asyncHandler(downloadResumeController),
+);
 
 router.get("/:id", authenticate, asyncHandler(getResumeByIdController));
 
