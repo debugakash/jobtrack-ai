@@ -6,3 +6,5 @@ variables:
     name: accessToken
   - secret: true
     name: jobId
+  - name: interviewId
+    value: ""

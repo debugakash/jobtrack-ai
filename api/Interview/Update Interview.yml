@@ -1,0 +1,25 @@
+info:
+  name: Update Interview
+  type: http
+  seq: 4
+
+http:
+  method: PATCH
+  url: "{{BASE_URL}}/api/interviews/{{interviewId}}"
+  headers:
+    - name: Authorization
+      value: Bearer {{accessToken}}
+  body:
+    type: json
+    data: |-
+      {
+        "completed": true,
+        "notes": "Interview completed successfully."
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

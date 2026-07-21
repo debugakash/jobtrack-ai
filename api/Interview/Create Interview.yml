@@ -1,0 +1,36 @@
+info:
+  name: Create Interview
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/api/jobs/{{jobId}}/interviews"
+  headers:
+    - name: Authorization
+      value: Bearer {{accessToken}}
+  body:
+    type: json
+    data: |-
+      {
+        "round": "Technical Round 1",
+        "scheduledAt": "2026-08-05T10:30:00.000Z",
+        "interviewerName": "John Smith",
+        "meetingLink": "https://meet.google.com/abc-defg-hij",
+        "notes": "Focus on React and TypeScript"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        const body = res.getBody();
+
+        bru.setEnvVar("interviewId", body.data.id);
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
