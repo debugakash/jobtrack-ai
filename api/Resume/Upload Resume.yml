@@ -1,0 +1,42 @@
+info:
+  name: Upload Resume
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/api/resumes"
+  headers:
+    - name: Authorization
+      value: Bearer {{accessToken}}
+  body:
+    type: multipart-form
+    data:
+      - name: resume
+        type: file
+        value:
+          - C:\Users\akash\Downloads\resume.pdf
+        contentType: application/pdf
+      - name: label
+        type: text
+        value: Frontend Resume
+        contentType: Text
+      - name: isDefault
+        type: text
+        value: "true"
+        contentType: Text
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        const body = res.getBody();
+
+        bru.setEnvVar("resumeId", body.data.id);
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

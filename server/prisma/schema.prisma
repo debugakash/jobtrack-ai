@@ -19,6 +19,7 @@ model User {
   avatar        String?
   lastLogin     DateTime?
   jobs          Job[]
+  resumes       Resume[]
 
   @@map("users")
 }
@@ -36,6 +37,8 @@ model Job {
   source    JobSource?
   jobUrl    String?
   notes     String?
+  resumeId  String?
+  resume    Resume?    @relation(fields: [resumeId], references: [id], onDelete: SetNull)
   followUpDate DateTime?
   followUpDone Boolean @default(false)
   appliedAt DateTime?
@@ -50,6 +53,8 @@ model Job {
   @@index([status])
   @@index([company])
   @@index([createdAt])
+  @@index([resumeId])
+  
   @@map("jobs")
 }
 
@@ -103,6 +108,28 @@ model Interview {
   @@index([scheduledAt])
 
   @@map("interviews")
+}
+
+model Resume {
+  id           String   @id @default(cuid())
+  originalName String
+  storedName   String
+  filePath     String
+  mimeType     String
+  fileSize     Int
+  label        String?
+  isDefault    Boolean  @default(false)
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  jobs         Job[]
+
+  @@index([userId])
+  @@map("resumes")
 }
 
 enum JobStatus {

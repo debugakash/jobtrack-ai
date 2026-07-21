@@ -8,3 +8,5 @@ variables:
     name: jobId
   - name: interviewId
     value: ""
+  - name: resumeId
+    value: ""
