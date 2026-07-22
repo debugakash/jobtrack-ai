@@ -8,6 +8,11 @@ import DashboardPage from "@/features/dashboard/pages/dashboard-page";
 
 import ProtectedRoute from "./protected-route";
 import PublicRoute from "./public-route";
+import JobsPage from "@/features/jobs/pages/jobs-page";
+import InterviewsPage from "@/features/interviews/pages/interviews-page";
+import ResumesPage from "@/features/resumes/pages/resumes-page";
+import SettingsPage from "@/features/settings/pages/settings-page";
+import ProfilePage from "@/features/profile/pages/profile-page";
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +25,26 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <DashboardPage />,
+      },
+      {
+        path: "/jobs",
+        element: <JobsPage />,
+      },
+      {
+        path: "/interviews",
+        element: <InterviewsPage />,
+      },
+      {
+        path: "/resumes",
+        element: <ResumesPage />,
+      },
+      {
+        path: "/settings",
+        element: <SettingsPage />,
+      },
+      {
+        path: "/profile",
+        element: <ProfilePage />,
       },
     ],
   },

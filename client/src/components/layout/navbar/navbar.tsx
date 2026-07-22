@@ -1,19 +1,20 @@
-import { LogOut } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
-import { Button } from "@/components/ui/button";
-import { useLogout } from "@/features/auth/hooks/use-logout";
+import { navigation, secondaryNavigation } from "@/config/navigation";
+import UserMenu from "./user-menu";
 
 export default function Navbar() {
-  const logout = useLogout();
+  const location = useLocation();
+
+  const page = [...navigation, ...secondaryNavigation].find(
+    (item) => item.href === location.pathname,
+  );
 
   return (
     <header className="flex h-16 items-center justify-between border-b bg-white px-6">
-      <h2 className="text-xl font-semibold">Dashboard</h2>
+      <h2 className="text-xl font-semibold">{page?.title ?? "JobTrack AI"}</h2>
 
-      <Button variant="outline" onClick={logout}>
-        <LogOut className="mr-2 h-4 w-4" />
-        Logout
-      </Button>
+      <UserMenu />
     </header>
   );
 }
