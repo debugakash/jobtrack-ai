@@ -1,15 +1,15 @@
 import JobsTable from "../components/jobs-table";
+import { PageHeader } from "@/components/common/page-header";
+import AddJobDialog from "../components/add-job-dialog";
 
 export default function JobsPage() {
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Jobs</h1>
-
-        <p className="text-muted-foreground">
-          Track and manage your job applications.
-        </p>
-      </div>
+      <PageHeader
+        title="Jobs"
+        description="Track and manage your job applications."
+        action={<AddJobDialog />}
+      />
 
       <JobsTable />
     </div>

@@ -1,4 +1,8 @@
+import { DataTable } from "@/components/common/data-table";
+
 import { useJobs } from "../hooks/use-jobs";
+
+import { columns } from "./columns";
 
 export default function JobsTable() {
   const { data, isLoading } = useJobs();
@@ -7,9 +11,5 @@ export default function JobsTable() {
     return <p>Loading jobs...</p>;
   }
 
-  return (
-    <pre className="rounded-lg bg-slate-100 p-4 overflow-auto">
-      {JSON.stringify(data, null, 2)}
-    </pre>
-  );
+  return <DataTable columns={columns} data={data ?? []} />;
 }

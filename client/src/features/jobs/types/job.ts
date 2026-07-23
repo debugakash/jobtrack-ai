@@ -1,19 +1,53 @@
+export interface CreateJobRequest {
+  company: string;
+  jobTitle: string;
+  location?: string;
+  jobType: "FULL_TIME" | "PART_TIME" | "CONTRACT" | "INTERN";
+  workMode: "REMOTE" | "HYBRID" | "ONSITE";
+  status:
+    | "WISHLIST"
+    | "APPLIED"
+    | "SCREENING"
+    | "INTERVIEW"
+    | "OFFER"
+    | "REJECTED"
+    | "ACCEPTED";
+  jobUrl?: string;
+  notes?: string;
+}
+
 export interface Job {
   id: string;
   company: string;
   jobTitle: string;
-  location: string;
-  status: "Wishlist" | "Applied" | "Interview" | "Offer" | "Rejected";
+  location?: string;
 
-  salary?: string | null;
+  jobType: "FULL_TIME" | "PART_TIME" | "CONTRACT" | "INTERN";
+
+  workMode: "REMOTE" | "HYBRID" | "ONSITE";
+
+  status:
+    | "WISHLIST"
+    | "APPLIED"
+    | "SCREENING"
+    | "INTERVIEW"
+    | "OFFER"
+    | "REJECTED"
+    | "ACCEPTED";
+
+  salaryMin?: number | null;
+  salaryMax?: number | null;
 
   jobUrl?: string | null;
-
   notes?: string | null;
 
-  applicationDate: string;
+  appliedAt?: string | null;
 
   createdAt: string;
-
   updatedAt: string;
+}
+
+export interface CreateJobResponse {
+  success: boolean;
+  data: Job;
 }

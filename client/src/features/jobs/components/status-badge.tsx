@@ -1,24 +1,34 @@
 import { Badge } from "@/components/ui/badge";
+import { formatEnum } from "@/lib/format";
 
 interface Props {
   status: string;
 }
 
 export default function StatusBadge({ status }: Props) {
+  const label = formatEnum(status);
+
   switch (status) {
-    case "Applied":
-      return <Badge>{status}</Badge>;
+    case "APPLIED":
+      return <Badge>{label}</Badge>;
 
-    case "Interview":
-      return <Badge variant="secondary">{status}</Badge>;
+    case "SCREENING":
+      return <Badge variant="secondary">{label}</Badge>;
 
-    case "Offer":
-      return <Badge>{status}</Badge>;
+    case "INTERVIEW":
+      return <Badge variant="secondary">{label}</Badge>;
 
-    case "Rejected":
-      return <Badge variant="destructive">{status}</Badge>;
+    case "OFFER":
+      return <Badge>{label}</Badge>;
 
+    case "ACCEPTED":
+      return <Badge>{label}</Badge>;
+
+    case "REJECTED":
+      return <Badge variant="destructive">{label}</Badge>;
+
+    case "WISHLIST":
     default:
-      return <Badge variant="outline">{status}</Badge>;
+      return <Badge variant="outline">{label}</Badge>;
   }
 }
