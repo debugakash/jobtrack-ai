@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -24,37 +25,86 @@ import {
 } from "@/components/ui/select";
 
 import { jobSchema, type JobFormValues } from "../validators/job-schema";
-import { useCreateJob } from "../hooks/use-create-job";
 
-interface Props {
-  onSuccess: () => void;
+import { JOB_STATUSES, JOB_TYPES, WORK_MODES } from "@/constants/job";
+
+import { formatEnum } from "@/lib/format";
+
+import { useCreateJob } from "../hooks/use-create-job";
+import { useUpdateJob } from "../hooks/use-update-job";
+
+import type { Job } from "../types/job";
+
+interface JobFormProps {
+  mode: "create" | "edit";
+
+  initialData?: Job;
+
+  onSuccess?: () => void;
 }
 
-export default function JobForm({ onSuccess }: Props) {
+export default function JobForm({
+  mode,
+  initialData,
+  onSuccess,
+}: JobFormProps) {
   const form = useForm<JobFormValues>({
     resolver: zodResolver(jobSchema),
 
     defaultValues: {
-      company: "",
-      jobTitle: "",
-      location: "",
-      jobType: "FULL_TIME",
-      workMode: "REMOTE",
-      status: "WISHLIST",
-      jobUrl: "",
-      notes: "",
+      company: initialData?.company ?? "",
+      jobTitle: initialData?.jobTitle ?? "",
+      location: initialData?.location ?? "",
+
+      jobType: initialData?.jobType ?? "FULL_TIME",
+
+      workMode: initialData?.workMode ?? "REMOTE",
+
+      status: initialData?.status ?? "APPLIED",
+
+      jobUrl: initialData?.jobUrl ?? "",
+
+      notes: initialData?.notes ?? "",
     },
   });
 
-  const createJobMutation = useCreateJob();
+  useEffect(() => {
+    if (mode === "edit" && initialData) {
+      form.reset({
+        company: initialData.company,
+        jobTitle: initialData.jobTitle,
+        location: initialData.location ?? "",
 
-  function onSubmit(values: JobFormValues) {
-    createJobMutation.mutate(values, {
-      onSuccess: () => {
-        form.reset();
-        onSuccess();
-      },
-    });
+        jobType: initialData.jobType,
+
+        workMode: initialData.workMode,
+
+        status: initialData.status,
+
+        jobUrl: initialData.jobUrl ?? "",
+
+        notes: initialData.notes ?? "",
+      });
+    }
+  }, [mode, initialData, form]);
+
+  const createJob = useCreateJob();
+
+  const updateJob = useUpdateJob();
+
+  async function onSubmit(values: JobFormValues) {
+    if (mode === "create") {
+      await createJob.mutateAsync(values);
+    } else {
+      await updateJob.mutateAsync({
+        id: initialData!.id,
+        data: values,
+      });
+    }
+
+    form.reset();
+
+    onSuccess?.();
   }
 
   return (
@@ -123,13 +173,11 @@ export default function JobForm({ onSuccess }: Props) {
                 </FormControl>
 
                 <SelectContent>
-                  <SelectItem value="FULL_TIME">Full Time</SelectItem>
-
-                  <SelectItem value="PART_TIME">Part Time</SelectItem>
-
-                  <SelectItem value="CONTRACT">Contract</SelectItem>
-
-                  <SelectItem value="INTERN">Internship</SelectItem>
+                  {JOB_TYPES.map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {formatEnum(type)}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
 
@@ -153,11 +201,11 @@ export default function JobForm({ onSuccess }: Props) {
                 </FormControl>
 
                 <SelectContent>
-                  <SelectItem value="REMOTE">Remote</SelectItem>
-
-                  <SelectItem value="HYBRID">Hybrid</SelectItem>
-
-                  <SelectItem value="ONSITE">Onsite</SelectItem>
+                  {WORK_MODES.map((mode) => (
+                    <SelectItem key={mode} value={mode}>
+                      {formatEnum(mode)}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
 
@@ -181,19 +229,11 @@ export default function JobForm({ onSuccess }: Props) {
                 </FormControl>
 
                 <SelectContent>
-                  <SelectItem value="WISHLIST">Wishlist</SelectItem>
-
-                  <SelectItem value="APPLIED">Applied</SelectItem>
-
-                  <SelectItem value="SCREENING">Screening</SelectItem>
-
-                  <SelectItem value="INTERVIEW">Interview</SelectItem>
-
-                  <SelectItem value="OFFER">Offer</SelectItem>
-
-                  <SelectItem value="REJECTED">Rejected</SelectItem>
-
-                  <SelectItem value="ACCEPTED">Accepted</SelectItem>
+                  {JOB_STATUSES.map((status) => (
+                    <SelectItem key={status} value={status}>
+                      {formatEnum(status)}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
 
@@ -241,9 +281,15 @@ export default function JobForm({ onSuccess }: Props) {
         <Button
           type="submit"
           className="w-full"
-          disabled={createJobMutation.isPending}
+          disabled={createJob.isPending || updateJob.isPending}
         >
-          {createJobMutation.isPending ? "Creating..." : "Create Job"}
+          {mode === "create"
+            ? createJob.isPending
+              ? "Creating..."
+              : "Create Job"
+            : updateJob.isPending
+              ? "Saving..."
+              : "Save Changes"}
         </Button>
       </form>
     </Form>

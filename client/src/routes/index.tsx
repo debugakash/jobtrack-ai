@@ -13,6 +13,7 @@ import InterviewsPage from "@/features/interviews/pages/interviews-page";
 import ResumesPage from "@/features/resumes/pages/resumes-page";
 import SettingsPage from "@/features/settings/pages/settings-page";
 import ProfilePage from "@/features/profile/pages/profile-page";
+import JobDetailsPage from "@/features/jobs/pages/job-details-page";
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
       {
         path: "/jobs",
         element: <JobsPage />,
+      },
+      {
+        path: "/jobs/:id",
+        element: <JobDetailsPage />,
       },
       {
         path: "/interviews",

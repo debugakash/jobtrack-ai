@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-import { Plus } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 
 import {
@@ -12,28 +10,31 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import JobForm from "./job-form";
+import InterviewForm from "./interview-form";
 
-export default function AddJobDialog() {
+interface Props {
+  jobId: string;
+}
+
+export default function ScheduleInterviewDialog({ jobId }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          Add Job
-        </Button>
+        <Button size="sm">Schedule</Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle>Add Job</DialogTitle>
+          <DialogTitle>Schedule Interview</DialogTitle>
         </DialogHeader>
 
-        <div className="py-8 text-center text-muted-foreground">
-          <JobForm mode="create" onSuccess={() => setOpen(false)} />
-        </div>
+        <InterviewForm
+          jobId={jobId}
+          mode="create"
+          onSuccess={() => setOpen(false)}
+        />
       </DialogContent>
     </Dialog>
   );

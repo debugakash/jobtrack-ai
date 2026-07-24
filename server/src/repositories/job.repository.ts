@@ -103,6 +103,22 @@ export function getJobById(userId: string, jobId: string) {
       id: jobId,
       userId,
     },
+
+    include: {
+      activities: {
+        orderBy: {
+          eventDate: "desc",
+        },
+      },
+
+      interviews: {
+        orderBy: {
+          scheduledAt: "asc",
+        },
+      },
+
+      resume: true,
+    },
   });
 }
 

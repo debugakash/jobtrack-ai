@@ -5,30 +5,21 @@ interface Props {
   status: string;
 }
 
+const variants: Record<
+  string,
+  "default" | "secondary" | "destructive" | "outline"
+> = {
+  WISHLIST: "outline",
+  APPLIED: "default",
+  SCREENING: "secondary",
+  INTERVIEW: "secondary",
+  OFFER: "default",
+  ACCEPTED: "default",
+  REJECTED: "destructive",
+};
+
 export default function StatusBadge({ status }: Props) {
-  const label = formatEnum(status);
-
-  switch (status) {
-    case "APPLIED":
-      return <Badge>{label}</Badge>;
-
-    case "SCREENING":
-      return <Badge variant="secondary">{label}</Badge>;
-
-    case "INTERVIEW":
-      return <Badge variant="secondary">{label}</Badge>;
-
-    case "OFFER":
-      return <Badge>{label}</Badge>;
-
-    case "ACCEPTED":
-      return <Badge>{label}</Badge>;
-
-    case "REJECTED":
-      return <Badge variant="destructive">{label}</Badge>;
-
-    case "WISHLIST":
-    default:
-      return <Badge variant="outline">{label}</Badge>;
-  }
+  return (
+    <Badge variant={variants[status] ?? "outline"}>{formatEnum(status)}</Badge>
+  );
 }
