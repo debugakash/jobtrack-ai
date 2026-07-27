@@ -22,6 +22,8 @@ export const createJobSchema = z.object({
 
   notes: z.string().optional(),
 
+  resumeId: z.string().cuid().optional(),
+
   followUpDate: z.coerce.date().optional(),
 
   followUpDone: z.boolean().optional(),

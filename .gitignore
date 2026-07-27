@@ -24,3 +24,16 @@ coverage/
 
 # Prisma
 prisma/dev.db
+
+# Uploaded files
+server/uploads/**
+!server/uploads/.gitkeep
+
+# Vite cache
+.vite/
+
+# Turborepo (future-proof)
+.turbo/
+
+# TypeScript
+*.tsbuildinfo

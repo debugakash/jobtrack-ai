@@ -34,7 +34,7 @@ export default function JobDetailsPage() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <InterviewCard jobId={job.id} />
-        <ResumeCard />
+        <ResumeCard job={job} />
       </div>
 
       <JobActivityTimeline activities={job.activities} />

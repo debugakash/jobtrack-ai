@@ -24,6 +24,16 @@ export interface JobActivity {
   eventDate: string;
 }
 
+export interface Resume {
+  id: string;
+
+  originalName: string;
+
+  label?: string | null;
+
+  isDefault: boolean;
+}
+
 export interface Job {
   id: string;
 
@@ -78,7 +88,7 @@ export interface Job {
 
   interviews: unknown[];
 
-  resume: unknown | null;
+  resume: Resume | null;
 }
 
 export interface CreateJobResponse {
