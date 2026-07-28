@@ -17,7 +17,21 @@ export function getStatusDistributionService(userId: string) {
 export async function getMonthlyApplicationsService(userId: string) {
   const jobs = await getMonthlyApplications(userId);
 
-  const monthlyCounts = new Map<string, number>();
+  const now = new Date();
+
+  const months: { month: string; count: number }[] = [];
+
+  for (let i = 5; i >= 0; i--) {
+    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+
+    months.push({
+      month: date.toLocaleString("en-US", {
+        month: "short",
+        year: "numeric",
+      }),
+      count: 0,
+    });
+  }
 
   for (const job of jobs) {
     const month = job.createdAt.toLocaleString("en-US", {
@@ -25,13 +39,14 @@ export async function getMonthlyApplicationsService(userId: string) {
       year: "numeric",
     });
 
-    monthlyCounts.set(month, (monthlyCounts.get(month) ?? 0) + 1);
+    const existing = months.find((m) => m.month === month);
+
+    if (existing) {
+      existing.count++;
+    }
   }
 
-  return Array.from(monthlyCounts.entries()).map(([month, count]) => ({
-    month,
-    count,
-  }));
+  return months;
 }
 
 export async function getTopCompaniesService(userId: string) {
