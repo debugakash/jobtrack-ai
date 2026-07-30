@@ -14,6 +14,7 @@ import ResumesPage from "@/features/resumes/pages/resumes-page";
 import SettingsPage from "@/features/settings/pages/settings-page";
 import ProfilePage from "@/features/profile/pages/profile-page";
 import JobDetailsPage from "@/features/jobs/pages/job-details-page";
+import NotFoundPage from "@/pages/not-found-page";
 
 export const router = createBrowserRouter([
   {
@@ -68,5 +69,9 @@ export const router = createBrowserRouter([
         <RegisterPage />
       </PublicRoute>
     ),
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
 ]);

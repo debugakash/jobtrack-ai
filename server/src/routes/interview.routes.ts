@@ -6,6 +6,7 @@ import { authenticate } from "../middleware/auth.middleware.js";
 import {
   createInterviewController,
   deleteInterviewController,
+  getAllUserInterviewsController,
   getInterviewByIdController,
   getInterviewsController,
   updateInterviewController,
@@ -16,6 +17,12 @@ const router = Router();
 router.use(authenticate);
 
 router.post("/jobs/:jobId/interviews", asyncHandler(createInterviewController));
+
+router.get(
+  "/interviews",
+  authenticate,
+  asyncHandler(getAllUserInterviewsController),
+);
 
 router.get("/jobs/:jobId/interviews", asyncHandler(getInterviewsController));
 

@@ -1,26 +1,44 @@
+export type JobStatus =
+  | "WISHLIST"
+  | "APPLIED"
+  | "SCREENING"
+  | "INTERVIEW"
+  | "OFFER"
+  | "REJECTED"
+  | "ACCEPTED";
+
+export type JobType = "FULL_TIME" | "PART_TIME" | "CONTRACT" | "INTERN";
+
+export type WorkMode = "REMOTE" | "HYBRID" | "ONSITE";
+
 export interface CreateJobRequest {
   company: string;
   jobTitle: string;
   location?: string;
-  jobType: "FULL_TIME" | "PART_TIME" | "CONTRACT" | "INTERN";
-  workMode: "REMOTE" | "HYBRID" | "ONSITE";
-  status:
-    | "WISHLIST"
-    | "APPLIED"
-    | "SCREENING"
-    | "INTERVIEW"
-    | "OFFER"
-    | "REJECTED"
-    | "ACCEPTED";
+  jobType: JobType;
+  workMode: WorkMode;
+  status: JobStatus;
   jobUrl?: string;
   notes?: string;
 }
 
 export interface JobActivity {
   id: string;
-  type: string;
+
+  type:
+    | "CREATED"
+    | "STATUS_CHANGED"
+    | "NOTE"
+    | "FOLLOW_UP"
+    | "INTERVIEW"
+    | "OFFER"
+    | "REJECTED"
+    | "OTHER";
+
   title: string;
-  description: string;
+
+  description?: string | null;
+
   eventDate: string;
 }
 
@@ -43,18 +61,11 @@ export interface Job {
 
   location?: string;
 
-  jobType: "FULL_TIME" | "PART_TIME" | "CONTRACT" | "INTERN";
+  jobType: JobType;
 
-  workMode: "REMOTE" | "HYBRID" | "ONSITE";
+  workMode: WorkMode;
 
-  status:
-    | "WISHLIST"
-    | "APPLIED"
-    | "SCREENING"
-    | "INTERVIEW"
-    | "OFFER"
-    | "REJECTED"
-    | "ACCEPTED";
+  status: JobStatus;
 
   salaryMin?: number | null;
   salaryMax?: number | null;

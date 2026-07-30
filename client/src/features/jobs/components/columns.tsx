@@ -2,8 +2,6 @@ import type { ColumnDef } from "@tanstack/react-table";
 
 import type { Job } from "../types/job";
 
-import StatusBadge from "./status-badge";
-
 import { Pencil, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -11,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import EditJobDialog from "./edit-job-dialog";
 
 import DeleteJobDialog from "./delete-job-dialog";
+
+import JobStatusBadge from "./job-status-badge";
 
 export const columns: ColumnDef<Job>[] = [
   {
@@ -28,7 +28,7 @@ export const columns: ColumnDef<Job>[] = [
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => <StatusBadge status={row.original.status} />,
+    cell: ({ row }) => <JobStatusBadge status={row.original.status} />,
   },
   {
     accessorKey: "applicationDate",

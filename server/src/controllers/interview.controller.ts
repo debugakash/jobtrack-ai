@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import {
   createInterviewService,
   deleteInterviewService,
+  getAllUserInterviewsService,
   getInterviewByIdService,
   getInterviewsService,
   updateInterviewService,
@@ -30,6 +31,18 @@ export async function getInterviewsController(req: Request, res: Response) {
   const jobId = req.params.jobId as string;
 
   const interviews = await getInterviewsService(req.user!.userId, jobId);
+
+  return res.json({
+    success: true,
+    data: interviews,
+  });
+}
+
+export async function getAllUserInterviewsController(
+  req: Request,
+  res: Response,
+) {
+  const interviews = await getAllUserInterviewsService(req.user!.userId);
 
   return res.json({
     success: true,

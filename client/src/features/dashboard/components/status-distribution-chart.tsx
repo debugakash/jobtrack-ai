@@ -11,6 +11,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { useStatusDistribution } from "../hooks/use-status-distribution";
 
+import { formatEnum } from "@/lib/format";
+
 const COLORS = [
   "#3B82F6",
   "#22C55E",
@@ -26,7 +28,7 @@ export default function StatusDistributionChart() {
 
   if (isLoading || !data) {
     return (
-      <Card>
+      <Card className="h-full">
         <CardContent className="py-16 text-center">
           Loading chart...
         </CardContent>
@@ -35,12 +37,12 @@ export default function StatusDistributionChart() {
   }
 
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader>
         <CardTitle>Status Distribution</CardTitle>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="flex-1">
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -49,16 +51,25 @@ export default function StatusDistributionChart() {
                 dataKey="count"
                 nameKey="status"
                 outerRadius={110}
-                label
+                isAnimationActive
+                animationDuration={800}
+                label={({ name, percent }) =>
+                  `${formatEnum(name as string)} (${((percent ?? 0) * 100).toFixed(0)}%)`
+                }
               >
                 {data.map((_, index) => (
                   <Cell key={index} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
 
-              <Tooltip />
+              <Tooltip
+                contentStyle={{
+                  borderRadius: 10,
+                  border: "1px solid var(--border)",
+                }}
+              />
 
-              <Legend />
+              <Legend formatter={(value) => formatEnum(value as string)} />
             </PieChart>
           </ResponsiveContainer>
         </div>

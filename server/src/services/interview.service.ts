@@ -7,6 +7,7 @@ import { NotFoundError } from "../errors/NotFoundError.js";
 import {
   createInterview,
   deleteInterview,
+  getAllUserInterviews,
   getInterviewById,
   getInterviewsByJobId,
   updateInterview,
@@ -30,6 +31,10 @@ export async function createInterviewService(
 
 export async function getInterviewsService(userId: string, jobId: string) {
   return getInterviewsByJobId(userId, jobId);
+}
+
+export async function getAllUserInterviewsService(userId: string) {
+  return getAllUserInterviews(userId);
 }
 
 export async function getInterviewByIdService(

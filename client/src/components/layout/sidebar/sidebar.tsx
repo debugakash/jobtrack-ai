@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
   return (
-    <aside className="flex h-screen w-64 flex-col border-r bg-white">
+    <aside className="flex h-screen w-64 flex-col border-r bg-sidebar text-sidebar-foreground">
       <div className="border-b p-6">
         <h1 className="text-2xl font-bold">JobTrack AI</h1>
       </div>
@@ -21,8 +21,8 @@ export default function Sidebar() {
                 className={({ isActive }) =>
                   `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                     isActive
-                      ? "bg-slate-900 text-white"
-                      : "text-slate-700 hover:bg-slate-100"
+                      ? "bg-sidebar-primary text-sidebar-primary-foreground"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                   }`
                 }
               >
@@ -47,8 +47,8 @@ export default function Sidebar() {
                 className={({ isActive }) =>
                   `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                     isActive
-                      ? "bg-slate-900 text-white"
-                      : "text-slate-700 hover:bg-slate-100"
+                      ? "bg-sidebar-primary text-sidebar-primary-foreground"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                   }`
                 }
               >

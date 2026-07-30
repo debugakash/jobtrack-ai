@@ -1,4 +1,4 @@
-import { Download } from "lucide-react";
+import { Download, FileText } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { useResumes } from "../hooks/use-resumes";
 import { useDownloadResume } from "../hooks/use-download-resume";
 import { useUpdateResume } from "../hooks/use-update-resume";
 import DeleteResumeDialog from "./delete-resume-dialog";
+import { EmptyState } from "@/components/common/empty-state";
 
 export default function ResumeList() {
   const { data, isLoading } = useResumes();
@@ -20,11 +21,11 @@ export default function ResumeList() {
 
   if (!data?.length) {
     return (
-      <Card>
-        <CardContent className="py-12 text-center text-muted-foreground">
-          No resumes uploaded yet.
-        </CardContent>
-      </Card>
+      <EmptyState
+        icon={<FileText className="h-12 w-12" />}
+        title="No resumes uploaded"
+        description="Upload your first resume to attach it to job applications."
+      />
     );
   }
 

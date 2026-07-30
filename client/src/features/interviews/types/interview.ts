@@ -1,3 +1,5 @@
+import type { JobStatus } from "@/features/jobs/types/job";
+
 export interface Interview {
   id: string;
 
@@ -18,4 +20,11 @@ export interface Interview {
   updatedAt: string;
 
   jobId: string;
+
+  job: {
+    id: string;
+    company: string;
+    jobTitle: string;
+    status: JobStatus;
+  };
 }

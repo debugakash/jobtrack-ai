@@ -22,6 +22,31 @@ export function getInterviewsByJobId(userId: string, jobId: string) {
   });
 }
 
+export function getAllUserInterviews(userId: string) {
+  return prisma.interview.findMany({
+    where: {
+      job: {
+        userId,
+      },
+    },
+
+    include: {
+      job: {
+        select: {
+          id: true,
+          company: true,
+          jobTitle: true,
+          status: true,
+        },
+      },
+    },
+
+    orderBy: {
+      scheduledAt: "asc",
+    },
+  });
+}
+
 export function getInterviewById(userId: string, interviewId: string) {
   return prisma.interview.findFirst({
     where: {

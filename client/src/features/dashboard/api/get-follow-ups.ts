@@ -1,10 +1,11 @@
 import { api } from "@/lib/api";
+import type { Job } from "@/features/jobs/types/job";
 
 export interface FollowUp {
   id: string;
   company: string;
   jobTitle: string;
-  status: string;
+  status: Job["status"];
   followUpDate: string;
 }
 

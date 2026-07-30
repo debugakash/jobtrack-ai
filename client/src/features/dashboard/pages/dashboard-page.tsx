@@ -1,10 +1,18 @@
+import DashboardSkeleton from "../components/dashboard-skeleton";
 import FollowUpList from "../components/follow-up-list";
 import MonthlyApplicationsChart from "../components/monthly-applications-chart";
 import StatsCards from "../components/stats-cards";
 import StatusDistributionChart from "../components/status-distribution-chart";
 import TopCompaniesChart from "../components/top-companies-chart";
+import { useDashboardStats } from "../hooks/use-dashboard-stats";
 
 export default function DashboardPage() {
+  const { isLoading } = useDashboardStats();
+
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
+
   return (
     <div className="space-y-8">
       <div>
@@ -17,13 +25,15 @@ export default function DashboardPage() {
 
       <StatsCards />
 
-      <MonthlyApplicationsChart />
+      <div className="grid gap-6 lg:grid-cols-2">
+        <MonthlyApplicationsChart />
+        <StatusDistributionChart />
+      </div>
 
-      <StatusDistributionChart />
-
-      <TopCompaniesChart />
-
-      <FollowUpList />
+      <div className="grid gap-6 lg:grid-cols-2">
+        <TopCompaniesChart />
+        <FollowUpList />
+      </div>
     </div>
   );
 }

@@ -3,10 +3,8 @@ import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 
-import StatusBadge from "./status-badge";
-
 import type { Job } from "../types/job";
-import { formatEnum } from "@/lib/format";
+import JobStatusBadge from "./job-status-badge";
 
 interface Props {
   job: Job;
@@ -29,7 +27,7 @@ export default function JobHeader({ job }: Props) {
           <p className="mt-1 text-lg text-muted-foreground">{job.jobTitle}</p>
         </div>
 
-        <StatusBadge status={formatEnum(job.status)} />
+        <JobStatusBadge status={job.status} />
       </div>
     </div>
   );
