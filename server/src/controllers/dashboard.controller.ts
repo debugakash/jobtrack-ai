@@ -5,6 +5,7 @@ import {
   getPendingFollowUpsService,
   getStatusDistributionService,
   getTopCompaniesService,
+  getUpcomingInterviewsService,
 } from "../services/dashboard.service.js";
 
 export async function getDashboardStats(req: Request, res: Response) {
@@ -59,5 +60,19 @@ export async function getPendingFollowUpsController(
   return res.json({
     success: true,
     data,
+  });
+}
+
+export async function getUpcomingInterviewsController(
+  req: Request,
+  res: Response,
+) {
+  const upcomingInterviews = await getUpcomingInterviewsService(
+    req.user!.userId,
+  );
+
+  return res.json({
+    success: true,
+    data: upcomingInterviews,
   });
 }

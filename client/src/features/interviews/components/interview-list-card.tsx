@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { format, differenceInCalendarDays, startOfDay } from "date-fns";
+import { format } from "date-fns";
 
-import { Briefcase, Circle, Laptop, Trophy, User, Video } from "lucide-react";
+import { Video } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,79 +11,11 @@ import JobStatusBadge from "@/features/jobs/components/job-status-badge";
 
 import type { Interview } from "../types/interview";
 
+import { getRoundConfig, getInterviewBadge } from "../utils/interview-utils";
+
 interface Props {
   interview: Interview;
   completed?: boolean;
-}
-
-function getRoundConfig(round: string) {
-  const value = round.toLowerCase();
-
-  if (value.includes("hr")) {
-    return {
-      icon: User,
-      color: "text-sky-500",
-    };
-  }
-
-  if (value.includes("tech")) {
-    return {
-      icon: Laptop,
-      color: "text-violet-500",
-    };
-  }
-
-  if (value.includes("manager")) {
-    return {
-      icon: Briefcase,
-      color: "text-amber-500",
-    };
-  }
-
-  if (value.includes("final")) {
-    return {
-      icon: Trophy,
-      color: "text-emerald-500",
-    };
-  }
-
-  return {
-    icon: Circle,
-    color: "text-muted-foreground",
-  };
-}
-
-function getInterviewBadge(date: string) {
-  const today = startOfDay(new Date());
-  const interviewDay = startOfDay(new Date(date));
-
-  const diff = differenceInCalendarDays(interviewDay, today);
-
-  if (diff < 0)
-    return {
-      label: "Overdue",
-      className: "bg-red-700 text-white",
-    };
-
-  if (diff === 0)
-    return {
-      label: "Today",
-      className: "bg-red-500 text-white",
-    };
-
-  if (diff === 1)
-    return {
-      label: "Tomorrow",
-      className: "bg-orange-500 text-white",
-    };
-
-  if (diff <= 7)
-    return {
-      label: `In ${diff} days`,
-      className: "bg-emerald-600 text-white",
-    };
-
-  return null;
 }
 
 export default function InterviewListCard({
@@ -92,7 +24,7 @@ export default function InterviewListCard({
 }: Props) {
   const navigate = useNavigate();
 
-  const { icon: RoundIcon, color: roundColor } = getRoundConfig(
+  const { Icon: RoundIcon, color: roundColor } = getRoundConfig(
     interview.round,
   );
 

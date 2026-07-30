@@ -120,3 +120,36 @@ export function getPendingFollowUps(userId: string) {
     },
   });
 }
+
+export async function getUpcomingInterviews(userId: string) {
+  return prisma.interview.findMany({
+    where: {
+      completed: false,
+
+      scheduledAt: {
+        gte: new Date(),
+      },
+
+      job: {
+        userId,
+      },
+    },
+
+    include: {
+      job: {
+        select: {
+          id: true,
+          company: true,
+          jobTitle: true,
+          status: true,
+        },
+      },
+    },
+
+    orderBy: {
+      scheduledAt: "asc",
+    },
+
+    take: 5,
+  });
+}

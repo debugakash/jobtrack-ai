@@ -4,6 +4,7 @@ import {
   getPendingFollowUps,
   getStatusDistribution,
   getTopCompanies,
+  getUpcomingInterviews,
 } from "../repositories/dashboard.repository.js";
 
 export function getDashboardStatsService(userId: string) {
@@ -60,4 +61,10 @@ export async function getTopCompaniesService(userId: string) {
 
 export async function getPendingFollowUpsService(userId: string) {
   return getPendingFollowUps(userId);
+}
+
+export async function getUpcomingInterviewsService(userId: string) {
+  const upcomingInterviews = await getUpcomingInterviews(userId);
+
+  return upcomingInterviews;
 }

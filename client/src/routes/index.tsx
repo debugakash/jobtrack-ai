@@ -15,6 +15,7 @@ import SettingsPage from "@/features/settings/pages/settings-page";
 import ProfilePage from "@/features/profile/pages/profile-page";
 import JobDetailsPage from "@/features/jobs/pages/job-details-page";
 import NotFoundPage from "@/pages/not-found-page";
+import AnalyticsPage from "@/features/analytics/pages/analytics-page";
 
 export const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ export const router = createBrowserRouter([
       {
         path: "/profile",
         element: <ProfilePage />,
+      },
+      {
+        path: "/analytics",
+        element: <AnalyticsPage />,
       },
     ],
   },

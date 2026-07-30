@@ -4,6 +4,7 @@ import MonthlyApplicationsChart from "../components/monthly-applications-chart";
 import StatsCards from "../components/stats-cards";
 import StatusDistributionChart from "../components/status-distribution-chart";
 import TopCompaniesChart from "../components/top-companies-chart";
+import UpcomingInterviewsCard from "../components/upcoming-interviews-card";
 import { useDashboardStats } from "../hooks/use-dashboard-stats";
 
 export default function DashboardPage() {
@@ -30,9 +31,12 @@ export default function DashboardPage() {
         <StatusDistributionChart />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-3">
         <TopCompaniesChart />
+
         <FollowUpList />
+
+        <UpcomingInterviewsCard />
       </div>
     </div>
   );

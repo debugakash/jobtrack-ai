@@ -5,10 +5,17 @@ import {
   getPendingFollowUpsController,
   getStatusDistribution,
   getTopCompanies,
+  getUpcomingInterviewsController,
 } from "../controllers/dashboard.controller.js";
 import { authenticate } from "../middleware/auth.middleware.js";
 
 const router = Router();
+
+router.get(
+  "/upcoming-interviews",
+  authenticate,
+  getUpcomingInterviewsController,
+);
 
 router.get("/stats", authenticate, getDashboardStats);
 
