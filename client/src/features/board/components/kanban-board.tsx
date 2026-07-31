@@ -5,12 +5,15 @@ import { arrayMove } from "@dnd-kit/sortable";
 import BoardColumn from "./board-column";
 
 import { useBoard } from "../hooks/use-board";
+import { useUpdateJobStatus } from "../hooks/use-update-job-status";
 
 export default function KanbanBoard() {
   const { columns, setColumns } = useBoard();
+  const updateJobStatus = useUpdateJobStatus();
 
-  function handleDragEnd(event: DragEndEvent) {
+  async function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
+    const previousColumns = columns;
 
     if (!over || active.id === over.id) return;
 
@@ -85,7 +88,18 @@ export default function KanbanBoard() {
       jobs: destinationJobs,
     };
 
+    // Optimistic UI update
     setColumns(newColumns);
+
+    try {
+      await updateJobStatus.mutateAsync({
+        jobId: activeId,
+        status: destinationColumn.id,
+      });
+    } catch {
+      // Roll back UI if request fails
+      setColumns(previousColumns);
+    }
   }
 
   return (
