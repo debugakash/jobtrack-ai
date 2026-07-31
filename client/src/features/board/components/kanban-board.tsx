@@ -1,4 +1,9 @@
-import { closestCenter, DndContext } from "@dnd-kit/core";
+import {
+  closestCenter,
+  DndContext,
+  DragOverlay,
+  type DragStartEvent,
+} from "@dnd-kit/core";
 import type { DragEndEvent } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 
@@ -6,10 +11,22 @@ import BoardColumn from "./board-column";
 
 import { useBoard } from "../hooks/use-board";
 import { useUpdateJobStatus } from "../hooks/use-update-job-status";
+import { useState } from "react";
+import JobCard from "./job-card";
 
 export default function KanbanBoard() {
+  const [activeJobId, setActiveJobId] = useState<string | null>(null);
+
   const { columns, setColumns } = useBoard();
   const updateJobStatus = useUpdateJobStatus();
+
+  const activeJob = columns
+    .flatMap((column) => column.jobs)
+    .find((job) => job.id === activeJobId);
+
+  function handleDragStart(event: DragStartEvent) {
+    setActiveJobId(String(event.active.id));
+  }
 
   async function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
@@ -100,10 +117,16 @@ export default function KanbanBoard() {
       // Roll back UI if request fails
       setColumns(previousColumns);
     }
+
+    setActiveJobId(null);
   }
 
   return (
-    <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+    <DndContext
+      collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         {columns.map((column) => (
           <BoardColumn
@@ -114,6 +137,14 @@ export default function KanbanBoard() {
           />
         ))}
       </div>
+
+      <DragOverlay>
+        {activeJob ? (
+          <div className="rotate-2 opacity-95">
+            <JobCard job={activeJob} isOverlay />
+          </div>
+        ) : null}
+      </DragOverlay>
     </DndContext>
   );
 }

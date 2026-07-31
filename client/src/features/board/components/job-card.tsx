@@ -12,10 +12,16 @@ import { GripVertical } from "lucide-react";
 
 interface Props {
   job: Job;
+  isOverlay?: boolean;
 }
 
-export default function JobCard({ job }: Props) {
+export default function JobCard({ job, isOverlay = false }: Props) {
   const navigate = useNavigate();
+  const sortable = useSortable({
+    id: job.id,
+    disabled: isOverlay,
+  });
+
   const {
     attributes,
     listeners,
@@ -23,9 +29,7 @@ export default function JobCard({ job }: Props) {
     transform,
     transition,
     isDragging,
-  } = useSortable({
-    id: job.id,
-  });
+  } = sortable;
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -36,7 +40,11 @@ export default function JobCard({ job }: Props) {
     <Card
       ref={setNodeRef}
       style={style}
-      onClick={() => navigate(`/jobs/${job.id}`)}
+      onClick={() => {
+        if (!isOverlay) {
+          navigate(`/jobs/${job.id}`);
+        }
+      }}
       className="cursor-pointer p-4 transition hover:shadow-md"
     >
       <div className="flex items-start justify-between">
@@ -46,14 +54,16 @@ export default function JobCard({ job }: Props) {
           <p className="text-sm text-muted-foreground">{job.jobTitle}</p>
         </div>
 
-        <button
-          {...listeners}
-          {...attributes}
-          onClick={(e) => e.stopPropagation()}
-          className="cursor-grab active:cursor-grabbing rounded p-1 hover:bg-muted"
-        >
-          <GripVertical className="h-4 w-4 text-muted-foreground" />
-        </button>
+        {!isOverlay && (
+          <button
+            {...listeners}
+            {...attributes}
+            onClick={(e) => e.stopPropagation()}
+            className="cursor-grab active:cursor-grabbing rounded p-1 hover:bg-muted"
+          >
+            <GripVertical className="h-4 w-4 text-muted-foreground" />
+          </button>
+        )}
       </div>
 
       <div className="mt-4">
