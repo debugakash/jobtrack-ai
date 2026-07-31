@@ -1,3 +1,9 @@
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { useDroppable } from "@dnd-kit/core";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import JobCard from "./job-card";
@@ -10,9 +16,12 @@ interface Props {
   jobs: Job[];
 }
 
-export default function BoardColumn({ title, jobs }: Props) {
+export default function BoardColumn({ id, title, jobs }: Props) {
+  const { setNodeRef } = useDroppable({
+    id,
+  });
   return (
-    <Card className="min-h-[600px]">
+    <Card ref={setNodeRef} className="min-h-[600px]">
       <CardHeader>
         <CardTitle>
           {title}
@@ -26,7 +35,14 @@ export default function BoardColumn({ title, jobs }: Props) {
             No jobs
           </div>
         ) : (
-          jobs.map((job) => <JobCard key={job.id} job={job} />)
+          <SortableContext
+            items={jobs.map((job) => job.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            {jobs.map((job) => (
+              <JobCard key={job.id} job={job} />
+            ))}
+          </SortableContext>
         )}
       </CardContent>
     </Card>
