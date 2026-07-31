@@ -18,6 +18,7 @@ import NotFoundPage from "@/pages/not-found-page";
 import AnalyticsPage from "@/features/analytics/pages/analytics-page";
 import ActivityPage from "@/features/activity/pages/activity-page";
 import BoardPage from "@/features/board/pages/board-page";
+import CalendarPage from "@/features/calendar/pages/calendar-page";
 
 export const router = createBrowserRouter([
   {
@@ -66,6 +67,10 @@ export const router = createBrowserRouter([
       {
         path: "/activity",
         element: <ActivityPage />,
+      },
+      {
+        path: "/calendar",
+        element: <CalendarPage />,
       },
     ],
   },

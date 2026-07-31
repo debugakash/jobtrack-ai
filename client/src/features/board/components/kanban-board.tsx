@@ -140,7 +140,7 @@ export default function KanbanBoard() {
 
       <DragOverlay>
         {activeJob ? (
-          <div className="rotate-2 opacity-95">
+          <div className="rotate-2 scale-105 shadow-2xl opacity-95">
             <JobCard job={activeJob} isOverlay />
           </div>
         ) : null}

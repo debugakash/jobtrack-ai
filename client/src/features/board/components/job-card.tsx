@@ -34,7 +34,7 @@ export default function JobCard({ job, isOverlay = false }: Props) {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.4 : 1,
+    opacity: isDragging ? 0.15 : 1,
   };
   return (
     <Card

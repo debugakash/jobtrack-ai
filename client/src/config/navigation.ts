@@ -2,6 +2,7 @@ import {
   BarChart3,
   Briefcase,
   CalendarDays,
+  ClipboardList,
   Columns3,
   FileText,
   History,
@@ -28,6 +29,11 @@ export const navigation = [
   {
     title: "Interviews",
     href: "/interviews",
+    icon: ClipboardList,
+  },
+  {
+    title: "Calendar",
+    href: "/calendar",
     icon: CalendarDays,
   },
   {
