@@ -1,5 +1,6 @@
 import { closestCenter, DndContext } from "@dnd-kit/core";
 import type { DragEndEvent } from "@dnd-kit/core";
+import { arrayMove } from "@dnd-kit/sortable";
 
 import BoardColumn from "./board-column";
 
@@ -11,60 +12,77 @@ export default function KanbanBoard() {
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
 
-    if (!over) return;
+    if (!over || active.id === over.id) return;
 
     const activeId = String(active.id);
     const overId = String(over.id);
 
-    let sourceColumnIndex = -1;
-    let destinationColumnIndex = -1;
+    const sourceColumn = columns.find((column) =>
+      column.jobs.some((job) => job.id === activeId),
+    );
 
-    for (let i = 0; i < columns.length; i++) {
-      const column = columns[i];
+    const destinationColumn = columns.find(
+      (column) =>
+        column.id === overId || column.jobs.some((job) => job.id === overId),
+    );
 
-      if (column.jobs.some((job) => job.id === activeId)) {
-        sourceColumnIndex = i;
-      }
+    if (!sourceColumn || !destinationColumn) return;
 
-      if (
-        column.id === overId ||
-        column.jobs.some((job) => job.id === overId)
-      ) {
-        destinationColumnIndex = i;
-      }
-    }
+    const sourceColumnIndex = columns.findIndex(
+      (column) => column.id === sourceColumn.id,
+    );
 
-    if (sourceColumnIndex === -1 || destinationColumnIndex === -1) {
+    const destinationColumnIndex = columns.findIndex(
+      (column) => column.id === destinationColumn.id,
+    );
+
+    const activeIndex = sourceColumn.jobs.findIndex(
+      (job) => job.id === activeId,
+    );
+
+    const overIndex =
+      destinationColumn.jobs.findIndex((job) => job.id === overId) === -1
+        ? destinationColumn.jobs.length
+        : destinationColumn.jobs.findIndex((job) => job.id === overId);
+
+    // ---------- SAME COLUMN ----------
+    if (sourceColumn.id === destinationColumn.id) {
+      const newColumns = [...columns];
+
+      newColumns[sourceColumnIndex] = {
+        ...sourceColumn,
+        jobs: arrayMove(sourceColumn.jobs, activeIndex, overIndex),
+      };
+
+      setColumns(newColumns);
+
       return;
     }
 
-    if (sourceColumnIndex === destinationColumnIndex) {
-      return;
-    }
+    // ---------- DIFFERENT COLUMN ----------
 
-    const sourceColumn = columns[sourceColumnIndex];
-    const destinationColumn = columns[destinationColumnIndex];
+    const movedJob = sourceColumn.jobs[activeIndex];
 
-    const movedJob = sourceColumn.jobs.find((job) => job.id === activeId);
+    const sourceJobs = [...sourceColumn.jobs];
+    sourceJobs.splice(activeIndex, 1);
 
-    if (!movedJob) return;
+    const destinationJobs = [...destinationColumn.jobs];
+
+    destinationJobs.splice(overIndex, 0, {
+      ...movedJob,
+      status: destinationColumn.id as typeof movedJob.status,
+    });
 
     const newColumns = [...columns];
 
     newColumns[sourceColumnIndex] = {
       ...sourceColumn,
-      jobs: sourceColumn.jobs.filter((job) => job.id !== activeId),
+      jobs: sourceJobs,
     };
 
     newColumns[destinationColumnIndex] = {
       ...destinationColumn,
-      jobs: [
-        ...destinationColumn.jobs,
-        {
-          ...movedJob,
-          status: destinationColumn.id as typeof movedJob.status,
-        },
-      ],
+      jobs: destinationJobs,
     };
 
     setColumns(newColumns);

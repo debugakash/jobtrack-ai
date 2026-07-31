@@ -5,10 +5,17 @@ info:
 
 http:
   method: GET
-  url: "{{BASE_URL}}/api/dashboard/recent-activity"
+  url: "{{BASE_URL}}/api/dashboard/recent-activity?page=2&limit=5"
   headers:
     - name: Authorization
       value: Bearer {{accessToken}}
+  params:
+    - name: page
+      value: "2"
+      type: query
+    - name: limit
+      value: "5"
+      type: query
   auth: inherit
 
 settings:
