@@ -2,6 +2,7 @@ import {
   BarChart3,
   Briefcase,
   CalendarDays,
+  Columns3,
   FileText,
   History,
   LayoutDashboard,
@@ -18,6 +19,11 @@ export const navigation = [
     title: "Jobs",
     href: "/jobs",
     icon: Briefcase,
+  },
+  {
+    title: "Board",
+    href: "/board",
+    icon: Columns3,
   },
   {
     title: "Interviews",

@@ -17,6 +17,7 @@ import JobDetailsPage from "@/features/jobs/pages/job-details-page";
 import NotFoundPage from "@/pages/not-found-page";
 import AnalyticsPage from "@/features/analytics/pages/analytics-page";
 import ActivityPage from "@/features/activity/pages/activity-page";
+import BoardPage from "@/features/board/pages/board-page";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
       {
         path: "/jobs",
         element: <JobsPage />,
+      },
+      {
+        path: "/board",
+        element: <BoardPage />,
       },
       {
         path: "/jobs/:id",
