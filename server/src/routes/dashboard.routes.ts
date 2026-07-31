@@ -3,6 +3,7 @@ import {
   getDashboardStats,
   getMonthlyApplications,
   getPendingFollowUpsController,
+  getRecentActivityController,
   getStatusDistribution,
   getTopCompanies,
   getUpcomingInterviewsController,
@@ -26,5 +27,7 @@ router.get("/monthly-applications", authenticate, getMonthlyApplications);
 router.get("/top-companies", authenticate, getTopCompanies);
 
 router.get("/follow-ups", authenticate, getPendingFollowUpsController);
+
+router.get("/recent-activity", authenticate, getRecentActivityController);
 
 export default router;

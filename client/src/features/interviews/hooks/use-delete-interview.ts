@@ -4,6 +4,12 @@ import { toast } from "sonner";
 
 import { deleteInterview } from "../api/delete-interview";
 
+import {
+  invalidateDashboard,
+  invalidateJobInterviews,
+  invalidateNotifications,
+} from "@/lib/query-invalidations";
+
 export function useDeleteInterview(jobId: string) {
   const queryClient = useQueryClient();
 
@@ -11,9 +17,9 @@ export function useDeleteInterview(jobId: string) {
     mutationFn: deleteInterview,
 
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["interviews", jobId],
-      });
+      invalidateJobInterviews(queryClient, jobId);
+      invalidateNotifications(queryClient);
+      invalidateDashboard(queryClient);
 
       toast.success("Interview deleted");
     },

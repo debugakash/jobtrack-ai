@@ -20,6 +20,7 @@ model User {
   lastLogin     DateTime?
   jobs          Job[]
   resumes       Resume[]
+  notifications Notification[]
 
   @@map("users")
 }
@@ -110,6 +111,24 @@ model Interview {
   @@map("interviews")
 }
 
+model Notification {
+  id        String   @id @default(cuid())
+
+  title     String
+  message   String
+
+  type      NotificationType
+
+  isRead    Boolean  @default(false)
+
+  actionUrl String?
+
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model Resume {
   id           String   @id @default(cuid())
   originalName String
@@ -173,4 +192,11 @@ enum JobActivityType {
   OFFER
   REJECTED
   OTHER
+}
+
+enum NotificationType {
+  FOLLOW_UP
+  INTERVIEW
+  JOB_STATUS
+  SYSTEM
 }

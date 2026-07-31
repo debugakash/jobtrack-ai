@@ -1,7 +1,9 @@
 import {
+  BarChart3,
   Briefcase,
   CalendarDays,
   FileText,
+  History,
   LayoutDashboard,
   Settings,
 } from "lucide-react";
@@ -21,6 +23,16 @@ export const navigation = [
     title: "Interviews",
     href: "/interviews",
     icon: CalendarDays,
+  },
+  {
+    title: "Analytics",
+    href: "/analytics",
+    icon: BarChart3,
+  },
+  {
+    title: "Activity",
+    href: "/activity",
+    icon: History,
   },
   {
     title: "Resumes",

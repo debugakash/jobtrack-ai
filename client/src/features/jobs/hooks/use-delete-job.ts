@@ -2,7 +2,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { deleteJob } from "../api/delete-job";
-import { jobsQueryKeys } from "../query-keys";
+
+import {
+  invalidateDashboard,
+  invalidateJobs,
+  invalidateNotifications,
+} from "@/lib/query-invalidations";
 
 export function useDeleteJob() {
   const queryClient = useQueryClient();
@@ -11,9 +16,9 @@ export function useDeleteJob() {
     mutationFn: deleteJob,
 
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: jobsQueryKeys.all,
-      });
+      invalidateJobs(queryClient);
+      invalidateNotifications(queryClient);
+      invalidateDashboard(queryClient);
 
       toast.success("Job deleted successfully");
     },

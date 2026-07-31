@@ -3,6 +3,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createJob } from "../api/create-job";
 
 import { toast } from "sonner";
+import {
+  invalidateDashboard,
+  invalidateJobs,
+  invalidateNotifications,
+} from "@/lib/query-invalidations";
 
 export function useCreateJob() {
   const queryClient = useQueryClient();
@@ -11,9 +16,9 @@ export function useCreateJob() {
     mutationFn: createJob,
 
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["jobs"],
-      });
+      invalidateJobs(queryClient);
+      invalidateNotifications(queryClient);
+      invalidateDashboard(queryClient);
 
       toast.success("Job created successfully");
     },

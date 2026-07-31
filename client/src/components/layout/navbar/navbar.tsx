@@ -4,6 +4,7 @@ import { navigation, secondaryNavigation } from "@/config/navigation";
 import UserMenu from "./user-menu";
 import MobileSidebar from "../sidebar/mobile-sidebar";
 import ThemeToggle from "@/components/theme-toggle";
+import NotificationBell from "@/features/notifications/components/notification-bell";
 
 export default function Navbar() {
   const location = useLocation();
@@ -27,6 +28,9 @@ export default function Navbar() {
 
       <div className="flex items-center gap-3">
         <ThemeToggle />
+
+        <NotificationBell />
+
         <UserMenu />
       </div>
     </header>

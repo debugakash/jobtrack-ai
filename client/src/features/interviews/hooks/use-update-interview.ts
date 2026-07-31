@@ -4,6 +4,12 @@ import { toast } from "sonner";
 
 import { updateInterview } from "../api/update-interview";
 
+import {
+  invalidateDashboard,
+  invalidateJobInterviews,
+  invalidateNotifications,
+} from "@/lib/query-invalidations";
+
 export function useUpdateInterview(jobId: string) {
   const queryClient = useQueryClient();
 
@@ -17,9 +23,9 @@ export function useUpdateInterview(jobId: string) {
     }) => updateInterview(interviewId, data),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["interviews", jobId],
-      });
+      invalidateJobInterviews(queryClient, jobId);
+      invalidateNotifications(queryClient);
+      invalidateDashboard(queryClient);
 
       toast.success("Interview updated");
     },

@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import type { JobActivity } from "../types/job";
 
-import { format } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
 
 import {
   Calendar,
@@ -50,7 +50,9 @@ export default function JobActivityTimeline({ activities }: Props) {
 
       <CardContent>
         {activities.length === 0 ? (
-          <p className="text-muted-foreground">No activity yet.</p>
+          <div className="py-10 text-center text-muted-foreground">
+            No activity recorded yet.
+          </div>
         ) : (
           <div className="space-y-6">
             {activities.map((activity) => {
@@ -61,10 +63,10 @@ export default function JobActivityTimeline({ activities }: Props) {
               return (
                 <div
                   key={activity.id}
-                  className="relative border-l border-border pl-8 pb-8 last:border-l-0 last:pb-0"
+                  className="relative border-l border-border pl-10 pb-8 last:border-l-0 last:pb-0"
                 >
-                  <div className="absolute -left-4 top-0 flex h-8 w-8 items-center justify-center rounded-full border bg-background shadow-sm">
-                    <Icon className={`h-4 w-4 ${iconColor}`} />
+                  <div className="absolute -left-5 top-0 flex h-10 w-10 items-center justify-center rounded-full border bg-background shadow-sm">
+                    <Icon className={`h-5 w-5 ${iconColor}`} />
                   </div>
 
                   <h4 className="font-semibold">{activity.title}</h4>
@@ -75,12 +77,20 @@ export default function JobActivityTimeline({ activities }: Props) {
                     </p>
                   )}
 
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    {format(
-                      new Date(activity.eventDate),
-                      "dd MMM yyyy • h:mm a",
-                    )}
-                  </p>
+                  <div className="mt-2 space-y-1">
+                    <p className="text-xs font-medium text-primary">
+                      {formatDistanceToNow(new Date(activity.eventDate), {
+                        addSuffix: true,
+                      })}
+                    </p>
+
+                    <p className="text-xs text-muted-foreground">
+                      {format(
+                        new Date(activity.eventDate),
+                        "dd MMM yyyy • h:mm a",
+                      )}
+                    </p>
+                  </div>
                 </div>
               );
             })}

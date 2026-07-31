@@ -1,18 +1,14 @@
 info:
-  name: GET Analytics
+  name: Get Notifications
   type: http
   seq: 1
 
 http:
   method: GET
-  url: "{{BASE_URL}}/api/analytics?range=all"
+  url: "{{BASE_URL}}/api/notifications"
   headers:
     - name: Authorization
       value: Bearer {{accessToken}}
-  params:
-    - name: range
-      value: all
-      type: query
   auth: inherit
 
 settings:

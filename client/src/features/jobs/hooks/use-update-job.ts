@@ -4,6 +4,11 @@ import { toast } from "sonner";
 import { updateJob } from "../api/update-job";
 
 import type { JobFormValues } from "../validators/job-schema";
+import {
+  invalidateDashboard,
+  invalidateJobs,
+  invalidateNotifications,
+} from "@/lib/query-invalidations";
 
 export function useUpdateJob() {
   const queryClient = useQueryClient();
@@ -13,9 +18,9 @@ export function useUpdateJob() {
       updateJob(id, data),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["jobs"],
-      });
+      invalidateJobs(queryClient);
+      invalidateNotifications(queryClient);
+      invalidateDashboard(queryClient);
 
       toast.success("Job updated successfully");
     },

@@ -4,6 +4,7 @@ import routes from "./routes/index.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import analyticsRoutes from "./routes/analytics.routes.js";
+import notificationsRoutes from "./routes/notifications.routes.js";
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.get("/", (_req, res) => {
 app.use("/api", routes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/notifications", notificationsRoutes);
 
 app.use(errorHandler);
 

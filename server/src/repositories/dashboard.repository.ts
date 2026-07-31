@@ -153,3 +153,33 @@ export async function getUpcomingInterviews(userId: string) {
     take: 5,
   });
 }
+
+export async function getRecentActivity(userId: string, page = 1, limit = 20) {
+  const skip = (page - 1) * limit;
+
+  return prisma.jobActivity.findMany({
+    where: {
+      job: {
+        userId,
+      },
+    },
+
+    include: {
+      job: {
+        select: {
+          id: true,
+          company: true,
+          jobTitle: true,
+        },
+      },
+    },
+
+    orderBy: {
+      eventDate: "desc",
+    },
+
+    skip,
+
+    take: limit,
+  });
+}

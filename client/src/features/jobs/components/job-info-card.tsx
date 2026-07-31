@@ -10,6 +10,12 @@ interface Props {
   job: Job;
 }
 
+function formatSalary(min?: number | null, max?: number | null) {
+  if (!min || !max) return "-";
+
+  return `₹${(min / 100000).toFixed(1)}L - ₹${(max / 100000).toFixed(1)}L`;
+}
+
 export default function JobInfoCard({ job }: Props) {
   return (
     <Card>
@@ -39,11 +45,7 @@ export default function JobInfoCard({ job }: Props) {
         <InfoRow
           icon={<IndianRupee className="h-4 w-4" />}
           label="Salary"
-          value={
-            job.salaryMin && job.salaryMax
-              ? `₹${job.salaryMin.toLocaleString()} - ₹${job.salaryMax.toLocaleString()}`
-              : "-"
-          }
+          value={formatSalary(job.salaryMin, job.salaryMax)}
         />
 
         <InfoRow
@@ -55,9 +57,9 @@ export default function JobInfoCard({ job }: Props) {
                 href={job.jobUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="text-primary underline"
+                className="font-medium text-primary hover:underline"
               >
-                Open Link
+                View Posting ↗
               </a>
             ) : (
               "-"
@@ -77,13 +79,15 @@ interface InfoRowProps {
 
 function InfoRow({ icon, label, value }: InfoRowProps) {
   return (
-    <div className="flex items-center justify-between gap-6">
-      <div className="flex items-center gap-2 text-muted-foreground">
+    <div className="flex items-start justify-between gap-6 rounded-lg border p-3">
+      <div className="flex items-center gap-3 text-muted-foreground">
         {icon}
         <span>{label}</span>
       </div>
 
-      <div className="font-medium text-right">{value}</div>
+      <div className="max-w-[60%] break-words text-right font-medium">
+        {value}
+      </div>
     </div>
   );
 }

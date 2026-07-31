@@ -16,6 +16,7 @@ import ProfilePage from "@/features/profile/pages/profile-page";
 import JobDetailsPage from "@/features/jobs/pages/job-details-page";
 import NotFoundPage from "@/pages/not-found-page";
 import AnalyticsPage from "@/features/analytics/pages/analytics-page";
+import ActivityPage from "@/features/activity/pages/activity-page";
 
 export const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ export const router = createBrowserRouter([
       {
         path: "/analytics",
         element: <AnalyticsPage />,
+      },
+      {
+        path: "/activity",
+        element: <ActivityPage />,
       },
     ],
   },

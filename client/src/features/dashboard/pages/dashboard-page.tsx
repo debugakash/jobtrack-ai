@@ -1,6 +1,7 @@
 import DashboardSkeleton from "../components/dashboard-skeleton";
 import FollowUpList from "../components/follow-up-list";
 import MonthlyApplicationsChart from "../components/monthly-applications-chart";
+import RecentActivityCard from "../components/recent-activity-card";
 import StatsCards from "../components/stats-cards";
 import StatusDistributionChart from "../components/status-distribution-chart";
 import TopCompaniesChart from "../components/top-companies-chart";
@@ -38,6 +39,8 @@ export default function DashboardPage() {
 
         <UpcomingInterviewsCard />
       </div>
+
+      <RecentActivityCard />
     </div>
   );
 }

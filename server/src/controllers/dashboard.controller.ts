@@ -3,6 +3,7 @@ import {
   getDashboardStatsService,
   getMonthlyApplicationsService,
   getPendingFollowUpsService,
+  getRecentActivityService,
   getStatusDistributionService,
   getTopCompaniesService,
   getUpcomingInterviewsService,
@@ -74,5 +75,18 @@ export async function getUpcomingInterviewsController(
   return res.json({
     success: true,
     data: upcomingInterviews,
+  });
+}
+
+export async function getRecentActivityController(req: Request, res: Response) {
+  const page = Number(req.query.page ?? 1);
+
+  const limit = Number(req.query.limit ?? 20);
+
+  const data = await getRecentActivityService(req.user!.userId, page, limit);
+
+  return res.json({
+    success: true,
+    data,
   });
 }

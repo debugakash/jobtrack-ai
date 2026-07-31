@@ -4,6 +4,12 @@ import { toast } from "sonner";
 
 import { createInterview } from "../api/create-interview";
 
+import {
+  invalidateDashboard,
+  invalidateJobInterviews,
+  invalidateNotifications,
+} from "@/lib/query-invalidations";
+
 export function useCreateInterview(jobId: string) {
   const queryClient = useQueryClient();
 
@@ -12,9 +18,9 @@ export function useCreateInterview(jobId: string) {
       createInterview(jobId, data),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["interviews", jobId],
-      });
+      invalidateJobInterviews(queryClient, jobId);
+      invalidateNotifications(queryClient);
+      invalidateDashboard(queryClient);
 
       toast.success("Interview scheduled");
     },

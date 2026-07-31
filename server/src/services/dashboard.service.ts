@@ -2,6 +2,7 @@ import {
   getDashboardStats,
   getMonthlyApplications,
   getPendingFollowUps,
+  getRecentActivity,
   getStatusDistribution,
   getTopCompanies,
   getUpcomingInterviews,
@@ -67,4 +68,12 @@ export async function getUpcomingInterviewsService(userId: string) {
   const upcomingInterviews = await getUpcomingInterviews(userId);
 
   return upcomingInterviews;
+}
+
+export function getRecentActivityService(
+  userId: string,
+  page: number,
+  limit: number,
+) {
+  return getRecentActivity(userId, page, limit);
 }
