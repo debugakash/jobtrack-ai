@@ -1,3 +1,5 @@
+import InterviewCalendar from "../components/interview-calendar";
+
 export default function CalendarPage() {
   return (
     <div className="space-y-8">
@@ -8,6 +10,8 @@ export default function CalendarPage() {
           View and manage your scheduled interviews.
         </p>
       </div>
+
+      <InterviewCalendar />
     </div>
   );
 }
