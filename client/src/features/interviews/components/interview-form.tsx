@@ -32,6 +32,8 @@ interface Props {
 
   initialData?: Interview;
 
+  defaultScheduledAt?: string;
+
   onSuccess: () => void;
 }
 
@@ -40,6 +42,7 @@ export default function InterviewForm({
   mode,
   interviewId,
   initialData,
+  defaultScheduledAt,
   onSuccess,
 }: Props) {
   const mutation = useCreateInterview(jobId);
@@ -52,7 +55,7 @@ export default function InterviewForm({
       round: initialData?.round ?? "",
       scheduledAt: initialData?.scheduledAt
         ? new Date(initialData.scheduledAt).toISOString().slice(0, 16)
-        : "",
+        : (defaultScheduledAt ?? ""),
       interviewerName: initialData?.interviewerName ?? "",
       meetingLink: initialData?.meetingLink ?? "",
       notes: initialData?.notes ?? "",

@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { createInterview } from "../api/create-interview";
 
 import {
+  invalidateCalendarInterviews,
   invalidateDashboard,
   invalidateJobInterviews,
   invalidateNotifications,
@@ -19,6 +20,7 @@ export function useCreateInterview(jobId: string) {
 
     onSuccess: () => {
       invalidateJobInterviews(queryClient, jobId);
+      invalidateCalendarInterviews(queryClient);
       invalidateNotifications(queryClient);
       invalidateDashboard(queryClient);
 

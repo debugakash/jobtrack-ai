@@ -30,3 +30,9 @@ export function invalidateJobInterviews(
     queryKey: ["interviews", jobId],
   });
 }
+
+export function invalidateCalendarInterviews(queryClient: QueryClient) {
+  queryClient.invalidateQueries({
+    queryKey: ["calendar-interviews"],
+  });
+}
