@@ -28,3 +28,29 @@ export async function findUserById(id: string) {
     },
   });
 }
+
+export async function updateUser(
+  id: string,
+  data: {
+    firstName: string;
+    lastName: string;
+  },
+) {
+  return prisma.user.update({
+    where: {
+      id,
+    },
+    data,
+  });
+}
+
+export async function updateUserAvatar(id: string, avatar: string) {
+  return prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      avatar,
+    },
+  });
+}

@@ -14,9 +14,9 @@ export default function Navbar() {
   );
 
   return (
-    <header className="flex h-16 items-center justify-between border-b bg-background px-4 md:px-6">
+    <header className="sticky top-0 z-40 flex h-16 shrink-0 items-center justify-between border-b bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/80 md:px-6">
       <div className="flex items-center gap-3">
-        {/* Mobile menu button (functionality comes next) */}
+        {/* Mobile menu button */}
         <div className="lg:hidden">
           <MobileSidebar />
         </div>

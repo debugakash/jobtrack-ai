@@ -35,3 +35,33 @@ export const uploadResume = multer({
     fileSize: 5 * 1024 * 1024,
   },
 });
+
+const avatarStorage = multer.diskStorage({
+  destination: (_req, _file, cb) => {
+    cb(null, "uploads/avatars");
+  },
+
+  filename: (_req, file, cb) => {
+    const uniqueName = crypto.randomUUID() + path.extname(file.originalname);
+
+    cb(null, uniqueName);
+  },
+});
+
+const avatarFileFilter: multer.Options["fileFilter"] = (_req, file, cb) => {
+  const allowedMimeTypes = ["image/jpeg", "image/png", "image/webp"];
+
+  if (allowedMimeTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only JPG, PNG and WEBP images are allowed."));
+  }
+};
+
+export const uploadAvatar = multer({
+  storage: avatarStorage,
+  fileFilter: avatarFileFilter,
+  limits: {
+    fileSize: 2 * 1024 * 1024,
+  },
+});

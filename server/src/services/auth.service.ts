@@ -3,6 +3,7 @@ import {
   createUser,
   findUserByEmail,
   findUserById,
+  updateUserAvatar,
 } from "../repositories/user.repository.js";
 import { hashPassword } from "../utils/hash.js";
 import { LoginInput, RegisterInput } from "../validators/auth.validator.js";
@@ -62,4 +63,17 @@ export async function getCurrentUser(userId: string) {
     throw new NotFoundError("User not found");
   }
   return user;
+}
+
+export async function updateUserAvatarService(
+  userId: string,
+  avatarPath: string,
+) {
+  const user = await findUserById(userId);
+
+  if (!user) {
+    throw new NotFoundError("User not found");
+  }
+
+  return updateUserAvatar(userId, avatarPath);
 }

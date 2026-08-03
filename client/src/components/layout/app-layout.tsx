@@ -6,13 +6,16 @@ import Sidebar from "./sidebar";
 export default function AppLayout() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="flex">
+      <div className="flex min-h-screen">
         {/* Desktop Sidebar */}
-        <div className="hidden lg:block">
-          <Sidebar />
+        <div className="hidden w-64 shrink-0 lg:block">
+          <div className="fixed inset-y-0 left-0 w-64">
+            <Sidebar />
+          </div>
         </div>
 
-        <div className="flex min-h-screen flex-1 flex-col">
+        {/* Main application area */}
+        <div className="flex min-w-0 flex-1 flex-col">
           <Navbar />
 
           <main className="flex-1 p-4 md:p-6">

@@ -72,7 +72,7 @@ export default function NotificationBell() {
         <Separator />
 
         {data && data.length > 0 ? (
-          <ScrollArea className="max-h-[420px]">
+          <ScrollArea className="h-[400px] max-h-[calc(100vh-8rem)]">
             {data.map((notification) => (
               <div
                 key={notification.id}

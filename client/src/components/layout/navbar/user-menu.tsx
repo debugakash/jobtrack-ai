@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { LogOut, Settings, User } from "lucide-react";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import {
   DropdownMenu,
@@ -31,6 +31,13 @@ export default function UserMenu() {
       <DropdownMenuTrigger asChild>
         <button className="rounded-full outline-none ring-offset-2 transition focus:ring-2">
           <Avatar>
+            {user?.avatar && (
+              <AvatarImage
+                src={`http://localhost:5000/${user.avatar}`}
+                alt={`${user.firstName} ${user.lastName}`}
+              />
+            )}
+
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
         </button>

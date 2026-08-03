@@ -15,6 +15,10 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
+  avatar: string | null;
+  emailVerified: boolean;
+  isActive: boolean;
+  createdAt: string;
 }
 
 export interface AuthResponse {
