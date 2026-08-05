@@ -18,6 +18,11 @@ model User {
   updatedAt     DateTime  @updatedAt
   avatar        String?
   lastLogin     DateTime?
+
+  emailNotifications Boolean @default(true)
+  interviewReminders Boolean @default(true)
+  followUpReminders  Boolean @default(true)
+
   jobs          Job[]
   resumes       Resume[]
   notifications Notification[]

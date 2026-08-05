@@ -6,6 +6,7 @@ import { updateInterview } from "../api/update-interview";
 
 import {
   invalidateDashboard,
+  invalidateJob,
   invalidateJobInterviews,
   invalidateNotifications,
 } from "@/lib/query-invalidations";
@@ -24,6 +25,7 @@ export function useUpdateInterview(jobId: string) {
 
     onSuccess: () => {
       invalidateJobInterviews(queryClient, jobId);
+      invalidateJob(queryClient, jobId);
       invalidateNotifications(queryClient);
       invalidateDashboard(queryClient);
 

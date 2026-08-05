@@ -13,6 +13,10 @@ export const jobSchema = z.object({
 
   workMode: z.enum(WORK_MODES),
 
+  salaryMin: z.number().int().nonnegative().optional(),
+
+  salaryMax: z.number().int().nonnegative().optional(),
+
   status: z.enum(JOB_STATUSES),
 
   jobUrl: z.string().url("Enter a valid URL").optional().or(z.literal("")),

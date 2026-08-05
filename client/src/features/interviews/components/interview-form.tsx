@@ -37,6 +37,16 @@ interface Props {
   onSuccess: () => void;
 }
 
+function formatDateTimeLocal(value: string) {
+  const date = new Date(value);
+
+  const pad = (number: number) => String(number).padStart(2, "0");
+
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
+    date.getDate(),
+  )}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
 export default function InterviewForm({
   jobId,
   mode,
@@ -54,7 +64,7 @@ export default function InterviewForm({
     defaultValues: {
       round: initialData?.round ?? "",
       scheduledAt: initialData?.scheduledAt
-        ? new Date(initialData.scheduledAt).toISOString().slice(0, 16)
+        ? formatDateTimeLocal(initialData.scheduledAt)
         : (defaultScheduledAt ?? ""),
       interviewerName: initialData?.interviewerName ?? "",
       meetingLink: initialData?.meetingLink ?? "",

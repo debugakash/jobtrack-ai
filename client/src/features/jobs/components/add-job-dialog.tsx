@@ -26,14 +26,12 @@ export default function AddJobDialog() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-2xl">
-        <DialogHeader>
+      <DialogContent className="flex max-h-[90vh] flex-col overflow-hidden sm:max-w-2xl">
+        <DialogHeader className="shrink-0">
           <DialogTitle>Add Job</DialogTitle>
         </DialogHeader>
 
-        <div className="py-8 text-center text-muted-foreground">
-          <JobForm mode="create" onSuccess={() => setOpen(false)} />
-        </div>
+        <JobForm mode="create" onSuccess={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );

@@ -17,6 +17,8 @@ export interface CreateJobRequest {
   location?: string;
   jobType: JobType;
   workMode: WorkMode;
+  salaryMin?: number;
+  salaryMax?: number;
   status: JobStatus;
   jobUrl?: string;
   notes?: string;

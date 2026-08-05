@@ -4,6 +4,7 @@ import {
   findUserByEmail,
   findUserById,
   updateUserAvatar,
+  updateUserPassword,
 } from "../repositories/user.repository.js";
 import { hashPassword } from "../utils/hash.js";
 import { LoginInput, RegisterInput } from "../validators/auth.validator.js";
@@ -76,4 +77,29 @@ export async function updateUserAvatarService(
   }
 
   return updateUserAvatar(userId, avatarPath);
+}
+
+export async function changePassword(
+  userId: string,
+  currentPassword: string,
+  newPassword: string,
+) {
+  const user = await findUserById(userId);
+
+  if (!user) {
+    throw new NotFoundError("User not found");
+  }
+
+  const isCurrentPasswordValid = await bcrypt.compare(
+    currentPassword,
+    user.passwordHash,
+  );
+
+  if (!isCurrentPasswordValid) {
+    throw new UnauthorizedError("Current password is incorrect");
+  }
+
+  const newPasswordHash = await hashPassword(newPassword);
+
+  await updateUserPassword(userId, newPasswordHash);
 }

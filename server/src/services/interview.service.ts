@@ -1,3 +1,4 @@
+import prisma from "../config/prisma.js";
 import { Prisma } from "@prisma/client";
 import {
   createInterviewDto,
@@ -18,15 +19,59 @@ export async function createInterviewService(
   jobId: string,
   data: createInterviewDto,
 ) {
-  return createInterview({
-    ...data,
-
-    job: {
-      connect: {
-        id: jobId,
-      },
+  const job = await prisma.job.findFirst({
+    where: {
+      id: jobId,
+      userId,
     },
   });
+
+  if (!job) {
+    throw new NotFoundError("Job not found");
+  }
+
+  const result = await prisma.$transaction(async (tx) => {
+    const interview = await tx.interview.create({
+      data: {
+        ...data,
+        job: {
+          connect: {
+            id: jobId,
+          },
+        },
+      },
+    });
+
+    const shouldUpdateStatus =
+      job.status === "WISHLIST" ||
+      job.status === "APPLIED" ||
+      job.status === "SCREENING";
+
+    if (shouldUpdateStatus) {
+      await tx.job.update({
+        where: {
+          id: jobId,
+        },
+        data: {
+          status: "INTERVIEW",
+        },
+      });
+
+      await tx.jobActivity.create({
+        data: {
+          jobId,
+          type: "INTERVIEW",
+          title: "Interview scheduled",
+          description: `${data.round} interview scheduled.`,
+          eventDate: data.scheduledAt,
+        },
+      });
+    }
+
+    return interview;
+  });
+
+  return result;
 }
 
 export async function getInterviewsService(userId: string, jobId: string) {
@@ -55,6 +100,12 @@ export async function updateInterviewService(
   interviewId: string,
   data: updateInterviewDto,
 ) {
+  const existingInterview = await getInterviewById(userId, interviewId);
+
+  if (!existingInterview) {
+    throw new NotFoundError("Interview not found");
+  }
+
   const result = await updateInterview(
     userId,
     interviewId,
@@ -63,6 +114,18 @@ export async function updateInterviewService(
 
   if (result.count === 0) {
     throw new NotFoundError("Interview not found");
+  }
+
+  if (data.completed === true && existingInterview.completed === false) {
+    await prisma.jobActivity.create({
+      data: {
+        jobId: existingInterview.jobId,
+        type: "INTERVIEW",
+        title: "Interview completed",
+        description: `${existingInterview.round} interview was completed.`,
+        eventDate: new Date(),
+      },
+    });
   }
 
   return getInterviewById(userId, interviewId);

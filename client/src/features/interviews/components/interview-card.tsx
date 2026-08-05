@@ -14,6 +14,17 @@ interface Props {
   jobId: string;
 }
 
+function formatInterviewDate(date: string) {
+  return new Date(date).toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
+
 export default function InterviewCard({ jobId }: Props) {
   const { data: interviews, isLoading } = useInterviews(jobId);
 
@@ -44,7 +55,7 @@ export default function InterviewCard({ jobId }: Props) {
                 <h4 className="font-semibold">{interview.round}</h4>
 
                 <p className="text-sm text-muted-foreground">
-                  {new Date(interview.scheduledAt).toLocaleString()}
+                  {formatInterviewDate(interview.scheduledAt)}
                 </p>
 
                 {interview.interviewerName && (

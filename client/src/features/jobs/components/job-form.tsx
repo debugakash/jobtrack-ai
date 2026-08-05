@@ -60,6 +60,9 @@ export default function JobForm({
 
       workMode: initialData?.workMode ?? "REMOTE",
 
+      salaryMin: initialData?.salaryMin ?? undefined,
+      salaryMax: initialData?.salaryMax ?? undefined,
+
       status: initialData?.status ?? "APPLIED",
 
       jobUrl: initialData?.jobUrl ?? "",
@@ -78,6 +81,9 @@ export default function JobForm({
         jobType: initialData.jobType,
 
         workMode: initialData.workMode,
+
+        salaryMin: initialData.salaryMin ?? undefined,
+        salaryMax: initialData.salaryMax ?? undefined,
 
         status: initialData.status,
 
@@ -109,188 +115,259 @@ export default function JobForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="company"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Company</FormLabel>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex min-h-0 flex-1 flex-col"
+      >
+        <div className="min-h-0 flex-1 space-y-6 overflow-y-auto pr-2">
+          <FormField
+            control={form.control}
+            name="company"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Company</FormLabel>
 
-              <FormControl>
-                <Input placeholder="Google" {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="jobTitle"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Job Title</FormLabel>
-
-              <FormControl>
-                <Input placeholder="Frontend Developer" {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="location"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Location</FormLabel>
-
-              <FormControl>
-                <Input placeholder="Indore" {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="jobType"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Job Type</FormLabel>
-
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select job type" />
-                  </SelectTrigger>
+                  <Input placeholder="Google" {...field} />
                 </FormControl>
 
-                <SelectContent>
-                  {JOB_TYPES.map((type) => (
-                    <SelectItem key={type} value={type}>
-                      {formatEnum(type)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="jobTitle"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Job Title</FormLabel>
 
-        <FormField
-          control={form.control}
-          name="workMode"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Work Mode</FormLabel>
-
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select work mode" />
-                  </SelectTrigger>
+                  <Input placeholder="Frontend Developer" {...field} />
                 </FormControl>
 
-                <SelectContent>
-                  {WORK_MODES.map((mode) => (
-                    <SelectItem key={mode} value={mode}>
-                      {formatEnum(mode)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="location"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Location</FormLabel>
 
-        <FormField
-          control={form.control}
-          name="status"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Status</FormLabel>
-
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select status" />
-                  </SelectTrigger>
+                  <Input placeholder="Indore" {...field} />
                 </FormControl>
 
-                <SelectContent>
-                  {JOB_STATUSES.map((status) => (
-                    <SelectItem key={status} value={status}>
-                      {formatEnum(status)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="jobType"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Job Type</FormLabel>
 
-        <FormField
-          control={form.control}
-          name="jobUrl"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Job URL</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select job type" />
+                    </SelectTrigger>
+                  </FormControl>
 
-              <FormControl>
-                <Input placeholder="https://..." {...field} />
-              </FormControl>
+                  <SelectContent>
+                    {JOB_TYPES.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {formatEnum(type)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Notes</FormLabel>
+          <FormField
+            control={form.control}
+            name="workMode"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Work Mode</FormLabel>
 
-              <FormControl>
-                <Textarea
-                  rows={4}
-                  placeholder="Additional notes..."
-                  {...field}
-                />
-              </FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select work mode" />
+                    </SelectTrigger>
+                  </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                  <SelectContent>
+                    {WORK_MODES.map((mode) => (
+                      <SelectItem key={mode} value={mode}>
+                        {formatEnum(mode)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={createJob.isPending || updateJob.isPending}
-        >
-          {mode === "create"
-            ? createJob.isPending
-              ? "Creating..."
-              : "Create Job"
-            : updateJob.isPending
-              ? "Saving..."
-              : "Save Changes"}
-        </Button>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <FormField
+              control={form.control}
+              name="salaryMin"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Minimum Salary</FormLabel>
+
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="800000"
+                      value={field.value ?? ""}
+                      onChange={(e) => {
+                        const value = e.target.value;
+
+                        field.onChange(
+                          value === "" ? undefined : Number(value),
+                        );
+                      }}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="salaryMax"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Maximum Salary</FormLabel>
+
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="1200000"
+                      value={field.value ?? ""}
+                      onChange={(e) => {
+                        const value = e.target.value;
+
+                        field.onChange(
+                          value === "" ? undefined : Number(value),
+                        );
+                      }}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Status</FormLabel>
+
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                  </FormControl>
+
+                  <SelectContent>
+                    {JOB_STATUSES.map((status) => (
+                      <SelectItem key={status} value={status}>
+                        {formatEnum(status)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="jobUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Job URL</FormLabel>
+
+                <FormControl>
+                  <Input placeholder="https://..." {...field} />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="notes"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Notes</FormLabel>
+
+                <FormControl>
+                  <Textarea
+                    rows={4}
+                    placeholder="Additional notes..."
+                    {...field}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="shrink-0 border-t bg-background pt-4">
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={createJob.isPending || updateJob.isPending}
+          >
+            {mode === "create"
+              ? createJob.isPending
+                ? "Creating..."
+                : "Create Job"
+              : updateJob.isPending
+                ? "Saving..."
+                : "Save Changes"}
+          </Button>
+        </div>
       </form>
     </Form>
   );

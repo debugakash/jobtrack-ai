@@ -1,5 +1,7 @@
 import { Router } from "express";
 import {
+  changePasswordController,
+  deleteAccount,
   login,
   me,
   register,
@@ -21,5 +23,9 @@ router.patch(
   uploadAvatar.single("avatar"),
   updateAvatar,
 );
+
+router.patch("/me/password", authenticate, changePasswordController);
+
+router.delete("/me", authenticate, deleteAccount);
 
 export default router;

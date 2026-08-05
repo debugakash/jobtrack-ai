@@ -54,3 +54,46 @@ export async function updateUserAvatar(id: string, avatar: string) {
     },
   });
 }
+
+export async function updateUserPreferences(
+  id: string,
+  data: {
+    emailNotifications?: boolean;
+    interviewReminders?: boolean;
+    followUpReminders?: boolean;
+  },
+) {
+  return prisma.user.update({
+    where: {
+      id,
+    },
+    data,
+    select: {
+      emailNotifications: true,
+      interviewReminders: true,
+      followUpReminders: true,
+    },
+  });
+}
+
+export async function updateUserPassword(id: string, passwordHash: string) {
+  return prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      passwordHash,
+    },
+  });
+}
+
+export async function deleteUser(id: string) {
+  return prisma.user.delete({
+    where: {
+      id,
+    },
+    include: {
+      resumes: true,
+    },
+  });
+}

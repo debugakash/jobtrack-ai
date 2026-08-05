@@ -7,6 +7,7 @@ import { createInterview } from "../api/create-interview";
 import {
   invalidateCalendarInterviews,
   invalidateDashboard,
+  invalidateJob,
   invalidateJobInterviews,
   invalidateNotifications,
 } from "@/lib/query-invalidations";
@@ -20,6 +21,7 @@ export function useCreateInterview(jobId: string) {
 
     onSuccess: () => {
       invalidateJobInterviews(queryClient, jobId);
+      invalidateJob(queryClient, jobId);
       invalidateCalendarInterviews(queryClient);
       invalidateNotifications(queryClient);
       invalidateDashboard(queryClient);

@@ -21,6 +21,7 @@ export function createJob(data: {
   notes?: string;
   followUpDate?: Date;
   followUpDone?: boolean;
+  appliedAt?: Date | null;
   user: {
     connect: {
       id: string;

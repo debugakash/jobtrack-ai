@@ -22,6 +22,12 @@ export function invalidateJobs(queryClient: QueryClient) {
   });
 }
 
+export function invalidateJob(queryClient: QueryClient, jobId: string) {
+  queryClient.invalidateQueries({
+    queryKey: ["job", jobId],
+  });
+}
+
 export function invalidateJobInterviews(
   queryClient: QueryClient,
   jobId: string,

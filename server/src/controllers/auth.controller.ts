@@ -1,13 +1,19 @@
 import { Request, Response } from "express";
 import {
+  changePassword,
   getCurrentUser,
   loginUser,
   registerUser,
   updateUserAvatarService,
 } from "../services/auth.service.js";
-import { loginSchema, registerSchema } from "../validators/auth.validator.js";
+import {
+  changePasswordSchema,
+  loginSchema,
+  registerSchema,
+} from "../validators/auth.validator.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import { BadRequestError } from "../errors/BadRequestError.js";
+import { deleteUserService } from "../services/user.service.js";
 
 export const register = asyncHandler(async (req: Request, res: Response) => {
   const data = registerSchema.parse(req.body);
@@ -61,6 +67,10 @@ export const me = asyncHandler(async (req: Request, res: Response) => {
       emailVerified: user.emailVerified,
       isActive: user.isActive,
       createdAt: user.createdAt,
+
+      emailNotifications: user.emailNotifications,
+      interviewReminders: user.interviewReminders,
+      followUpReminders: user.followUpReminders,
     },
   });
 });
@@ -81,6 +91,34 @@ export const updateAvatar = asyncHandler(
       data: {
         avatar: user.avatar,
       },
+    });
+  },
+);
+
+export const changePasswordController = asyncHandler(
+  async (req: Request, res: Response) => {
+    const data = changePasswordSchema.parse(req.body);
+
+    await changePassword(
+      req.user!.userId,
+      data.currentPassword,
+      data.newPassword,
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Password changed successfully",
+    });
+  },
+);
+
+export const deleteAccount = asyncHandler(
+  async (req: Request, res: Response) => {
+    await deleteUserService(req.user!.userId);
+
+    res.status(200).json({
+      success: true,
+      message: "Account deleted successfully",
     });
   },
 );

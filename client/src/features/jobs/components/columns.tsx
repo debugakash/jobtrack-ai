@@ -31,8 +31,21 @@ export const columns: ColumnDef<Job>[] = [
     cell: ({ row }) => <JobStatusBadge status={row.original.status} />,
   },
   {
-    accessorKey: "applicationDate",
+    accessorKey: "appliedAt",
     header: "Applied",
+    cell: ({ row }) => {
+      const appliedAt = row.original.appliedAt;
+
+      if (!appliedAt) {
+        return "—";
+      }
+
+      return new Date(appliedAt).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+    },
   },
   {
     id: "actions",

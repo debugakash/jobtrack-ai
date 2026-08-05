@@ -1,0 +1,26 @@
+info:
+  name: Update Notification Preferences
+  type: http
+  seq: 5
+
+http:
+  method: PATCH
+  url: "{{BASE_URL}}/api/users/me/preferences"
+  headers:
+    - name: Authorization
+      value: Bearer {{accessToken}}
+  body:
+    type: json
+    data: |-
+      {
+        "emailNotifications": false,
+        "interviewReminders": true,
+        "followUpReminders": false
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

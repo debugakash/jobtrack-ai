@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
 
-import { updateUserProfile } from "../services/user.service.js";
+import {
+  updateUserPreferencesService,
+  updateUserProfile,
+} from "../services/user.service.js";
 import { updateProfileSchema } from "../validators/user.validator.js";
+import { updateUserPreferencesSchema } from "../validators/user-preferences.validator.js";
 import { asyncHandler } from "../utils/async-handler.js";
 
 export const updateProfile = asyncHandler(
@@ -26,3 +30,21 @@ export const updateProfile = asyncHandler(
     });
   },
 );
+
+export async function updateUserPreferencesController(
+  req: Request,
+  res: Response,
+) {
+  const data = updateUserPreferencesSchema.parse(req.body);
+
+  const preferences = await updateUserPreferencesService(
+    req.user!.userId,
+    data,
+  );
+
+  return res.json({
+    success: true,
+    message: "Notification preferences updated successfully",
+    data: preferences,
+  });
+}

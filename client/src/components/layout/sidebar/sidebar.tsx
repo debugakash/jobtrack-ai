@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 export default function Sidebar() {
   return (
     <aside className="flex h-screen w-64 flex-col border-r bg-sidebar text-sidebar-foreground">
-      <div className="border-b p-6">
+      <div className="flex h-16 shrink-0 items-center border-b px-6">
         <h1 className="text-2xl font-bold">JobTrack AI</h1>
       </div>
 
