@@ -33,6 +33,7 @@ export interface JobActivity {
     | "NOTE"
     | "FOLLOW_UP"
     | "INTERVIEW"
+    | "RESUME"
     | "OFFER"
     | "REJECTED"
     | "OTHER";

@@ -17,6 +17,7 @@ import {
   addJobActivity,
   handleStatusChangeActivity,
 } from "./job-activity.service.js";
+import { getResumeById } from "../repositories/resume.repository.js";
 
 export async function createJobService(userId: string, data: CreateJobDto) {
   const effectiveStatus = data.status ?? "APPLIED";
@@ -69,6 +70,20 @@ export async function updateJobService(
   const statusChanged =
     data.status !== undefined && data.status !== existingJob.status;
 
+  const resumeChanged =
+    data.resumeId !== undefined && data.resumeId !== existingJob.resumeId;
+
+  let newResume = null;
+
+  // If attaching a resume, make sure it belongs to the current user.
+  if (resumeChanged && data.resumeId) {
+    newResume = await getResumeById(userId, data.resumeId);
+
+    if (!newResume) {
+      throw new NotFoundError("Resume not found");
+    }
+  }
+
   const updateData: Prisma.JobUpdateInput = {
     ...data,
   };
@@ -93,6 +108,36 @@ export async function updateJobService(
 
   if (statusChanged) {
     await handleStatusChangeActivity(jobId, existingJob.status, data.status!);
+  }
+
+  if (resumeChanged) {
+    const oldResumeName =
+      existingJob.resume?.label || existingJob.resume?.originalName;
+
+    const newResumeName = newResume?.label || newResume?.originalName;
+
+    if (!existingJob.resume && newResume) {
+      await addJobActivity(
+        jobId,
+        JobActivityType.RESUME,
+        "Resume attached",
+        `"${newResumeName}" was attached to this job.`,
+      );
+    } else if (existingJob.resume && !newResume) {
+      await addJobActivity(
+        jobId,
+        JobActivityType.RESUME,
+        "Resume removed",
+        `"${oldResumeName}" was removed from this job.`,
+      );
+    } else if (existingJob.resume && newResume) {
+      await addJobActivity(
+        jobId,
+        JobActivityType.RESUME,
+        "Resume changed",
+        `Resume changed from "${oldResumeName}" to "${newResumeName}".`,
+      );
+    }
   }
 
   return updatedJob;

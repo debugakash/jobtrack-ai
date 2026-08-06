@@ -41,7 +41,16 @@ export default function AttachResumeDialog({ jobId, currentResumeId }: Props) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(nextOpen) => {
+        setOpen(nextOpen);
+
+        if (nextOpen) {
+          setSelected(currentResumeId ?? "");
+        }
+      }}
+    >
       <DialogTrigger asChild>
         <Button variant="outline">
           {currentResumeId ? "Change Resume" : "Attach Resume"}
@@ -71,7 +80,11 @@ export default function AttachResumeDialog({ jobId, currentResumeId }: Props) {
           onClick={handleAttach}
           disabled={mutation.isPending}
         >
-          {mutation.isPending ? "Saving..." : "Attach Resume"}
+          {mutation.isPending
+            ? "Saving..."
+            : currentResumeId
+              ? "Change Resume"
+              : "Attach Resume"}
         </Button>
       </DialogContent>
     </Dialog>

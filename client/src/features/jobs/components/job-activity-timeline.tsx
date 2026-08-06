@@ -11,6 +11,7 @@ import {
   CircleX,
   Clock,
   FileText,
+  FileUser,
   PartyPopper,
   RefreshCw,
 } from "lucide-react";
@@ -25,6 +26,7 @@ const activityIcons: Record<JobActivity["type"], React.ElementType> = {
   NOTE: FileText,
   FOLLOW_UP: Clock,
   INTERVIEW: Calendar,
+  RESUME: FileUser,
   OFFER: PartyPopper,
   REJECTED: CircleX,
   OTHER: Circle,
@@ -36,6 +38,7 @@ const activityColors: Record<JobActivity["type"], string> = {
   NOTE: "text-slate-500",
   FOLLOW_UP: "text-amber-500",
   INTERVIEW: "text-violet-500",
+  RESUME: "text-indigo-500",
   OFFER: "text-emerald-500",
   REJECTED: "text-red-500",
   OTHER: "text-slate-500",

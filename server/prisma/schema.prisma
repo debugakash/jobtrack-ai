@@ -194,6 +194,7 @@ enum JobActivityType {
   NOTE
   FOLLOW_UP
   INTERVIEW
+  RESUME
   OFFER
   REJECTED
   OTHER
