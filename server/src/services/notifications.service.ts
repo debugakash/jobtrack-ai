@@ -4,15 +4,15 @@ import {
   getFollowUpReminders,
   getInterviewReminders,
   getNotifications,
+  getUserNotificationSettings,
   markAllAsRead,
   markAsRead,
 } from "../repositories/notifications.repository.js";
 
 import { differenceInCalendarDays, startOfDay } from "date-fns";
+import { sendEmail } from "./email.service.js";
 
 export async function getNotificationsService(userId: string) {
-  await generateNotifications(userId);
-
   return getNotifications(userId);
 }
 
@@ -33,6 +33,10 @@ export async function generateNotifications(
 ) {
   const followUpRemindersEnabled = preferences?.followUpReminders ?? true;
   const interviewRemindersEnabled = preferences?.interviewReminders ?? true;
+
+  const emailSettings = await getUserNotificationSettings(userId);
+
+  const emailNotificationsEnabled = emailSettings?.emailNotifications ?? false;
 
   const today = startOfDay(new Date());
 
@@ -82,6 +86,20 @@ export async function generateNotifications(
           actionUrl: `/jobs/${interview.job.id}`,
           reminderDate,
         });
+
+        if (emailNotificationsEnabled && emailSettings?.email) {
+          await sendEmail({
+            to: emailSettings.email,
+            subject: title,
+            html: `
+              <h2>${title}</h2>
+              <p>${message}</p>
+              <p>
+                Open JobTrack AI to view more details.
+              </p>
+            `,
+          });
+        }
       }
     }
   }
@@ -144,6 +162,20 @@ export async function generateNotifications(
           actionUrl: `/jobs/${job.id}`,
           reminderDate,
         });
+
+        if (emailNotificationsEnabled && emailSettings?.email) {
+          await sendEmail({
+            to: emailSettings.email,
+            subject: title,
+            html: `
+        <h2>${title}</h2>
+        <p>${message}</p>
+        <p>
+          Open JobTrack AI to view more details.
+        </p>
+      `,
+          });
+        }
       }
     }
   }

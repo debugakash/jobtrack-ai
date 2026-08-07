@@ -125,3 +125,15 @@ export function getUsersForNotificationScheduler() {
     },
   });
 }
+
+export function getUserNotificationSettings(userId: string) {
+  return prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      email: true,
+      emailNotifications: true,
+    },
+  });
+}
