@@ -24,78 +24,127 @@ export function markAllNotificationsReadService(userId: string) {
   return markAllAsRead(userId);
 }
 
-export async function generateNotifications(userId: string) {
-  const interviews = await getInterviewReminders(userId);
-
-  const followUps = await getFollowUpReminders(userId);
+export async function generateNotifications(
+  userId: string,
+  preferences?: {
+    followUpReminders: boolean;
+    interviewReminders: boolean;
+  },
+) {
+  const followUpRemindersEnabled = preferences?.followUpReminders ?? true;
+  const interviewRemindersEnabled = preferences?.interviewReminders ?? true;
 
   const today = startOfDay(new Date());
 
-  for (const interview of interviews) {
-    const interviewDate = startOfDay(interview.scheduledAt);
+  // -----------------------------------
+  // Interview reminders
+  // -----------------------------------
 
-    const diff = differenceInCalendarDays(interviewDate, today);
+  if (interviewRemindersEnabled) {
+    const interviews = await getInterviewReminders(userId);
 
-    let title = "";
-    let message = "";
+    for (const interview of interviews) {
+      const interviewDate = startOfDay(interview.scheduledAt);
 
-    if (diff === 0) {
-      title = "Interview Today";
+      const diff = differenceInCalendarDays(interviewDate, today);
 
-      message = `${interview.job.company} interview is scheduled today.`;
-    } else if (diff === 1) {
-      title = "Interview Tomorrow";
+      let title = "";
+      let message = "";
 
-      message = `${interview.job.company} interview is tomorrow.`;
-    } else {
-      continue;
-    }
+      if (diff === 0) {
+        title = "Interview Today";
 
-    const exists = await findNotification(userId, title, message);
+        message = `${interview.job.company} interview is scheduled today.`;
+      } else if (diff === 1) {
+        title = "Interview Tomorrow";
 
-    if (!exists) {
-      await createNotification({
+        message = `${interview.job.company} interview is tomorrow.`;
+      } else {
+        continue;
+      }
+
+      const reminderDate = interviewDate;
+
+      const exists = await findNotification(
         userId,
-        title,
-        message,
-        type: "INTERVIEW",
-        actionUrl: `/jobs/${interview.job.id}`,
-      });
+        interview.job.id,
+        "INTERVIEW",
+        reminderDate,
+      );
+
+      if (!exists) {
+        await createNotification({
+          userId,
+          jobId: interview.job.id,
+          title,
+          message,
+          type: "INTERVIEW",
+          actionUrl: `/jobs/${interview.job.id}`,
+          reminderDate,
+        });
+      }
     }
   }
 
-  for (const job of followUps) {
-    if (!job.followUpDate) continue;
+  // -----------------------------------
+  // Follow-up reminders
+  // -----------------------------------
 
-    const followUpDate = startOfDay(job.followUpDate);
+  if (followUpRemindersEnabled) {
+    const followUps = await getFollowUpReminders(userId);
 
-    const diff = differenceInCalendarDays(followUpDate, today);
+    for (const job of followUps) {
+      if (!job.followUpDate) continue;
 
-    let title = "";
-    let message = "";
+      const followUpDate = startOfDay(job.followUpDate);
 
-    if (diff < 0) {
-      title = "Follow-up Overdue";
+      const diff = differenceInCalendarDays(followUpDate, today);
 
-      message = `Follow up with ${job.company} for ${job.jobTitle}.`;
-    } else if (diff === 0) {
-      title = "Follow-up Today";
+      let title = "";
+      let message = "";
 
-      message = `Today is the follow-up day for ${job.company}.`;
-    } else {
-      continue;
-    }
+      if (diff < 0) {
+        title = "Follow-up Overdue";
 
-    const exists = await findNotification(userId, title, message);
+        message = `Follow up with ${job.company} for ${job.jobTitle}.`;
+      } else if (diff === 0) {
+        title = "Follow-up Today";
 
-    if (!exists) {
-      await createNotification({
+        message = `Today is the follow-up day for ${job.company}.`;
+      } else {
+        continue;
+      }
+
+      // IMPORTANT:
+      // For overdue reminders we use TODAY as the reminder date.
+      //
+      // This means:
+      //
+      // July 30 → one overdue notification
+      // July 31 → another overdue notification
+      // Aug 1   → another overdue notification
+      //
+      // But the same day cannot generate duplicates.
+      const reminderDate = today;
+
+      const exists = await findNotification(
         userId,
-        title,
-        message,
-        type: "FOLLOW_UP",
-        actionUrl: `/jobs/${job.id}`,
-      });
+        job.id,
+        "FOLLOW_UP",
+        reminderDate,
+      );
+
+      if (!exists) {
+        await createNotification({
+          userId,
+          jobId: job.id,
+          title,
+          message,
+          type: "FOLLOW_UP",
+          actionUrl: `/jobs/${job.id}`,
+          reminderDate,
+        });
+      }
     }
   }
 }

@@ -40,10 +40,12 @@ export function markAllAsRead(userId: string) {
 
 export function createNotification(data: {
   userId: string;
+  jobId?: string;
   title: string;
   message: string;
   type: "FOLLOW_UP" | "INTERVIEW" | "JOB_STATUS" | "SYSTEM";
   actionUrl?: string;
+  reminderDate?: Date;
 }) {
   return prisma.notification.create({
     data,
@@ -52,14 +54,16 @@ export function createNotification(data: {
 
 export function findNotification(
   userId: string,
-  title: string,
-  message: string,
+  jobId: string,
+  type: "FOLLOW_UP" | "INTERVIEW" | "JOB_STATUS" | "SYSTEM",
+  reminderDate: Date,
 ) {
   return prisma.notification.findFirst({
     where: {
       userId,
-      title,
-      message,
+      jobId,
+      type,
+      reminderDate,
     },
   });
 }
@@ -96,6 +100,28 @@ export function getFollowUpReminders(userId: string) {
       followUpDate: {
         not: null,
       },
+    },
+  });
+}
+
+export function getUsersForNotificationScheduler() {
+  return prisma.user.findMany({
+    where: {
+      isActive: true,
+      OR: [
+        {
+          followUpReminders: true,
+        },
+        {
+          interviewReminders: true,
+        },
+      ],
+    },
+
+    select: {
+      id: true,
+      followUpReminders: true,
+      interviewReminders: true,
     },
   });
 }
