@@ -3,7 +3,11 @@ export interface AnalyticsOverview {
   offers: number;
   interviews: number;
   rejections: number;
+
   responseRate: number;
+  interviewRate: number;
+  offerRate: number;
+  rejectionRate: number;
 }
 
 export interface MonthlyApplication {
@@ -21,6 +25,11 @@ export interface SourceDistribution {
   count: number;
 }
 
+export interface ApplicationFunnel {
+  status: string;
+  count: number;
+}
+
 export interface AnalyticsResponse {
   overview: AnalyticsOverview;
 
@@ -29,4 +38,10 @@ export interface AnalyticsResponse {
   statusDistribution: StatusDistribution[];
 
   sourceDistribution: SourceDistribution[];
+
+  applicationFunnel: ApplicationFunnel[];
+
+  averageTimeToInterview: number;
+
+  averageTimeToResponse: number;
 }

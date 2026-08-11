@@ -10,14 +10,21 @@ import { PageHeader } from "@/components/common/page-header";
 
 import { useAnalytics } from "../hooks/use-analytics";
 
-import { Briefcase, CalendarDays, Gift, TrendingUp } from "lucide-react";
+import {
+  Briefcase,
+  CalendarDays,
+  Clock3,
+  Gift,
+  Timer,
+  TrendingUp,
+} from "lucide-react";
 
 import AnalyticsSummaryCard from "../components/analytics-summary-card";
 import MonthlyApplicationsChart from "../components/monthly-applications-chart";
-import StatusDistributionChart from "../components/status-distribution-chart";
 import SourceDistributionChart from "../components/source-distribution-chart";
 import AnalyticsSkeleton from "../components/analytics-skeleton";
 import AnalyticsEmptyState from "../components/analytics-empty-state";
+import ApplicationFunnelChart from "../components/application-funnel-chart";
 
 export default function AnalyticsPage() {
   const [range, setRange] = useState("365");
@@ -29,6 +36,9 @@ export default function AnalyticsPage() {
   }
 
   const overview = data?.overview;
+
+  const averageResponseHours = data?.averageTimeToResponse ?? 0;
+  const averageResponseDays = averageResponseHours / 24;
 
   if (!overview || overview.totalApplications === 0) {
     return (
@@ -91,10 +101,36 @@ export default function AnalyticsPage() {
         />
       </div>
 
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <AnalyticsSummaryCard
+          title="Interview Rate"
+          value={`${data?.overview.interviewRate ?? 0}%`}
+          icon={CalendarDays}
+        />
+
+        <AnalyticsSummaryCard
+          title="Offer Rate"
+          value={`${data?.overview.offerRate ?? 0}%`}
+          icon={Gift}
+        />
+
+        <AnalyticsSummaryCard
+          title="Avg. Time to Interview"
+          value={`${data?.averageTimeToInterview ?? 0} days`}
+          icon={Clock3}
+        />
+
+        <AnalyticsSummaryCard
+          title="Avg. Time to Response"
+          value={`${averageResponseDays.toFixed(1)} days`}
+          icon={Timer}
+        />
+      </div>
+
       <div className="grid gap-6 lg:grid-cols-2">
         <MonthlyApplicationsChart data={data?.monthlyApplications ?? []} />
 
-        <StatusDistributionChart data={data?.statusDistribution ?? []} />
+        <ApplicationFunnelChart data={data?.applicationFunnel ?? []} />
       </div>
 
       <SourceDistributionChart data={data?.sourceDistribution ?? []} />

@@ -19,7 +19,7 @@ interface Props {
   }[];
 }
 
-export default function StatusDistributionChart({ data }: Props) {
+export default function ApplicationFunnelChart({ data }: Props) {
   const chartData = data.map((item) => ({
     ...item,
     label: formatEnum(item.status),
@@ -28,22 +28,29 @@ export default function StatusDistributionChart({ data }: Props) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Status Distribution</CardTitle>
+        <CardTitle>Application Funnel</CardTitle>
       </CardHeader>
 
       <CardContent>
         <div className="h-[320px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData}>
+            <BarChart
+              data={chartData}
+              layout="vertical"
+              margin={{
+                left: 20,
+                right: 20,
+              }}
+            >
               <CartesianGrid strokeDasharray="4 4" />
 
-              <XAxis dataKey="label" />
+              <XAxis type="number" allowDecimals={false} />
 
-              <YAxis allowDecimals={false} />
+              <YAxis type="category" dataKey="label" width={90} />
 
               <Tooltip />
 
-              <Bar dataKey="count" fill="currentColor" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="count" fill="currentColor" radius={[0, 6, 6, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
