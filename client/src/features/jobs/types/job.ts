@@ -11,6 +11,14 @@ export type JobType = "FULL_TIME" | "PART_TIME" | "CONTRACT" | "INTERN";
 
 export type WorkMode = "REMOTE" | "HYBRID" | "ONSITE";
 
+export type JobSource =
+  | "LINKEDIN"
+  | "NAUKRI"
+  | "INDEED"
+  | "REFERRAL"
+  | "COMPANY_WEBSITE"
+  | "OTHER";
+
 export interface CreateJobRequest {
   company: string;
   jobTitle: string;
@@ -20,6 +28,7 @@ export interface CreateJobRequest {
   salaryMin?: number;
   salaryMax?: number;
   status: JobStatus;
+  source?: JobSource;
   jobUrl?: string;
   notes?: string;
 }
@@ -73,14 +82,7 @@ export interface Job {
   salaryMin?: number | null;
   salaryMax?: number | null;
 
-  source?:
-    | "LINKEDIN"
-    | "NAUKRI"
-    | "INDEED"
-    | "REFERRAL"
-    | "COMPANY_WEBSITE"
-    | "OTHER"
-    | null;
+  source?: JobSource | null;
 
   jobUrl?: string | null;
 

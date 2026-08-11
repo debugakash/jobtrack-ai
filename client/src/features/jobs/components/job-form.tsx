@@ -26,7 +26,12 @@ import {
 
 import { jobSchema, type JobFormValues } from "../validators/job-schema";
 
-import { JOB_STATUSES, JOB_TYPES, WORK_MODES } from "@/constants/job";
+import {
+  JOB_SOURCES,
+  JOB_STATUSES,
+  JOB_TYPES,
+  WORK_MODES,
+} from "@/constants/job";
 
 import { formatEnum } from "@/lib/format";
 
@@ -65,6 +70,8 @@ export default function JobForm({
 
       status: initialData?.status ?? "APPLIED",
 
+      source: initialData?.source ?? undefined,
+
       jobUrl: initialData?.jobUrl ?? "",
 
       notes: initialData?.notes ?? "",
@@ -86,6 +93,8 @@ export default function JobForm({
         salaryMax: initialData.salaryMax ?? undefined,
 
         status: initialData.status,
+
+        source: initialData.source ?? undefined,
 
         jobUrl: initialData.jobUrl ?? "",
 
@@ -307,6 +316,34 @@ export default function JobForm({
                     {JOB_STATUSES.map((status) => (
                       <SelectItem key={status} value={status}>
                         {formatEnum(status)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="source"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Source</FormLabel>
+
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select source" />
+                    </SelectTrigger>
+                  </FormControl>
+
+                  <SelectContent>
+                    {JOB_SOURCES.map((source) => (
+                      <SelectItem key={source} value={source}>
+                        {formatEnum(source)}
                       </SelectItem>
                     ))}
                   </SelectContent>

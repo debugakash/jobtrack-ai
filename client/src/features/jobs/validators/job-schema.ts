@@ -1,6 +1,11 @@
 import { z } from "zod";
 
-import { JOB_STATUSES, JOB_TYPES, WORK_MODES } from "@/constants/job";
+import {
+  JOB_STATUSES,
+  JOB_TYPES,
+  WORK_MODES,
+  JOB_SOURCES,
+} from "@/constants/job";
 
 export const jobSchema = z.object({
   company: z.string().min(1, "Company is required"),
@@ -18,6 +23,8 @@ export const jobSchema = z.object({
   salaryMax: z.number().int().nonnegative().optional(),
 
   status: z.enum(JOB_STATUSES),
+
+  source: z.enum(JOB_SOURCES).optional(),
 
   jobUrl: z.string().url("Enter a valid URL").optional().or(z.literal("")),
 

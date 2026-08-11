@@ -11,6 +11,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { formatEnum } from "@/lib/format";
 
+import { useTheme } from "next-themes";
+
 interface Props {
   data: {
     source: string | null;
@@ -28,6 +30,10 @@ const COLORS = [
 ];
 
 export default function SourceDistributionChart({ data }: Props) {
+  const { resolvedTheme } = useTheme();
+
+  const legendColor = resolvedTheme === "dark" ? "#f9fafb" : "#111827";
+
   const chartData = data.map((item) => ({
     ...item,
     label: item.source ? formatEnum(item.source) : "Unknown",
@@ -54,9 +60,26 @@ export default function SourceDistributionChart({ data }: Props) {
                 ))}
               </Pie>
 
-              <Tooltip />
+              <Tooltip
+                contentStyle={{
+                  borderRadius: 10,
+                  border: "1px solid var(--border)",
+                  backgroundColor:
+                    resolvedTheme === "dark" ? "#1f2937" : "#ffffff",
+                }}
+                labelStyle={{
+                  color: resolvedTheme === "dark" ? "#f9fafb" : "#111827",
+                }}
+                itemStyle={{
+                  color: resolvedTheme === "dark" ? "#f9fafb" : "#111827",
+                }}
+              />
 
-              <Legend />
+              <Legend
+                formatter={(value) => (
+                  <span style={{ color: legendColor }}>{value}</span>
+                )}
+              />
             </PieChart>
           </ResponsiveContainer>
         </div>
