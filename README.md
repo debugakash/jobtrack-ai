@@ -1,18 +1,26 @@
 # JobTrack AI
 
-A production-style **Full Stack Job Application Tracker** built with modern web technologies to help job seekers organize applications, manage interviews, track resumes, monitor progress, and gain actionable insights throughout their job search.
+A production-style **Full Stack Job Application Tracker** built with modern web technologies to help job seekers organize applications, manage interviews, track resumes, monitor follow-ups, analyze job-search performance, and gain actionable insights throughout their job search.
 
-The project is being built with a strong focus on clean architecture, scalable design, maintainable code, and real-world software engineering practices.
+The project is being developed with a strong focus on clean architecture, scalable design, maintainable code, real-world software engineering practices, and a feature-based development workflow.
 
 ---
 
 # 🚀 Current Status
 
-**Backend:** ✅ ~90% Complete
+**Backend:** ✅ Core Features Complete
 
-**Frontend:** 🚧 Starting Development
+**Frontend:** 🚧 Core Application Features Complete / Ongoing Enhancements
 
-This project is actively being developed following an incremental, feature-based workflow with Git version control and comprehensive documentation.
+**Analytics:** ✅ Implemented
+
+**Notifications:** ✅ In-app & Email Notifications Implemented
+
+**AI Features:** 🔜 Planned
+
+**Production Deployment:** 🔜 Planned
+
+The project is actively being developed incrementally with Git version control, feature-based architecture, and supporting technical documentation.
 
 ---
 
@@ -25,6 +33,8 @@ This project is actively being developed following an incremental, feature-based
 - JWT Authentication
 - Protected Routes
 - Password Hashing with bcrypt
+- Change Password
+- Session-based authenticated application flow
 
 ---
 
@@ -38,47 +48,157 @@ This project is actively being developed following an incremental, feature-based
 - Filter Jobs
 - Sort Jobs
 - Pagination
+- Job Status Tracking
+- Job Source Tracking
+- Job Type Tracking
+- Work Mode Tracking
+- Salary Range Tracking
+- Job Notes
+- Job URL
+- Application Date Tracking
 
----
+Supported application sources include:
 
-## 📊 Dashboard & Analytics
-
-- Total Applications
-- Applications by Status
-- Monthly Applications
-- Top Companies
-- Pending Follow-ups
+- LinkedIn
+- Naukri
+- Indeed
+- Referral
+- Company Website
+- Other
 
 ---
 
 ## 📝 Activity Timeline
 
-Automatic activity tracking for:
+Automatic activity tracking for important job events:
 
 - Job Created
 - Status Changes
 - Interview Events
 - Offer Updates
 - Rejections
+- Follow-up Events
+- Other Job Activities
+
+This provides a historical timeline for each job application.
 
 ---
 
 ## 🎯 Interview Management
 
 - Schedule Interviews
+- Store Interview Details
 - Update Interview Details
+- Track Interview Status
 - Mark Interviews as Completed
 - Delete Interviews
+- Interview-related Activity Tracking
 
 ---
 
 ## 📄 Resume Management
 
-- Upload Resume (PDF, DOC, DOCX)
+- Upload Resume
+- PDF / DOC / DOCX Support
 - Download Resume
 - Delete Resume
 - Default Resume Support
-- Secure File Management
+- Resume Metadata Management
+- Associate Resume with Job Applications
+
+Local file storage is currently used during development.
+
+Cloud object storage such as **AWS S3 or Cloudflare R2** is planned for production deployment.
+
+---
+
+## 🔔 Notifications
+
+### In-App Notifications
+
+- Follow-up Reminders
+- Interview Notifications
+- Job-related Notifications
+- Notification Read / Unread State
+
+### Email Notifications
+
+- Automated Email Notifications
+- Scheduled Notification Processing
+- Email-based Follow-up Reminders
+
+A background scheduler is used to process scheduled notifications.
+
+---
+
+## 📊 Dashboard
+
+The dashboard provides a high-level overview of the job search, including:
+
+- Total Applications
+- Application Status Overview
+- Upcoming Interviews
+- Pending Follow-ups
+- Recent Applications
+- Application Trends
+- Job Search Progress
+
+---
+
+# 📈 Analytics
+
+JobTrack AI includes an analytics module for understanding job-search performance.
+
+### Application Metrics
+
+- Total Applications
+- Applications by Month
+- Applications by Status
+- Applications by Source
+- Application Funnel
+
+### Conversion Metrics
+
+- Response Rate
+- Interview Conversion Rate
+- Offer Conversion Rate
+- Rejection Rate
+
+### Time-based Metrics
+
+- Average Time to Interview
+- Average Time to Response
+
+### Application Sources
+
+Applications can be analyzed by:
+
+- LinkedIn
+- Naukri
+- Indeed
+- Referral
+- Company Website
+- Other
+
+Charts and visualizations are implemented using **Recharts** with light and dark theme support.
+
+---
+
+# 🎨 UI & User Experience
+
+- Responsive Application Layout
+- Dashboard
+- Sidebar Navigation
+- Sticky Application Navigation
+- Light / Dark Theme
+- Theme-aware Charts
+- Responsive Data Visualization
+- Accessible Form Components
+- Loading Skeletons
+- Empty States
+- Form Validation
+- Toast / User Feedback
+- Reusable UI Components
 
 ---
 
@@ -98,6 +218,7 @@ Automatic activity tracking for:
 - React Hook Form
 - Zod
 - Recharts
+- Lucide React
 
 ---
 
@@ -109,8 +230,25 @@ Automatic activity tracking for:
 - Prisma ORM
 - PostgreSQL
 - JWT Authentication
-- Multer (File Uploads)
-- Zod Validation
+- bcrypt
+- Multer
+- Zod
+- date-fns
+
+---
+
+## Database
+
+**PostgreSQL**
+
+Prisma ORM is used for:
+
+- Database schema management
+- Migrations
+- Type-safe database queries
+- Relational data modeling
+
+The project intentionally uses PostgreSQL as its primary database because the application's data is highly relational, including users, jobs, activities, interviews, resumes, and notifications.
 
 ---
 
@@ -118,10 +256,12 @@ Automatic activity tracking for:
 
 - Git
 - GitHub
-- Bruno (API Testing)
+- VS Code
+- Bruno
 - Prisma Studio
 - ESLint
 - Prettier
+- npm
 
 ---
 
@@ -130,123 +270,32 @@ Automatic activity tracking for:
 ```text
 jobtrack-ai/
 │
-├── client/                 # React Frontend (In Progress)
+├── client/                       # React + TypeScript Frontend
+│   └── src/
+│       ├── components/
+│       ├── features/
+│       ├── hooks/
+│       ├── layouts/
+│       ├── lib/
+│       └── ...
 │
-├── server/                 # Express Backend
+├── server/                       # Express + TypeScript Backend
 │   ├── prisma/
 │   ├── src/
+│   │   ├── controllers/
+│   │   ├── repositories/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── validators/
+│   │   ├── middleware/
+│   │   └── ...
 │   ├── uploads/
 │   └── package.json
 │
 ├── docs/
 │   └── ROADMAP.md
 │
+├── .gitignore
+├── LICENSE
 └── README.md
 ```
-
----
-
-# 🏗 Backend Architecture
-
-The backend follows a layered architecture:
-
-```text
-Routes
-   │
-Controllers
-   │
-Services
-   │
-Repositories
-   │
-Prisma ORM
-   │
-PostgreSQL
-```
-
-This separation keeps business logic independent from HTTP handling and database access, making the project easier to maintain and extend.
-
----
-
-# 📚 Documentation
-
-Project planning and future milestones are maintained in:
-
-```text
-docs/ROADMAP.md
-```
-
----
-
-# 🚀 Getting Started
-
-## Clone the repository
-
-```bash
-git clone https://github.com/<your-username>/jobtrack-ai.git
-cd jobtrack-ai
-```
-
----
-
-## Backend Setup
-
-```bash
-cd server
-npm install
-```
-
-Create a `.env` file with your local configuration.
-
-Run database migrations:
-
-```bash
-npx prisma migrate dev
-```
-
-Generate the Prisma Client:
-
-```bash
-npx prisma generate
-```
-
-Start the development server:
-
-```bash
-npm run dev
-```
-
----
-
-## Frontend Setup
-
-_(Coming Soon)_
-
----
-
-# 🎯 Upcoming Features
-
-- Attach Resume to Jobs
-- Follow-up Reminder Scheduler
-- Email Notifications
-- Advanced Analytics
-- AWS S3 / Cloudflare R2 Storage
-- AI Resume Matching
-- AI Job Insights
-- Production Deployment
-
-See `docs/ROADMAP.md` for the complete roadmap.
-
----
-
-# 🤝 Contributing
-
-Contributions, suggestions, and feedback are always welcome.
-
-Feel free to open an issue or submit a pull request.
-
----
-
-# 📄 License
-
-This project is licensed under the MIT License.
