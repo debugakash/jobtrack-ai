@@ -1,6 +1,6 @@
-import z from "zod";
+import { z } from "zod";
 
-export const updateProfileSchema = z.object({
+export const profileSchema = z.object({
   firstName: z
     .string()
     .trim()
@@ -28,7 +28,7 @@ export const updateProfileSchema = z.object({
   headline: z
     .string()
     .trim()
-    .max(150, "Headline must be 150 characters or less")
+    .max(150, "Professional headline must be 150 characters or less")
     .optional()
     .or(z.literal("")),
 
@@ -41,18 +41,21 @@ export const updateProfileSchema = z.object({
 
   linkedinUrl: z
     .string()
+    .trim()
     .url("Enter a valid LinkedIn URL")
     .optional()
     .or(z.literal("")),
 
   githubUrl: z
     .string()
+    .trim()
     .url("Enter a valid GitHub URL")
     .optional()
     .or(z.literal("")),
 
   portfolioUrl: z
     .string()
+    .trim()
     .url("Enter a valid portfolio URL")
     .optional()
     .or(z.literal("")),
@@ -60,9 +63,9 @@ export const updateProfileSchema = z.object({
   skills: z
     .string()
     .trim()
-    .max(500, "Skills are too long")
+    .max(500, "Skills must be 500 characters or less")
     .optional()
     .or(z.literal("")),
 });
 
-export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
+export type ProfileFormValues = z.infer<typeof profileSchema>;

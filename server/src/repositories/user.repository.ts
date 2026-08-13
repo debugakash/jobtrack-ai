@@ -34,6 +34,14 @@ export async function updateUser(
   data: {
     firstName: string;
     lastName: string;
+    phone?: string;
+    location?: string;
+    headline?: string;
+    bio?: string;
+    linkedinUrl?: string;
+    githubUrl?: string;
+    portfolioUrl?: string;
+    skills?: string;
   },
 ) {
   return prisma.user.update({

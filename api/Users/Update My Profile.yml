@@ -16,7 +16,15 @@ http:
     data: |-
       {
         "firstName": "Bruno",
-        "lastName": "Mars"
+        "lastName": "Mars",
+        "phone": "9876543210",
+        "location": "Indore, India",
+        "headline": "Full Stack Developer",
+        "bio": "Full Stack Developer building scalable web applications with React, TypeScript, Node.js and PostgreSQL.",
+        "linkedinUrl": "https://www.linkedin.com/in/bruno-mars",
+        "githubUrl": "https://github.com/bruno-mars",
+        "portfolioUrl": "https://bruno-mars.com",
+        "skills": "React.js, TypeScript, JavaScript, Node.js, Express.js, PostgreSQL, Prisma"
       }
   auth: inherit
 

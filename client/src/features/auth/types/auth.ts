@@ -12,13 +12,29 @@ export interface RegisterRequest {
 
 export interface User {
   id: string;
+
   firstName: string;
   lastName: string;
   email: string;
+
   avatar?: string | null;
+
+  // Profile information
+  phone?: string | null;
+  location?: string | null;
+  headline?: string | null;
+  bio?: string | null;
+  linkedinUrl?: string | null;
+  githubUrl?: string | null;
+  portfolioUrl?: string | null;
+  skills?: string | null;
+
+  // Account information
   emailVerified?: boolean;
   isActive?: boolean;
   createdAt?: string;
+
+  // Notification preferences
   emailNotifications: boolean;
   interviewReminders: boolean;
   followUpReminders: boolean;

@@ -23,6 +23,16 @@ export const updateProfile = asyncHandler(
         lastName: user.lastName,
         email: user.email,
         avatar: user.avatar,
+
+        phone: user.phone,
+        location: user.location,
+        headline: user.headline,
+        bio: user.bio,
+        linkedinUrl: user.linkedinUrl,
+        githubUrl: user.githubUrl,
+        portfolioUrl: user.portfolioUrl,
+        skills: user.skills,
+
         emailVerified: user.emailVerified,
         isActive: user.isActive,
         createdAt: user.createdAt,
