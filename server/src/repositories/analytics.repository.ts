@@ -187,26 +187,86 @@ export async function getApplicationFunnel(
 ) {
   const createdAtFilter = getDateFilter(range);
 
-  const statuses = ["APPLIED", "SCREENING", "INTERVIEW", "OFFER"] as const;
-
-  const result = await Promise.all(
-    statuses.map(async (status) => {
-      const count = await prisma.job.count({
+  const jobs = await prisma.job.findMany({
+    where: {
+      userId,
+      createdAt: createdAtFilter,
+    },
+    select: {
+      status: true,
+      activities: {
         where: {
-          userId,
-          createdAt: createdAtFilter,
-          status,
+          type: "STATUS_CHANGED",
         },
-      });
+        select: {
+          description: true,
+        },
+      },
+    },
+  });
 
-      return {
-        status,
-        count,
-      };
-    }),
-  );
+  const stages = {
+    APPLIED: 0,
+    SCREENING: 0,
+    INTERVIEW: 0,
+    OFFER: 0,
+  };
 
-  return result;
+  for (const job of jobs) {
+    const reachedStages = new Set<string>();
+
+    // Current status counts as a stage reached.
+    reachedStages.add(job.status);
+
+    // Historical status changes tell us about previous stages.
+    for (const activity of job.activities) {
+      const description = activity.description ?? "";
+
+      const match = description.match(/Status changed from (\w+) to (\w+)/);
+
+      if (!match) continue;
+
+      const [, previousStatus, newStatus] = match;
+
+      reachedStages.add(previousStatus);
+      reachedStages.add(newStatus);
+    }
+
+    if (reachedStages.has("APPLIED")) {
+      stages.APPLIED++;
+    }
+
+    if (reachedStages.has("SCREENING")) {
+      stages.SCREENING++;
+    }
+
+    if (reachedStages.has("INTERVIEW")) {
+      stages.INTERVIEW++;
+    }
+
+    if (reachedStages.has("OFFER")) {
+      stages.OFFER++;
+    }
+  }
+
+  return [
+    {
+      status: "APPLIED",
+      count: stages.APPLIED,
+    },
+    {
+      status: "SCREENING",
+      count: stages.SCREENING,
+    },
+    {
+      status: "INTERVIEW",
+      count: stages.INTERVIEW,
+    },
+    {
+      status: "OFFER",
+      count: stages.OFFER,
+    },
+  ];
 }
 
 export async function getAverageTimeToInterview(userId: string) {
