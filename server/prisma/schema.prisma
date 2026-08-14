@@ -7,22 +7,22 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  firstName     String
-  lastName      String
-  email         String    @unique
-  passwordHash  String
+  id           String @id @default(cuid())
+  firstName    String
+  lastName     String
+  email        String @unique
+  passwordHash String
 
-  avatar        String?
+  avatar String?
 
-  phone         String?
-  location      String?
-  headline      String?
-  bio           String?
-  linkedinUrl   String?
-  githubUrl     String?
-  portfolioUrl  String?
-  skills        String?
+  phone        String?
+  location     String?
+  headline     String?
+  bio          String?
+  linkedinUrl  String?
+  githubUrl    String?
+  portfolioUrl String?
+  skills       String?
 
   isActive      Boolean   @default(true)
   emailVerified Boolean   @default(false)
@@ -38,7 +38,25 @@ model User {
   resumes       Resume[]
   notifications Notification[]
 
+  passwordResetTokens PasswordResetToken[]
+
   @@map("users")
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("password_reset_tokens")
 }
 
 model Job {
@@ -55,21 +73,21 @@ model Job {
   jobUrl    String?
   notes     String?
 
-  resumeId  String?
-  resume    Resume?    @relation(fields: [resumeId], references: [id], onDelete: SetNull)
+  resumeId String?
+  resume   Resume? @relation(fields: [resumeId], references: [id], onDelete: SetNull)
 
   followUpDate DateTime?
-  followUpDone Boolean @default(false)
+  followUpDone Boolean   @default(false)
 
   appliedAt DateTime?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
-  userId    String
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  activities JobActivity[]
-  interviews Interview[]
+  activities    JobActivity[]
+  interviews    Interview[]
   notifications Notification[]
 
   @@index([userId])
@@ -77,108 +95,103 @@ model Job {
   @@index([company])
   @@index([createdAt])
   @@index([resumeId])
-  
   @@map("jobs")
 }
 
 model JobActivity {
-  id          String          @id @default(cuid())
+  id String @id @default(cuid())
 
-  type        JobActivityType
+  type JobActivityType
 
-  title       String
+  title String
 
   description String?
 
-  eventDate   DateTime
+  eventDate DateTime
 
-  createdAt   DateTime        @default(now())
+  createdAt DateTime @default(now())
 
-  jobId        String
-  job          Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  jobId String
+  job   Job    @relation(fields: [jobId], references: [id], onDelete: Cascade)
 
   @@index([jobId])
   @@index([eventDate])
-
   @@map("job_activities")
 }
 
 model Interview {
-  id              String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  round           String
+  round String
 
-  scheduledAt     DateTime
+  scheduledAt DateTime
 
   interviewerName String?
 
-  meetingLink     String?
+  meetingLink String?
 
-  notes           String?
+  notes String?
 
-  completed       Boolean @default(false)
+  completed Boolean @default(false)
 
-  createdAt       DateTime @default(now())
+  createdAt DateTime @default(now())
 
-  updatedAt       DateTime @updatedAt
+  updatedAt DateTime @updatedAt
 
-  jobId           String
+  jobId String
 
-  job             Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
 
   @@index([jobId])
-
   @@index([scheduledAt])
-
   @@map("interviews")
 }
 
 model Notification {
-  id           String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  title        String
-  message      String
+  title   String
+  message String
 
-  type         NotificationType
+  type NotificationType
 
-  isRead       Boolean  @default(false)
+  isRead Boolean @default(false)
 
-  actionUrl    String?
+  actionUrl String?
 
   reminderDate DateTime?
 
-  createdAt    DateTime @default(now())
+  createdAt DateTime @default(now())
 
-  userId       String
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  jobId        String?
-  job          Job?     @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  jobId String?
+  job   Job?    @relation(fields: [jobId], references: [id], onDelete: Cascade)
 
   @@unique([userId, jobId, type, reminderDate])
-
   @@index([userId])
   @@index([jobId])
   @@index([createdAt])
 }
 
 model Resume {
-  id           String   @id @default(cuid())
+  id           String  @id @default(cuid())
   originalName String
   storedName   String
   filePath     String
   mimeType     String
   fileSize     Int
   label        String?
-  isDefault    Boolean  @default(false)
+  isDefault    Boolean @default(false)
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  userId       String
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  jobs         Job[]
+  jobs Job[]
 
   @@index([userId])
   @@map("resumes")

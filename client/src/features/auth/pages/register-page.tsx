@@ -1,9 +1,13 @@
+import AuthLayout from "../components/auth-layout";
 import RegisterForm from "../components/register-form";
 
 export default function RegisterPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-100 p-4">
+    <AuthLayout
+      title="Create your account"
+      description="Start organizing your job search with JobTrack AI."
+    >
       <RegisterForm />
-    </div>
+    </AuthLayout>
   );
 }

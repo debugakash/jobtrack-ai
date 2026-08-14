@@ -15,6 +15,21 @@ import {
   UnauthorizedError,
 } from "../errors/index.js";
 
+import {
+  findPasswordResetToken,
+  createPasswordResetToken,
+  deletePasswordResetTokensForUser,
+  markPasswordResetTokenAsUsed,
+} from "../repositories/password-reset.repository.js";
+
+import {
+  generatePasswordResetToken,
+  hashPasswordResetToken,
+} from "../utils/password-reset-token.js";
+
+import { getPasswordResetTokenExpiry } from "../utils/password-reset-config.js";
+import { sendPasswordResetEmail } from "./email.service.js";
+
 export async function registerUser(data: RegisterInput) {
   const existingUser = await findUserByEmail(data.email);
 
@@ -102,4 +117,63 @@ export async function changePassword(
   const newPasswordHash = await hashPassword(newPassword);
 
   await updateUserPassword(userId, newPasswordHash);
+}
+
+export async function requestPasswordReset(email: string) {
+  const user = await findUserByEmail(email);
+
+  // Do not reveal whether an email exists.
+  if (!user) {
+    return;
+  }
+
+  // Invalidate previous reset tokens.
+  await deletePasswordResetTokensForUser(user.id);
+
+  const rawToken = generatePasswordResetToken();
+  const tokenHash = hashPasswordResetToken(rawToken);
+  const expiresAt = getPasswordResetTokenExpiry();
+
+  await createPasswordResetToken({
+    tokenHash,
+    userId: user.id,
+    expiresAt,
+  });
+
+  const clientUrl = process.env.CLIENT_URL;
+
+  if (!clientUrl) {
+    throw new Error("CLIENT_URL is not configured.");
+  }
+
+  const resetUrl = `${clientUrl}/reset-password?token=${rawToken}`;
+
+  await sendPasswordResetEmail({
+    to: user.email,
+    resetUrl,
+  });
+}
+
+export async function resetPassword(token: string, newPassword: string) {
+  const tokenHash = hashPasswordResetToken(token);
+
+  const resetToken = await findPasswordResetToken(tokenHash);
+
+  if (!resetToken) {
+    throw new UnauthorizedError("Invalid or expired password reset token");
+  }
+
+  if (resetToken.usedAt) {
+    throw new UnauthorizedError("Invalid or expired password reset token");
+  }
+
+  if (resetToken.expiresAt < new Date()) {
+    throw new UnauthorizedError("Invalid or expired password reset token");
+  }
+
+  const newPasswordHash = await hashPassword(newPassword);
+
+  await updateUserPassword(resetToken.userId, newPasswordHash);
+
+  await markPasswordResetTokenAsUsed(resetToken.id);
 }

@@ -4,12 +4,16 @@ import {
   getCurrentUser,
   loginUser,
   registerUser,
+  requestPasswordReset,
+  resetPassword,
   updateUserAvatarService,
 } from "../services/auth.service.js";
 import {
   changePasswordSchema,
+  forgotPasswordSchema,
   loginSchema,
   registerSchema,
+  resetPasswordSchema,
 } from "../validators/auth.validator.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import { BadRequestError } from "../errors/BadRequestError.js";
@@ -146,6 +150,33 @@ export const deleteAccount = asyncHandler(
     res.status(200).json({
       success: true,
       message: "Account deleted successfully",
+    });
+  },
+);
+
+export const forgotPassword = asyncHandler(
+  async (req: Request, res: Response) => {
+    const data = forgotPasswordSchema.parse(req.body);
+
+    await requestPasswordReset(data.email);
+
+    res.status(200).json({
+      success: true,
+      message:
+        "If an account exists with this email, a password reset link has been sent.",
+    });
+  },
+);
+
+export const resetPasswordController = asyncHandler(
+  async (req: Request, res: Response) => {
+    const data = resetPasswordSchema.parse(req.body);
+
+    await resetPassword(data.token, data.newPassword);
+
+    res.status(200).json({
+      success: true,
+      message: "Password reset successfully",
     });
   },
 );

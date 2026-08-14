@@ -1,7 +1,7 @@
 info:
   name: Login
   type: http
-  seq: 1
+  seq: 2
 
 http:
   method: POST
@@ -12,15 +12,20 @@ http:
   body:
     type: json
     data: |-
-      {
-        "email": "bruno.mars@gmail.com",
-        "password": "BrunoPass1"
-      }
+      // {
+      //   "email": "bruno.mars@gmail.com",
+      //   "password": "BrunoPass1"
+      // }
 
       // {
       //   "email": "laniho7132@careney.com",
       //   "password": "JobTrack@123"
       // }
+
+      {
+        "email": "baboy37353@beiwoh.com",
+        "password": "MyResendPass@1234"
+      }
   auth: inherit
 
 runtime:

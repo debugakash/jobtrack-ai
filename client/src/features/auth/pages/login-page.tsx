@@ -1,9 +1,13 @@
+import AuthLayout from "../components/auth-layout";
 import LoginForm from "../components/login-form";
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-100 p-4">
+    <AuthLayout
+      title="Welcome back"
+      description="Sign in to continue managing your job search."
+    >
       <LoginForm />
-    </div>
+    </AuthLayout>
   );
 }
