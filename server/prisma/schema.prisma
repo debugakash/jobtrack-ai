@@ -63,6 +63,7 @@ model Job {
   id        String     @id @default(cuid())
   company   String
   jobTitle  String
+  description String?
   location  String?
   jobType   JobType
   workMode  WorkMode

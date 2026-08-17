@@ -5,6 +5,8 @@ export const createJobSchema = z.object({
   company: z.string().min(1),
   jobTitle: z.string().min(1),
 
+  description: z.string().trim().optional(),
+
   location: z.string().optional(),
 
   jobType: z.enum(JobType),

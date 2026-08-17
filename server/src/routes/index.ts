@@ -5,6 +5,7 @@ import jobActivityRoutes from "./job-activity.routes.js";
 import interviewRoutes from "./interview.routes.js";
 import resumeRoutes from "./resume.routes.js";
 import userRoutes from "./user.routes.js";
+import aiRoutes from "./ai.routes.js";
 
 const router = Router();
 
@@ -14,5 +15,6 @@ router.use("/jobs", jobRoutes);
 router.use("/jobs", jobActivityRoutes);
 router.use("/", interviewRoutes);
 router.use("/resumes", resumeRoutes);
+router.use("/ai", aiRoutes);
 
 export default router;

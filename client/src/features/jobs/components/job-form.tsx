@@ -59,6 +59,7 @@ export default function JobForm({
     defaultValues: {
       company: initialData?.company ?? "",
       jobTitle: initialData?.jobTitle ?? "",
+      description: initialData?.description ?? "",
       location: initialData?.location ?? "",
 
       jobType: initialData?.jobType ?? "FULL_TIME",
@@ -83,6 +84,7 @@ export default function JobForm({
       form.reset({
         company: initialData.company,
         jobTitle: initialData.jobTitle,
+        description: initialData.description ?? "",
         location: initialData.location ?? "",
 
         jobType: initialData.jobType,
@@ -154,6 +156,26 @@ export default function JobForm({
 
                 <FormControl>
                   <Input placeholder="Frontend Developer" {...field} />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Job Description</FormLabel>
+
+                <FormControl>
+                  <Textarea
+                    rows={8}
+                    placeholder="Paste the job description here..."
+                    {...field}
+                  />
                 </FormControl>
 
                 <FormMessage />

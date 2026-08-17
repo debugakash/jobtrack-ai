@@ -5,6 +5,7 @@ import { GetJobsQueryDto, GetJobsResultDto } from "../dtos/job.dto.js";
 export function createJob(data: {
   company: string;
   jobTitle: string;
+  description?: string;
   location?: string;
   jobType: "FULL_TIME" | "PART_TIME" | "CONTRACT" | "INTERN";
   workMode: "REMOTE" | "HYBRID" | "ONSITE";

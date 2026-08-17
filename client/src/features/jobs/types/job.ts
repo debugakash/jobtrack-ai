@@ -22,6 +22,7 @@ export type JobSource =
 export interface CreateJobRequest {
   company: string;
   jobTitle: string;
+  description?: string;
   location?: string;
   jobType: JobType;
   workMode: WorkMode;
@@ -70,6 +71,8 @@ export interface Job {
   company: string;
 
   jobTitle: string;
+
+  description?: string | null;
 
   location?: string;
 

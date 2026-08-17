@@ -12,6 +12,8 @@ export const jobSchema = z.object({
 
   jobTitle: z.string().min(1, "Job title is required"),
 
+  description: z.string().optional(),
+
   location: z.string().optional(),
 
   jobType: z.enum(JOB_TYPES),
