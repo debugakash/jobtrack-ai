@@ -29,6 +29,7 @@ import {
 
 import { getPasswordResetTokenExpiry } from "../utils/password-reset-config.js";
 import { sendPasswordResetEmail } from "./email.service.js";
+import { storageService } from "./storage/index.js";
 
 export async function registerUser(data: RegisterInput) {
   const existingUser = await findUserByEmail(data.email);
@@ -91,7 +92,19 @@ export async function updateUserAvatarService(
     throw new NotFoundError("User not found");
   }
 
-  return updateUserAvatar(userId, avatarPath);
+  const previousAvatar = user.avatar;
+
+  const updatedUser = await updateUserAvatar(userId, avatarPath);
+
+  if (previousAvatar && previousAvatar !== avatarPath) {
+    try {
+      await storageService.delete(previousAvatar);
+    } catch (error) {
+      console.error("Failed to delete previous avatar:", error);
+    }
+  }
+
+  return updatedUser;
 }
 
 export async function changePassword(
@@ -176,4 +189,18 @@ export async function resetPassword(token: string, newPassword: string) {
   await updateUserPassword(resetToken.userId, newPasswordHash);
 
   await markPasswordResetTokenAsUsed(resetToken.id);
+}
+
+export async function getUserAvatarUrlService(userId: string) {
+  const user = await findUserById(userId);
+
+  if (!user) {
+    throw new NotFoundError("User not found");
+  }
+
+  if (!user.avatar) {
+    return null;
+  }
+
+  return storageService.getSignedUrl(user.avatar);
 }

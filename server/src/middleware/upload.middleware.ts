@@ -2,17 +2,7 @@ import multer from "multer";
 import path from "path";
 import crypto from "crypto";
 
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
-    cb(null, "uploads/resumes");
-  },
-
-  filename: (_req, file, cb) => {
-    const uniqueName = crypto.randomUUID() + path.extname(file.originalname);
-
-    cb(null, uniqueName);
-  },
-});
+const storage = multer.memoryStorage();
 
 const fileFilter: multer.Options["fileFilter"] = (_req, file, cb) => {
   const allowedMimeTypes = [
@@ -36,17 +26,7 @@ export const uploadResume = multer({
   },
 });
 
-const avatarStorage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
-    cb(null, "uploads/avatars");
-  },
-
-  filename: (_req, file, cb) => {
-    const uniqueName = crypto.randomUUID() + path.extname(file.originalname);
-
-    cb(null, uniqueName);
-  },
-});
+const avatarStorage = multer.memoryStorage();
 
 const avatarFileFilter: multer.Options["fileFilter"] = (_req, file, cb) => {
   const allowedMimeTypes = ["image/jpeg", "image/png", "image/webp"];

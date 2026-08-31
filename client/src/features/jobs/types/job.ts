@@ -114,3 +114,10 @@ export interface CreateJobResponse {
   success: boolean;
   data: Job;
 }
+
+export interface JobAnalysisResult {
+  matchScore: number;
+  matchingSkills: string[];
+  missingSkills: string[];
+  suggestions: string[];
+}

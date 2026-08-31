@@ -54,6 +54,11 @@ export default function SourceDistributionChart({ data }: Props) {
                 dataKey="count"
                 nameKey="label"
                 outerRadius={100}
+                isAnimationActive
+                animationDuration={800}
+                label={({ name, percent }) =>
+                  `${formatEnum(name as string)} (${((percent ?? 0) * 100).toFixed(0)}%)`
+                }
               >
                 {chartData.map((_, index) => (
                   <Cell key={index} fill={COLORS[index % COLORS.length]} />
@@ -66,12 +71,6 @@ export default function SourceDistributionChart({ data }: Props) {
                   border: "1px solid var(--border)",
                   backgroundColor:
                     resolvedTheme === "dark" ? "#1f2937" : "#ffffff",
-                }}
-                labelStyle={{
-                  color: resolvedTheme === "dark" ? "#f9fafb" : "#111827",
-                }}
-                itemStyle={{
-                  color: resolvedTheme === "dark" ? "#f9fafb" : "#111827",
                 }}
               />
 

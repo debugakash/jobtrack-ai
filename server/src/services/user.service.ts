@@ -8,6 +8,7 @@ import {
 } from "../repositories/user.repository.js";
 import type { UpdateProfileInput } from "../validators/user.validator.js";
 import type { UpdateUserPreferencesInput } from "../validators/user-preferences.validator.js";
+import { storageService } from "./storage/index.js";
 
 export async function updateUserProfile(
   userId: string,
@@ -33,13 +34,25 @@ export async function deleteUserService(userId: string) {
   const user = await deleteUser(userId);
 
   for (const resume of user.resumes) {
-    if (fs.existsSync(resume.filePath)) {
-      fs.unlinkSync(resume.filePath);
+    try {
+      await storageService.delete(resume.filePath);
+    } catch (error) {
+      console.error(
+        `Failed to delete resume file from storage: ${resume.filePath}`,
+        error,
+      );
     }
   }
 
-  if (user.avatar && fs.existsSync(user.avatar)) {
-    fs.unlinkSync(user.avatar);
+  if (user.avatar) {
+    try {
+      await storageService.delete(user.avatar);
+    } catch (error) {
+      console.error(
+        `Failed to delete avatar file from storage: ${user.avatar}`,
+        error,
+      );
+    }
   }
 
   return user;

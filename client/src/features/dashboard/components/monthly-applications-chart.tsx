@@ -16,11 +16,9 @@ import { useTheme } from "next-themes";
 
 export default function MonthlyApplicationsChart() {
   const { data, isLoading } = useMonthlyApplications();
-
   const { resolvedTheme } = useTheme();
 
   const axisColor = resolvedTheme === "dark" ? "#9ca3af" : "#6b7280";
-
   const gridColor = resolvedTheme === "dark" ? "#374151" : "#e5e7eb";
 
   if (isLoading || !data) {
@@ -61,6 +59,14 @@ export default function MonthlyApplicationsChart() {
                 contentStyle={{
                   borderRadius: 10,
                   border: "1px solid var(--border)",
+                  backgroundColor:
+                    resolvedTheme === "dark" ? "#1f2937" : "#ffffff",
+                }}
+                labelStyle={{
+                  color: resolvedTheme === "dark" ? "#f9fafb" : "#111827",
+                }}
+                itemStyle={{
+                  color: "#3b82f6",
                 }}
               />
 

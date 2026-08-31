@@ -133,9 +133,9 @@ export default function ProfilePage() {
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
             <div className="relative shrink-0">
               <Avatar className="h-24 w-24">
-                {user?.avatar && (
+                {user?.avatarUrl && (
                   <AvatarImage
-                    src={`http://localhost:5000/${user.avatar}`}
+                    src={user.avatarUrl}
                     alt={`${user.firstName} ${user.lastName}`}
                   />
                 )}

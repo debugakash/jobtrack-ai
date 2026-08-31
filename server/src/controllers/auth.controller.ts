@@ -18,6 +18,7 @@ import {
 import { asyncHandler } from "../utils/async-handler.js";
 import { BadRequestError } from "../errors/BadRequestError.js";
 import { deleteUserService } from "../services/user.service.js";
+import { storageService } from "../services/storage/index.js";
 
 export const register = asyncHandler(async (req: Request, res: Response) => {
   const data = registerSchema.parse(req.body);
@@ -41,6 +42,10 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 
   const { user, accessToken } = await loginUser(data);
 
+  const avatarUrl = user.avatar
+    ? await storageService.getSignedUrl(user.avatar)
+    : null;
+
   res.status(200).json({
     success: true,
     message: "Login successful",
@@ -51,6 +56,7 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
         lastName: user.lastName,
         email: user.email,
         avatar: user.avatar,
+        avatarUrl,
 
         phone: user.phone,
         location: user.location,
@@ -77,6 +83,10 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 export const me = asyncHandler(async (req: Request, res: Response) => {
   const user = await getCurrentUser(req.user!.userId);
 
+  const avatarUrl = user.avatar
+    ? await storageService.getSignedUrl(user.avatar)
+    : null;
+
   res.status(200).json({
     success: true,
     data: {
@@ -85,6 +95,7 @@ export const me = asyncHandler(async (req: Request, res: Response) => {
       lastName: user.lastName,
       email: user.email,
       avatar: user.avatar,
+      avatarUrl,
 
       phone: user.phone,
       location: user.location,
@@ -112,15 +123,23 @@ export const updateAvatar = asyncHandler(
       throw new BadRequestError("Avatar image is required");
     }
 
-    const avatarPath = req.file.path.replace(/\\/g, "/");
+    const storedFile = await storageService.upload(req.file, "avatars");
 
-    const user = await updateUserAvatarService(req.user!.userId, avatarPath);
+    const user = await updateUserAvatarService(
+      req.user!.userId,
+      storedFile.filePath,
+    );
+
+    const avatarUrl = user.avatar
+      ? await storageService.getSignedUrl(user.avatar)
+      : null;
 
     res.status(200).json({
       success: true,
       message: "Avatar updated successfully",
       data: {
         avatar: user.avatar,
+        avatarUrl,
       },
     });
   },

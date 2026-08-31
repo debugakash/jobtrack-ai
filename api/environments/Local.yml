@@ -3,7 +3,7 @@ variables:
   - name: interviewId
     value: ""
   - name: resumeId
-    value: ""
+    value: cmt2vgia40000h01zsmli11jt
   - secret: true
     name: BASE_URL
   - secret: true

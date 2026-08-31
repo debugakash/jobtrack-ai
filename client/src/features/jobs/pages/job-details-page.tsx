@@ -9,6 +9,7 @@ import JobNotFound from "../components/job-not-found";
 import JobActivityTimeline from "../components/job-activity-timeline";
 import InterviewCard from "@/features/interviews/components/interview-card";
 import ResumeCard from "@/features/resumes/components/resume-card";
+import JobAiAnalysisCard from "../components/job-ai-analysis-card";
 
 export default function JobDetailsPage() {
   const { id } = useParams();
@@ -36,6 +37,8 @@ export default function JobDetailsPage() {
         <InterviewCard jobId={job.id} />
         <ResumeCard job={job} />
       </div>
+
+      <JobAiAnalysisCard jobId={job.id} aiAnalysis={job.aiAnalysis} />
 
       <JobActivityTimeline activities={job.activities} />
     </div>

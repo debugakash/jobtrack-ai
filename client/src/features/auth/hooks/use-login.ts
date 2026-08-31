@@ -14,6 +14,7 @@ interface CurrentUserResponse {
     lastName: string;
     email: string;
     avatar: string | null;
+    avatarUrl: string | null;
     emailVerified: boolean;
     isActive: boolean;
     createdAt: string;

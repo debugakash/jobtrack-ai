@@ -75,7 +75,19 @@ export async function deleteResumeController(req: Request, res: Response) {
 export async function downloadResumeController(req: Request, res: Response) {
   const resumeId = req.params.id as string;
 
-  const resume = await downloadResumeService(req.user!.userId, resumeId);
+  const { resume, fileBuffer } = await downloadResumeService(
+    req.user!.userId,
+    resumeId,
+  );
 
-  return res.download(resume.filePath, resume.originalName);
+  res.setHeader("Content-Type", resume.mimeType);
+
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename="${resume.originalName}"`,
+  );
+
+  res.setHeader("Content-Length", fileBuffer.length);
+
+  return res.send(fileBuffer);
 }

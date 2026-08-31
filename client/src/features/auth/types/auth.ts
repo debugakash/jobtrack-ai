@@ -18,6 +18,7 @@ export interface User {
   email: string;
 
   avatar?: string | null;
+  avatarUrl: string | null;
 
   // Profile information
   phone?: string | null;

@@ -31,9 +31,9 @@ export default function UserMenu() {
       <DropdownMenuTrigger asChild>
         <button className="rounded-full outline-none ring-offset-2 transition focus:ring-2">
           <Avatar>
-            {user?.avatar && (
+            {user?.avatarUrl && (
               <AvatarImage
-                src={`http://localhost:5000/${user.avatar}`}
+                src={user.avatarUrl}
                 alt={`${user.firstName} ${user.lastName}`}
               />
             )}

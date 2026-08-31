@@ -77,6 +77,8 @@ model Job {
   resumeId String?
   resume   Resume? @relation(fields: [resumeId], references: [id], onDelete: SetNull)
 
+  aiAnalysis JobAiAnalysis?
+
   followUpDate DateTime?
   followUpDone Boolean   @default(false)
 
@@ -194,8 +196,36 @@ model Resume {
 
   jobs Job[]
 
+  aiAnalyses JobAiAnalysis[]
+
   @@index([userId])
   @@map("resumes")
+}
+
+model JobAiAnalysis {
+  id String @id @default(cuid())
+
+  matchScore Int
+
+  matchingSkills String[]
+  missingSkills  String[]
+  suggestions   String[]
+
+  provider String
+  model    String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  jobId String @unique
+  job   Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  resumeId String?
+  resume   Resume? @relation(fields: [resumeId], references: [id], onDelete: SetNull)
+
+  @@index([jobId])
+  @@index([createdAt])
+  @@map("job_ai_analyses")
 }
 
 enum JobStatus {

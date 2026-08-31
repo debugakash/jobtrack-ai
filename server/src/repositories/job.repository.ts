@@ -120,6 +120,8 @@ export function getJobById(userId: string, jobId: string) {
       },
 
       resume: true,
+
+      aiAnalysis: true,
     },
   });
 }

@@ -1,17 +1,8 @@
-import fs from "fs/promises";
 import pdf from "../utils/pdf-parser.js";
 
 import { BadRequestError } from "../errors/index.js";
 
-export async function extractResumeText(filePath: string) {
-  let fileBuffer: Buffer;
-
-  try {
-    fileBuffer = await fs.readFile(filePath);
-  } catch {
-    throw new BadRequestError("Unable to read resume file.");
-  }
-
+export async function extractResumeText(fileBuffer: Buffer) {
   try {
     const result = await pdf(fileBuffer);
 

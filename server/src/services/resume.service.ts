@@ -1,4 +1,4 @@
-import fs from "fs";
+import { storageService } from "./storage/index.js";
 import {
   createResume,
   deleteResume,
@@ -28,10 +28,12 @@ export async function createResumeService(
     );
   }
 
+  const storedFile = await storageService.upload(file, "resumes");
+
   return createResume({
     originalName: file.originalname,
-    storedName: file.filename,
-    filePath: file.path,
+    storedName: storedFile.storedName,
+    filePath: storedFile.filePath,
     mimeType: file.mimetype,
     fileSize: file.size,
     label: data.label,
@@ -94,9 +96,7 @@ export async function deleteResumeService(userId: string, resumeId: string) {
     throw new NotFoundError("Resume not found.");
   }
 
-  if (fs.existsSync(resume.filePath)) {
-    fs.unlinkSync(resume.filePath);
-  }
+  await storageService.delete(resume.filePath);
 
   await deleteResume(userId, resumeId);
 }
@@ -108,5 +108,10 @@ export async function downloadResumeService(userId: string, resumeId: string) {
     throw new NotFoundError("Resume not found.");
   }
 
-  return resume;
+  const fileBuffer = await storageService.download(resume.filePath);
+
+  return {
+    resume,
+    fileBuffer,
+  };
 }

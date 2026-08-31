@@ -22,12 +22,14 @@ export function useUpdateAvatar() {
         return {
           ...(currentUser as Record<string, unknown>),
           avatar: updatedUser.avatar,
+          avatarUrl: updatedUser.avatarUrl,
         };
       });
 
       // Update Zustand auth state
       updateUser({
         avatar: updatedUser.avatar,
+        avatarUrl: updatedUser.avatarUrl,
       });
 
       toast.success("Profile picture updated");
