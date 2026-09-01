@@ -2,9 +2,9 @@
 
 ## Project Goal
 
-Build a production-style full-stack Job Application Tracker that demonstrates modern software engineering practices including authentication, CRUD operations, analytics, activity history, file uploads, scheduling, notifications, and scalable architecture.
+Build a production-style full-stack Job Application Tracker that demonstrates modern software engineering practices including authentication, CRUD operations, analytics, activity history, file uploads, scheduling, notifications, cloud storage, AI integration, automated testing, CI/CD, and production deployment.
 
-The project is being developed incrementally with a focus on clean architecture, maintainable code, reusable components, and realistic production workflows.
+The project is developed incrementally with a focus on clean architecture, maintainable code, reusable components, realistic workflows, and production-oriented engineering practices.
 
 ---
 
@@ -17,7 +17,13 @@ The project is being developed incrementally with a focus on clean architecture,
 - [x] JWT Authentication
 - [x] Protected Routes
 - [x] Password Hashing
-- [ ] Forgot Password / Password Recovery
+- [x] Change Password
+- [x] Forgot Password
+- [x] Password Reset
+- [x] Secure Password Reset Tokens
+- [x] Password Reset Token Expiration
+- [x] Single-use Password Reset Tokens
+- [x] Password Reset Email
 
 ## Job Management
 
@@ -26,9 +32,6 @@ The project is being developed incrementally with a focus on clean architecture,
 - [x] Get Job by ID
 - [x] Update Job
 - [x] Delete Job
-
-## Job Features
-
 - [x] Search
 - [x] Filtering
 - [x] Sorting
@@ -39,14 +42,18 @@ The project is being developed incrementally with a focus on clean architecture,
 - [x] Job Type
 - [x] Salary Range
 - [x] Notes
+- [x] Job URL
+- [x] Application Date Tracking
+- [x] Recruiter Information
 
 ## Activity Timeline
 
-- [x] Automatic Job Created Activity
-- [x] Automatic Status Change Activity
+- [x] Job Created Activity
+- [x] Status Change Activity
 - [x] Interview Activity
 - [x] Offer Activity
-- [x] Rejected Activity
+- [x] Rejection Activity
+- [x] Follow-up Activity
 - [x] Timeline API
 
 ## Dashboard APIs
@@ -72,7 +79,6 @@ The project is being developed incrementally with a focus on clean architecture,
 - [x] Download Resume
 - [x] Delete Resume
 - [x] Default Resume Support
-- [x] Physical File Cleanup
 
 ---
 
@@ -96,6 +102,7 @@ The project is being developed incrementally with a focus on clean architecture,
 - [x] Navbar
 - [x] Sidebar
 - [x] Responsive Layout
+- [x] Sticky Navigation
 - [x] Scrollable Content Area
 - [x] Navigation Between Application Modules
 
@@ -157,28 +164,32 @@ The project is being developed incrementally with a focus on clean architecture,
 - [x] User Information
 - [x] Avatar Support
 - [x] Profile Editing
+- [x] Profile Preferences
 
 ## Settings
 
 - [x] Settings Page
 - [x] Change Password
+- [x] Notification Preferences
 - [x] Theme Preferences
+- [x] Account Deletion
 
 ---
 
-# Phase 3 — Analytics & Application Intelligence 🚧
+# Phase 3 — Analytics & Application Intelligence ✅
 
 ## Advanced Analytics
 
 - [x] Application Funnel
 - [x] Applications by Month
+- [x] Applications by Status
+- [x] Applications by Source
 - [x] Response Rate
 - [x] Interview Conversion Rate
 - [x] Offer Conversion Rate
 - [x] Rejection Rate
 - [x] Average Time to Interview
 - [x] Average Time to Response
-- [x] Applications by Source
 - [x] Analytics Date Range Filtering
 - [x] Dark Mode Chart Support
 - [x] Chart Tooltip Dark Mode Support
@@ -193,23 +204,28 @@ The project is being developed incrementally with a focus on clean architecture,
 - [x] Empty State
 - [x] Loading State
 
-## Remaining Analytics
+## Future Analytics
 
 - [ ] Salary Insights
-- [ ] Top Companies Analysis
 - [ ] Additional Job Search Insights
+- [ ] Advanced Company Analysis
 
 ---
 
-# Phase 4 — Resume ↔ Job Integration 🚧
+# Phase 4 — Resume ↔ Job Integration ✅
 
 ## Job Resume Association
 
-- [ ] Attach Resume to Job
-- [ ] View Resume Used for Application
-- [ ] Change Resume Used
-- [ ] Automatically Use Default Resume
-- [ ] Resume Selection During Job Application
+- [x] Attach Resume to Job
+- [x] View Resume Used for Application
+- [x] Change Resume Used
+- [x] Automatically Use Default Resume
+- [x] Resume Selection During Job Application
+
+## Application Documents
+
+- [x] Resume Usage Tracking
+- [x] Resume Association with Job Applications
 
 ## Future Application Documents
 
@@ -219,84 +235,213 @@ The project is being developed incrementally with a focus on clean architecture,
 
 ---
 
-# Phase 5 — Follow-up & Reminder System 🚧
+# Phase 5 — Follow-up & Reminder System ✅
 
 ## Follow-up Reminders
 
-- [ ] Follow-up Date
-- [ ] Follow-up Reminder
-- [ ] Mark Follow-up as Completed
-- [ ] Upcoming Follow-ups
-- [ ] Overdue Follow-ups
+- [x] Follow-up Date
+- [x] Follow-up Reminder
+- [x] Mark Follow-up as Completed
+- [x] Upcoming Follow-ups
+- [x] Overdue Follow-ups
 
 ## Interview Reminders
 
-- [ ] Interview Reminder
-- [ ] Upcoming Interview Notifications
-- [ ] Completed Interview Handling
+- [x] Interview Reminder
+- [x] Upcoming Interview Notifications
+- [x] Completed Interview Handling
 
 ## Scheduler
 
-- [ ] Scheduled Background Jobs
-- [ ] Daily Reminder Processing
-- [ ] Reminder Notification Generation
+- [x] Background Scheduler
+- [x] Scheduled Reminder Processing
+- [x] Reminder Notification Generation
 
 ---
 
-# Phase 6 — Notifications & Email 🚧
+# Phase 6 — Notifications & Email ✅
 
 ## In-App Notifications
 
 - [x] Notification Infrastructure
 - [x] Notification UI
 - [x] Notification Read / Unread State
+- [x] Job-related Notifications
+- [x] Follow-up Notifications
+- [x] Interview Notifications
 
 ## Email Notifications
 
 - [x] Email Service Integration
 - [x] Email Notification Testing
 - [x] Automated Email Sending
+- [x] Password Reset Emails
+- [x] Follow-up Reminder Emails
+- [x] Interview Reminder Emails
 
-## Future Email Features
+## Notification Preferences
 
-- [ ] Follow-up Reminder Emails
-- [ ] Interview Reminder Emails
-- [ ] Application Status Emails
-- [ ] Notification Preferences
-
----
-
-# Phase 7 — Production File Storage
-
-## Current Storage
-
-- [x] Local Resume Storage
-- [x] Secure File Handling
-- [x] Physical File Cleanup
-
-## Cloud Storage
-
-- [ ] AWS S3 Integration OR Cloudflare R2
-- [ ] Upload Files to Cloud Storage
-- [ ] Generate Secure File URLs
-- [ ] Replace Local File Storage
-- [ ] Production File Storage Configuration
-
-> Cloud storage will be introduced when preparing the application for production deployment.
-> PostgreSQL remains the primary application database.
+- [x] Email Notification Preferences
+- [x] Reminder Preferences
 
 ---
 
-# Phase 8 — Production Readiness 🚧
+# Phase 7 — Cloud Storage ✅
+
+## Storage Architecture
+
+- [x] Storage Service Abstraction
+- [x] Storage Provider Implementation
+- [x] Multer Memory Storage
+- [x] Local Filesystem Storage Removed
+
+## Supabase Storage
+
+- [x] Supabase Storage Integration
+- [x] Resume Upload to Cloud Storage
+- [x] Avatar Upload to Cloud Storage
+- [x] Resume Download
+- [x] Resume Deletion
+- [x] Avatar Deletion
+- [x] Secure Signed URLs
+- [x] Account Deletion Storage Cleanup
+- [x] Cloud Storage Cleanup
+- [x] Storage Error Handling
+
+## Storage Structure
+
+```text
+Supabase Storage
+│
+├── resumes/
+│
+└── avatars/
+```
+
+PostgreSQL stores file metadata and storage paths, while Supabase Storage stores the actual binary files.
+
+---
+
+# Phase 8 — Authentication Completion & Auth UI ✅
+
+## Authentication Backend
+
+- [x] Forgot Password
+- [x] Password Reset
+- [x] Password Reset Email
+- [x] Secure Reset Token Generation
+- [x] Reset Token Hashing
+- [x] Reset Token Expiration
+- [x] Single-use Reset Tokens
+- [x] Previous Token Invalidation
+
+## Authentication UI
+
+- [x] Login Page
+- [x] Register Page
+- [x] Forgot Password Page
+- [x] Reset Password Page
+- [x] Password Visibility Controls
+- [x] Form Validation
+- [x] Loading States
+- [x] Error States
+- [x] Login ↔ Register Navigation
+- [x] Forgot Password Navigation
+- [x] Reset Password Navigation
+- [x] Responsive Authentication UI
+
+---
+
+# Phase 9 — AI Features ✅
+
+## AI Job Analysis
+
+- [x] Resume Text Extraction
+- [x] Job Description Processing
+- [x] Resume ↔ Job Comparison
+- [x] Match Score
+- [x] Matching Skills
+- [x] Missing Skills
+- [x] Improvement Recommendations
+- [x] AI Analysis Persistence
+- [x] Retrieve Existing AI Analysis
+- [x] Re-analysis Support
+
+## AI Infrastructure
+
+- [x] Gemini API Integration
+- [x] AI Service Layer
+- [x] Resume Processing
+- [x] AI Analysis Persistence
+- [x] AI Analysis UI
+
+## Future AI Features
+
+- [ ] AI Resume Improvement
+- [ ] AI Job Recommendations
+- [ ] AI Interview Preparation
+- [ ] AI Cover Letter Generation
+
+---
+
+# Phase 10 — Automated Testing 🧪
+
+Automated testing is the next major development milestone.
+
+## Test Infrastructure
+
+- [ ] Testing Framework Setup
+- [ ] Test Scripts
+- [ ] Test Environment Configuration
+- [ ] Test Database Strategy
+
+## Backend Tests
+
+- [ ] Authentication Tests
+- [ ] Password Recovery Tests
+- [ ] Job Service Tests
+- [ ] Job API Tests
+- [ ] Interview Tests
+- [ ] Resume Tests
+- [ ] Storage Tests
+- [ ] Notification Tests
+- [ ] Scheduler Tests
+- [ ] AI Service Tests
+- [ ] Account Deletion Tests
+- [ ] Validation Tests
+- [ ] Error Handling Tests
+
+## Frontend Tests
+
+- [ ] Authentication Tests
+- [ ] Form Validation Tests
+- [ ] Job Form Tests
+- [ ] Resume Management Tests
+- [ ] Profile Tests
+- [ ] Settings Tests
+- [ ] Critical Component Tests
+
+## Test Quality
+
+- [ ] Regression Test Suite
+- [ ] Coverage Reporting
+- [ ] Test Documentation
+
+---
+
+# Phase 11 — Production Readiness 🚧
 
 ## Backend
 
-- [ ] Environment Configuration
+- [ ] Production Environment Configuration
 - [ ] Production Error Handling
 - [ ] API Security Hardening
 - [ ] Rate Limiting
 - [ ] Request Logging
+- [ ] CORS Configuration
+- [ ] Security Headers
 - [ ] API Documentation
+- [ ] Health Check Endpoint
 
 ## Database
 
@@ -304,92 +449,91 @@ The project is being developed incrementally with a focus on clean architecture,
 - [x] Prisma ORM
 - [ ] Production PostgreSQL Database
 - [ ] Database Backup Strategy
-- [ ] Database Performance Optimization
+- [ ] Database Performance Review
+- [ ] Database Index Review
+- [ ] Connection Pool Configuration
 
 ## Frontend
 
-- [ ] Production Build
-- [ ] Environment Configuration
+- [ ] Production Environment Configuration
 - [ ] Error Boundaries
 - [ ] Performance Optimization
-- [ ] Accessibility Improvements
-- [ ] Mobile Responsive Improvements
+- [ ] Accessibility Review
+- [ ] Mobile Responsive Review
+- [ ] Production Build Verification
 
-## CI/CD
+## Cloud Storage
 
-- [ ] GitHub Actions
-- [ ] Automated Testing
-- [ ] Linting in CI
-- [ ] Build Verification
-- [ ] Automatic Deployment
-
-## Deployment
-
-- [ ] Backend Deployment
-- [ ] Frontend Deployment
-- [ ] PostgreSQL Production Database
-- [ ] Cloud File Storage
-- [ ] Domain / HTTPS Configuration
+- [x] Supabase Storage
+- [x] Signed URLs
+- [x] Resume Storage
+- [x] Avatar Storage
+- [x] Storage Cleanup
+- [ ] Production Storage Configuration Review
 
 ---
 
-# Phase 9 — AI Features 🤖
+# Phase 12 — CI/CD 🚀
 
-## AI Resume Matching
+## GitHub Actions
 
-Resume
-↓
-Extract Skills / Experience
-↓
-Job Description
-↓
-Compare
-↓
-Match Score
-↓
-Missing Skills
-↓
-Recommendations
+- [ ] GitHub Actions Setup
+- [ ] Dependency Installation
+- [ ] ESLint
+- [ ] Automated Tests
+- [ ] Client Build
+- [ ] Server Build
+- [ ] Pull Request Checks
+- [ ] Main Branch Checks
 
-- [ ] Resume Text Extraction
-- [ ] Job Description Processing
-- [ ] Skill Extraction
-- [ ] Resume ↔ Job Comparison
-- [ ] Match Score
-- [ ] Missing Skills
-- [ ] Improvement Recommendations
+## Deployment Pipeline
 
-## AI Job Insights
+- [ ] Deployment Workflow
+- [ ] Environment Secrets
+- [ ] Deployment Verification
+- [ ] Rollback Strategy
 
-Example:
+---
 
-Job: Senior React Developer
+# Phase 13 — Production Deployment 🚀
 
-Match: 82%
+## Infrastructure
 
-Strong Matches:
+- [ ] Production Frontend Hosting
+- [ ] Production Backend Hosting
+- [ ] Production PostgreSQL
+- [ ] Supabase Storage Configuration
+- [ ] Production Environment Variables
+- [ ] Domain Configuration
+- [ ] HTTPS
+- [ ] Production CORS Configuration
 
-- React
-- TypeScript
-- Redux
-- Node.js
+## Deployment Verification
 
-Potential Gaps:
+- [ ] Health Check
+- [ ] Production Smoke Tests
+- [ ] Authentication Verification
+- [ ] Job Management Verification
+- [ ] Resume Upload Verification
+- [ ] Cloud Storage Verification
+- [ ] AI Analysis Verification
+- [ ] Email Verification
+- [ ] Scheduler Verification
 
-- AWS
-- Docker
+## Monitoring
 
-Recommendation:
-Highlight TypeScript + Node.js experience more prominently.
-
-- [ ] AI Job Analysis
-- [ ] Skill Match Explanation
-- [ ] Missing Skill Detection
-- [ ] Resume Improvement Suggestions
+- [ ] Application Monitoring
+- [ ] Error Monitoring
+- [ ] Logging
+- [ ] Database Monitoring
+- [ ] Storage Monitoring
+- [ ] Backup Verification
 
 ---
 
 # Future Ideas
+
+These features are not part of the immediate production-readiness milestone but may be explored later.
 
 - [ ] Browser Extension for Saving Jobs
 - [ ] Calendar Integration
@@ -398,77 +542,135 @@ Highlight TypeScript + Node.js experience more prominently.
 - [ ] Job Import from Job Boards
 - [ ] Automated Job Discovery
 - [ ] AI-Powered Job Recommendations
+- [ ] Advanced Job Market Insights
+- [ ] Personalized Job Search Recommendations
 
 ---
 
 # Database Strategy
 
-JobTrack AI uses **PostgreSQL + Prisma** as its primary application database.
+JobTrack AI uses **PostgreSQL + Prisma** as its primary relational database.
 
-MongoDB is not currently part of the architecture.
-
-The application will continue using PostgreSQL for:
+PostgreSQL stores structured application data including:
 
 - Users
+- Companies
 - Jobs
 - Job Activities
 - Interviews
 - Resumes / Resume Metadata
 - Notifications
-- Analytics-related data
+- Reminders
+- Password Reset Tokens
+- AI Analysis Results
 
-Cloud object storage such as AWS S3 or Cloudflare R2 will be used for large file storage when the application moves toward production deployment.
+Binary files are stored separately using **Supabase Storage**.
+
+```text
+Structured Data
+      ↓
+PostgreSQL
+      ↑
+    Prisma
+      ↑
+Application
+      ↓
+StorageService
+      ↓
+Supabase Storage
+      ↓
+Binary Files
+```
+
+MongoDB is not part of the current architecture.
 
 ---
 
-# Current Status
+# Current Project Status
 
-**Backend:** ✅ Core backend completed
-
-**Frontend:** 🚧 Active development
-
-**Dashboard:** ✅ Implemented
-
-**Job Management:** ✅ Implemented
-
-**Interview Management:** ✅ Implemented
-
-**Resume Management:** ✅ Implemented
-
-**Profile:** ✅ Implemented
-
-**Settings:** ✅ Implemented
-
-**Analytics:** ✅ Core analytics implemented
-
-**Email Notifications:** ✅ Implemented
-
-**Resume ↔ Job Integration:** 🚧 Next major feature
-
-**Follow-up Scheduler:** ⏳ Planned
-
-**Cloud Storage:** ⏳ Planned for production
-
-**AI Features:** ⏳ Planned
+| Area                     | Status            |
+| ------------------------ | ----------------- |
+| Backend Foundation       | ✅ Complete       |
+| Authentication           | ✅ Complete       |
+| Password Recovery        | ✅ Complete       |
+| Job Management           | ✅ Complete       |
+| Activity Timeline        | ✅ Complete       |
+| Interview Management     | ✅ Complete       |
+| Resume Management        | ✅ Complete       |
+| Profile Management       | ✅ Complete       |
+| Settings                 | ✅ Complete       |
+| Dashboard                | ✅ Complete       |
+| Analytics                | ✅ Complete       |
+| Resume ↔ Job Integration | ✅ Complete       |
+| Follow-up System         | ✅ Complete       |
+| Reminder Scheduler       | ✅ Complete       |
+| In-App Notifications     | ✅ Complete       |
+| Email Notifications      | ✅ Complete       |
+| Cloud Storage            | ✅ Complete       |
+| AI Job Analysis          | ✅ Complete       |
+| Automated Testing        | 🔜 Next Milestone |
+| Production Readiness     | 🚧 Upcoming       |
+| CI/CD                    | 🔜 Planned        |
+| Production Deployment    | 🔜 Planned        |
 
 ---
 
 # Current Milestone
 
-## Next Major Feature — Resume ↔ Job Integration
+## Automated Testing
 
-The next development milestone is to connect resumes with individual job applications.
+The next major development milestone is to introduce automated testing into JobTrack AI.
 
-Target workflow:
+The goal is to learn and apply testing practices while building a meaningful regression suite around the existing application.
+
+The planned progression is:
 
 ```text
-Resume
-   │
-   ├── Default Resume
-   │
-   └── Job Application
-          │
-          ├── Resume Used
-          ├── Cover Letter Used
-          └── Application Details
+Testing Fundamentals
+        ↓
+Testing Framework Setup
+        ↓
+Unit Tests
+        ↓
+Service Tests
+        ↓
+API / Integration Tests
+        ↓
+Frontend Component Tests
+        ↓
+Regression Test Suite
+        ↓
+CI Integration
+```
+
+After automated testing, the project will move toward production hardening, CI/CD, and deployment.
+
+---
+
+# Long-Term Development Path
+
+```text
+Core Application
+      ↓
+Analytics
+      ↓
+Resume ↔ Job Integration
+      ↓
+Follow-ups & Reminders
+      ↓
+Notifications & Email
+      ↓
+Cloud Storage
+      ↓
+Authentication Completion
+      ↓
+AI Features
+      ↓
+Automated Testing
+      ↓
+Production Readiness
+      ↓
+CI/CD
+      ↓
+Production Deployment
 ```

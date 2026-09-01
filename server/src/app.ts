@@ -6,7 +6,6 @@ import { errorHandler } from "./middleware/error.middleware.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import analyticsRoutes from "./routes/analytics.routes.js";
 import notificationsRoutes from "./routes/notifications.routes.js";
-import aiRoutes from "./routes/ai.routes.js";
 
 const app = express();
 
@@ -27,7 +26,6 @@ app.use("/api", routes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/notifications", notificationsRoutes);
-app.use("/api/ai", aiRoutes);
 
 app.use(errorHandler);
 
