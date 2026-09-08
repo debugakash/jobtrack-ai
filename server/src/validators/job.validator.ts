@@ -31,7 +31,9 @@ export const createJobSchema = z.object({
   followUpDone: z.boolean().optional(),
 });
 
-export const updateJobSchema = createJobSchema.partial();
+export const updateJobSchema = createJobSchema.partial().extend({
+  resumeId: z.string().cuid().nullable().optional(),
+});
 
 export const getJobsQuerySchema = z.object({
   search: z.string().trim().optional(),

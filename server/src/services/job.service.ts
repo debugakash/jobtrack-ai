@@ -1,4 +1,3 @@
-import { CreateJobInput } from "../validators/job.validator.js";
 import {
   createJob,
   deleteJob,
