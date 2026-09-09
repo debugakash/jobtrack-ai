@@ -75,6 +75,10 @@ export class SupabaseStorageService implements StorageService {
   }
 
   async getSignedUrl(filePath: string, expiresIn = 3600) {
+    if (process.env.SIMULATE_STORAGE_FAILURE === "true") {
+      throw new Error("Simulated Supabase Storage failure");
+    }
+
     const { data, error } = await supabase.storage
       .from(getBucketName())
       .createSignedUrl(filePath, expiresIn);

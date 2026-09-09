@@ -20,6 +20,19 @@ import { BadRequestError } from "../errors/BadRequestError.js";
 import { deleteUserService } from "../services/user.service.js";
 import { storageService } from "../services/storage/index.js";
 
+async function getAvatarUrl(avatar: string | null) {
+  if (!avatar) {
+    return null;
+  }
+
+  try {
+    return await storageService.getSignedUrl(avatar);
+  } catch (error) {
+    console.error("Failed to generate avatar URL:", error);
+    return null;
+  }
+}
+
 export const register = asyncHandler(async (req: Request, res: Response) => {
   const data = registerSchema.parse(req.body);
 
@@ -42,9 +55,7 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 
   const { user, accessToken } = await loginUser(data);
 
-  const avatarUrl = user.avatar
-    ? await storageService.getSignedUrl(user.avatar)
-    : null;
+  const avatarUrl = await getAvatarUrl(user.avatar);
 
   res.status(200).json({
     success: true,
@@ -83,9 +94,7 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 export const me = asyncHandler(async (req: Request, res: Response) => {
   const user = await getCurrentUser(req.user!.userId);
 
-  const avatarUrl = user.avatar
-    ? await storageService.getSignedUrl(user.avatar)
-    : null;
+  const avatarUrl = await getAvatarUrl(user.avatar);
 
   res.status(200).json({
     success: true,
@@ -130,9 +139,7 @@ export const updateAvatar = asyncHandler(
       storedFile.filePath,
     );
 
-    const avatarUrl = user.avatar
-      ? await storageService.getSignedUrl(user.avatar)
-      : null;
+    const avatarUrl = await getAvatarUrl(user.avatar);
 
     res.status(200).json({
       success: true,
