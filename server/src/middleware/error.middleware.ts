@@ -43,7 +43,7 @@ export function errorHandler(
   if (err instanceof Error) {
     return res.status(500).json({
       success: false,
-      message: err.message,
+      message: "Internal Server Error",
     });
   }
 

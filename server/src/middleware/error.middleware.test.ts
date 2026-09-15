@@ -107,7 +107,7 @@ describe("errorHandler", () => {
     expect(response.status).toHaveBeenCalledWith(500);
     expect(response.status().json).toHaveBeenCalledWith({
       success: false,
-      message: "Unexpected failure",
+      message: "Internal Server Error",
     });
   });
 

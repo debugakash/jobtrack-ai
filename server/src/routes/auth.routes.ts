@@ -11,13 +11,17 @@ import {
 } from "../controllers/auth.controller.js";
 import { authenticate } from "../middleware/auth.middleware.js";
 import { uploadAvatar } from "../middleware/upload.middleware.js";
+import {
+  authRateLimiter,
+  passwordResetRateLimiter,
+} from "../middleware/rate-limit.middleware.js";
 
 const router = Router();
 
-router.post("/register", register);
-router.post("/login", login);
-router.post("/forgot-password", forgotPassword);
-router.post("/reset-password", resetPasswordController);
+router.post("/register", authRateLimiter, register);
+router.post("/login", authRateLimiter, login);
+router.post("/forgot-password", passwordResetRateLimiter, forgotPassword);
+router.post("/reset-password", authRateLimiter, resetPasswordController);
 
 router.get("/me", authenticate, me);
 
