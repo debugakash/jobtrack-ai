@@ -16,6 +16,7 @@ The backend is built with:
 - Multer
 - Supabase Storage
 - Google Gemini API
+- Resend
 
 Protected endpoints require authentication using the application's JWT authentication middleware.
 
@@ -32,10 +33,15 @@ The primary API routes use the `/api` prefix.
 ├── /jobs
 ├── /interviews
 ├── /resumes
-├── /dashboard
-├── /analytics
-├── /notifications
 └── /ai
+```
+
+Additional application-level routes are mounted directly under `/api`:
+
+```text
+/api/dashboard
+/api/analytics
+/api/notifications
 ```
 
 The exact server host and port depend on the environment configuration.
@@ -223,6 +229,8 @@ Request data is validated using `forgotPasswordSchema`.
 
 The response intentionally does not reveal whether the supplied email belongs to an existing account.
 
+Password reset requests are rate limited.
+
 ---
 
 ## Reset Password
@@ -251,6 +259,8 @@ Request data is validated using `resetPasswordSchema`.
   "message": "Password reset successfully"
 }
 ```
+
+Password reset tokens are designed to be temporary and single-use.
 
 ---
 
@@ -321,6 +331,11 @@ If no avatar file is provided, the API returns a bad-request error.
 
 The uploaded image is stored through the application's `StorageService`.
 
+### File Restrictions
+
+- Maximum size: `2 MB`
+- Supported formats: JPG, PNG, WEBP
+
 ### Success Response
 
 **Status:** `200 OK`
@@ -384,6 +399,8 @@ Deletes the authenticated user's account.
 Required.
 
 Associated application data is deleted according to the configured database relationships and account-deletion service logic.
+
+Associated storage resources are also handled by the account deletion workflow where applicable.
 
 ### Success Response
 
@@ -1036,6 +1053,17 @@ Additional metadata is validated using `createResumeSchema`.
 
 The resume file is handled through the application's storage layer.
 
+### File Restrictions
+
+- Maximum size: `5 MB`
+- Supported formats: PDF, DOC, DOCX
+
+### Storage
+
+The actual resume file is stored in Supabase Storage through the application's `StorageService`.
+
+Resume metadata is stored in PostgreSQL.
+
 ### Success Response
 
 **Status:** `201 Created`
@@ -1078,6 +1106,8 @@ Content-Type: <resume MIME type>
 Content-Disposition: attachment; filename="<original filename>"
 Content-Length: <file size>
 ```
+
+The application retrieves the stored file through the storage service rather than serving files from a local `/uploads` directory.
 
 ---
 
@@ -1365,7 +1395,7 @@ If `range` is omitted, the default is:
 365
 ```
 
-Example:
+Examples:
 
 ```http
 GET /api/analytics?range=30
@@ -1388,7 +1418,7 @@ GET /api/analytics?range=all
 }
 ```
 
-The analytics service provides the application's analytics metrics, including application, conversion, timing, source, and funnel information.
+The analytics service provides application analytics including application, conversion, timing, source, and funnel information.
 
 ---
 
@@ -1495,6 +1525,8 @@ POST /api/ai/jobs/:jobId/analyze
 
 Analyzes a job application using the application's AI job-analysis service.
 
+The analysis compares the job description against the resume associated with the job.
+
 ### Authentication
 
 Required.
@@ -1525,7 +1557,7 @@ The analysis result can contain data such as:
 - Missing Skills
 - Suggestions
 
-The exact result is produced by the AI analysis service.
+Analysis results are persisted in the `JobAiAnalysis` database model and can be re-generated when required.
 
 ---
 
@@ -1544,7 +1576,7 @@ Authenticated User
         └── Associated Resume
                   │
                   ▼
-          Resume Processing
+           Resume Processing
                   │
                   ▼
           AI Analysis Service
@@ -1553,7 +1585,7 @@ Authenticated User
              Gemini API
                   │
                   ▼
-          JobAiAnalysis
+            JobAiAnalysis
                   │
                   ▼
              PostgreSQL
@@ -1581,6 +1613,81 @@ req.user.userId
 
 ---
 
+# API Security
+
+The API includes several production-hardening measures.
+
+## CORS
+
+The API only accepts browser requests from configured frontend origins.
+
+The production frontend origin is provided through the server's environment configuration.
+
+During development, the Vite preview origin may also be allowed.
+
+---
+
+## Security Headers
+
+The application uses Helmet to apply common HTTP security headers.
+
+---
+
+## Request Body Limit
+
+JSON request bodies are limited to:
+
+```text
+1 MB
+```
+
+This prevents unnecessarily large JSON payloads from reaching application-level processing.
+
+---
+
+## Rate Limiting
+
+Authentication-sensitive endpoints use rate limiting.
+
+Current limits include:
+
+| Endpoint Group |       Limit | Window     |
+| -------------- | ----------: | ---------- |
+| Authentication | 10 requests | 15 minutes |
+| Password Reset |  5 requests | 15 minutes |
+
+When a rate limit is exceeded, the API returns:
+
+```text
+429 Too Many Requests
+```
+
+Example response:
+
+```json
+{
+  "success": false,
+  "message": "Too many requests. Please try again later."
+}
+```
+
+---
+
+## File Upload Protection
+
+Uploaded files are validated for supported MIME types and maximum file size before being processed.
+
+Current limits:
+
+| File Type | Maximum Size | Supported Formats |
+| --------- | -----------: | ----------------- |
+| Resume    |         5 MB | PDF, DOC, DOCX    |
+| Avatar    |         2 MB | JPG, PNG, WEBP    |
+
+Files are processed in memory and passed through the application's storage abstraction.
+
+---
+
 # HTTP Methods
 
 JobTrack AI uses standard HTTP methods.
@@ -1604,24 +1711,29 @@ JobTrack AI uses standard HTTP methods.
 
 ---
 
+# Common Error Status Codes
+
+| Status                      | Meaning                                           |
+| --------------------------- | ------------------------------------------------- |
+| `400 Bad Request`           | Invalid request data or request format            |
+| `401 Unauthorized`          | Authentication is missing or invalid              |
+| `403 Forbidden`             | Request is not permitted                          |
+| `404 Not Found`             | Requested resource does not exist                 |
+| `409 Conflict`              | Request conflicts with existing application state |
+| `429 Too Many Requests`     | Rate limit exceeded                               |
+| `500 Internal Server Error` | Unexpected server-side error                      |
+
+---
+
 # Error Handling
 
 The backend uses centralized error handling.
 
-Common HTTP error categories include:
-
-```text
-400 Bad Request
-401 Unauthorized
-403 Forbidden
-404 Not Found
-409 Conflict
-500 Internal Server Error
-```
-
 Zod validation errors are generated when incoming request data does not satisfy the relevant validator schema.
 
 Application-specific errors are processed by the central error middleware.
+
+Unexpected internal errors are handled centrally so that implementation details are not unnecessarily exposed to API consumers.
 
 ---
 
@@ -1635,7 +1747,7 @@ The upload flow is:
 Multipart Request
        │
        ▼
-Multer
+     Multer
        │
        ▼
 Express.Multer.File
@@ -1644,7 +1756,7 @@ Express.Multer.File
 Application Service
        │
        ▼
-StorageService
+ StorageService
        │
        ▼
 Supabase Storage
@@ -1653,6 +1765,8 @@ Supabase Storage
 Resume metadata is stored in PostgreSQL while the actual file is stored through the storage service.
 
 Avatar paths are stored on the user record and displayed using signed URLs.
+
+The application does not expose a local `/uploads` directory for serving user files.
 
 ---
 
@@ -1720,14 +1834,40 @@ jobtrack-ai/
 │
 ├── docs/
 │   └── api/
-│       └── endpoints.md        # Human-readable API documentation
+│       └── endpoint.md          # Human-readable API documentation
 │
 └── server/
     └── src/
-        ├── routes/             # Express route definitions
-        └── controllers/        # HTTP request/response handling
+        ├── routes/              # Express route definitions
+        └── controllers/         # HTTP request/response handling
 ```
 
 The backend route and controller files are the source of truth for implemented API endpoints.
 
 The Bruno collection provides executable API requests for development and manual testing.
+
+---
+
+# API Documentation Maintenance
+
+This document describes the currently implemented API surface.
+
+When API routes, request validation, response structures, authentication behavior, upload restrictions, or security-related behavior change, this document should be updated alongside the implementation.
+
+The following are the primary sources of truth for API behavior:
+
+```text
+server/src/routes/
+server/src/controllers/
+server/src/services/
+server/src/validators/
+server/src/middleware/
+```
+
+The Bruno collection under:
+
+```text
+api/
+```
+
+can be used for executable/manual API testing.
