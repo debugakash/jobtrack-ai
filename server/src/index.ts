@@ -6,7 +6,7 @@ import {
   stopNotificationScheduler,
 } from "./schedulers/notification.scheduler.js";
 
-const server = app.listen(Number(env.PORT), () => {
+const server = app.listen(Number(env.PORT), "0.0.0.0", () => {
   console.log(`Server running on port ${env.PORT}`);
 
   startNotificationScheduler();
