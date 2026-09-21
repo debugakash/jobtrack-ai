@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { BriefcaseBusiness, CheckCircle2, Sparkles } from "lucide-react";
+import { CheckCircle2, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface AuthLayoutProps {
@@ -34,12 +34,14 @@ export default function AuthLayout({
 
           <div className="relative z-10 flex w-full flex-col justify-between p-10 xl:p-14">
             {/* Logo */}
-            <Link to="/login" className="flex w-fit items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-slate-950">
-                <BriefcaseBusiness className="h-5 w-5" />
-              </div>
+            <Link to="/login" className="flex w-fit items-center gap-2.5">
+              <img
+                src="/jobtrack-ai-icon.png"
+                alt="JobTrack AI"
+                className="h-10 w-10 object-contain"
+              />
 
-              <span className="text-lg font-semibold tracking-tight">
+              <span className="text-xl font-bold tracking-tight text-white">
                 JobTrack AI
               </span>
             </Link>
@@ -87,13 +89,15 @@ export default function AuthLayout({
             {/* Mobile logo */}
             <Link
               to="/login"
-              className="mb-8 flex items-center justify-center gap-2 lg:hidden"
+              className="mb-8 flex items-center justify-center gap-2.5 lg:hidden"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-                <BriefcaseBusiness className="h-5 w-5" />
-              </div>
+              <img
+                src="/jobtrack-ai-icon.png"
+                alt="JobTrack AI"
+                className="h-10 w-10 object-contain"
+              />
 
-              <span className="text-lg font-semibold tracking-tight">
+              <span className="text-xl font-bold tracking-tight">
                 JobTrack AI
               </span>
             </Link>

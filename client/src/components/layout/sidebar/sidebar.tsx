@@ -6,7 +6,14 @@ export default function Sidebar() {
   return (
     <aside className="flex h-screen w-64 flex-col border-r bg-sidebar text-sidebar-foreground">
       <div className="flex h-16 shrink-0 items-center border-b px-6">
-        <h1 className="text-2xl font-bold">JobTrack AI</h1>
+        <NavLink to="/" className="flex items-center gap-2.5">
+          <img
+            src="/jobtrack-ai-icon.png"
+            alt="JobTrack AI"
+            className="h-9 w-9 object-contain"
+          />
+          <span className="text-xl font-bold">JobTrack AI</span>
+        </NavLink>
       </div>
 
       <nav className="flex flex-1 flex-col justify-between p-3">

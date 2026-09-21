@@ -27,8 +27,15 @@ export default function MobileSidebar() {
 
       <SheetContent side="left" className="w-72 p-0">
         <SheetHeader className="border-b p-6">
-          <SheetTitle className="text-left text-2xl font-bold">
-            JobTrack AI
+          <SheetTitle asChild>
+            <NavLink to="/" className="flex items-center gap-2.5">
+              <img
+                src="/jobtrack-ai-icon.png"
+                alt="JobTrack AI"
+                className="h-9 w-9 object-contain"
+              />
+              <span className="text-xl font-bold">JobTrack AI</span>
+            </NavLink>
           </SheetTitle>
         </SheetHeader>
 
@@ -45,8 +52,8 @@ export default function MobileSidebar() {
                   className={({ isActive }) =>
                     `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                       isActive
-                        ? "bg-slate-900 text-white"
-                        : "text-slate-700 hover:bg-slate-100"
+                        ? "bg-sidebar-primary text-sidebar-primary-foreground"
+                        : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                     }`
                   }
                 >
