@@ -3,6 +3,9 @@ import {
   changePasswordController,
   deleteAccount,
   forgotPassword,
+  googleAuth,
+  googleCallback,
+  googleExchange,
   login,
   me,
   register,
@@ -20,6 +23,11 @@ const router = Router();
 
 router.post("/register", authRateLimiter, register);
 router.post("/login", authRateLimiter, login);
+
+router.get("/google", googleAuth);
+router.get("/google/callback", googleCallback);
+router.post("/google/exchange", googleExchange);
+
 router.post("/forgot-password", passwordResetRateLimiter, forgotPassword);
 router.post("/reset-password", authRateLimiter, resetPasswordController);
 

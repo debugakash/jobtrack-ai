@@ -44,6 +44,35 @@ export class SupabaseStorageService implements StorageService {
     };
   }
 
+  async uploadBuffer(
+    buffer: Buffer,
+    fileName: string,
+    mimeType: string,
+    folder: "resumes" | "avatars",
+  ) {
+    const extension = path.extname(fileName);
+
+    const storedName = `${crypto.randomUUID()}${extension}`;
+
+    const filePath = `${folder}/${storedName}`;
+
+    const { error } = await supabase.storage
+      .from(getBucketName())
+      .upload(filePath, buffer, {
+        contentType: mimeType,
+        upsert: false,
+      });
+
+    if (error) {
+      throw error;
+    }
+
+    return {
+      storedName,
+      filePath,
+    };
+  }
+
   async delete(filePath: string): Promise<void> {
     const { error } = await supabase.storage
       .from(getBucketName())

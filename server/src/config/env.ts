@@ -18,6 +18,14 @@ const envSchema = z.object({
   JWT_EXPIRES_IN: z.string().default("7d"),
 
   CLIENT_URL: z.string().url("CLIENT_URL must be a valid URL"),
+
+  GOOGLE_CLIENT_ID: z.string().min(1, "GOOGLE_CLIENT_ID is required"),
+
+  GOOGLE_CLIENT_SECRET: z.string().min(1, "GOOGLE_CLIENT_SECRET is required"),
+
+  GOOGLE_CALLBACK_URL: z
+    .string()
+    .url("GOOGLE_CALLBACK_URL must be a valid URL"),
 });
 
 const parsedEnv = envSchema.parse(process.env);
@@ -29,4 +37,7 @@ export const env = {
   JWT_SECRET: parsedEnv.JWT_SECRET,
   JWT_EXPIRES_IN: parsedEnv.JWT_EXPIRES_IN as StringValue,
   CLIENT_URL: parsedEnv.CLIENT_URL,
+  GOOGLE_CLIENT_ID: parsedEnv.GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET: parsedEnv.GOOGLE_CLIENT_SECRET,
+  GOOGLE_CALLBACK_URL: parsedEnv.GOOGLE_CALLBACK_URL,
 };

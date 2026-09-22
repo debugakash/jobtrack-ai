@@ -5,6 +5,7 @@ interface CreateUserData {
   lastName: string;
   email: string;
   passwordHash: string;
+  emailVerified?: boolean;
 }
 
 export async function findUserByEmail(email: string) {
@@ -60,6 +61,16 @@ export async function updateUserAvatar(id: string, avatar: string) {
     data: {
       avatar,
     },
+  });
+}
+
+export async function updateUserEmailVerified(
+  id: string,
+  emailVerified: boolean,
+) {
+  return prisma.user.update({
+    where: { id },
+    data: { emailVerified },
   });
 }
 

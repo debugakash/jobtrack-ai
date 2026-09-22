@@ -19,6 +19,12 @@ import { asyncHandler } from "../utils/async-handler.js";
 import { BadRequestError } from "../errors/BadRequestError.js";
 import { deleteUserService } from "../services/user.service.js";
 import { storageService } from "../services/storage/index.js";
+import {
+  exchangeGoogleLoginCode,
+  getGoogleAuthorizationUrl,
+  handleGoogleCallback,
+} from "../services/google-auth.service.js";
+import { env } from "../config/env.js";
 
 async function getAvatarUrl(avatar: string | null) {
   if (!avatar) {
@@ -206,3 +212,34 @@ export const resetPasswordController = asyncHandler(
     });
   },
 );
+
+export async function googleAuth(_req: Request, res: Response) {
+  const authorizationUrl = getGoogleAuthorizationUrl();
+
+  res.redirect(authorizationUrl);
+}
+
+export async function googleCallback(req: Request, res: Response) {
+  const code = typeof req.query.code === "string" ? req.query.code : "";
+  const state = typeof req.query.state === "string" ? req.query.state : "";
+
+  const oauthCode = await handleGoogleCallback(code, state);
+
+  const callbackUrl = new URL("/oauth/callback", env.CLIENT_URL);
+
+  callbackUrl.searchParams.set("code", oauthCode);
+
+  res.redirect(callbackUrl.toString());
+}
+
+export async function googleExchange(req: Request, res: Response) {
+  const { code } = req.body;
+
+  const result = await exchangeGoogleLoginCode(code);
+
+  res.json({
+    success: true,
+    message: "Google login successful",
+    data: result,
+  });
+}

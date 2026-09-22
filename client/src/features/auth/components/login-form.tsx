@@ -29,6 +29,10 @@ export default function LoginForm() {
     loginMutation.mutate(data);
   };
 
+  const handleGoogleLogin = () => {
+    window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       <div className="space-y-2">
@@ -120,6 +124,46 @@ export default function LoginForm() {
         ) : (
           "Sign In"
         )}
+      </Button>
+
+      <div className="relative py-1">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t" />
+        </div>
+
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-3 text-muted-foreground">
+            Or continue with
+          </span>
+        </div>
+      </div>
+
+      <Button
+        type="button"
+        variant="outline"
+        className="h-11 w-full"
+        onClick={handleGoogleLogin}
+        disabled={loginMutation.isPending}
+      >
+        <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="#4285F4"
+            d="M21.35 12.23c0-.79-.07-1.55-.22-2.27H12v4.3h5.24a4.48 4.48 0 0 1-1.94 2.94v2.45h3.14c1.84-1.7 2.91-4.2 2.91-7.42Z"
+          />
+          <path
+            fill="#34A853"
+            d="M12 21.6c2.63 0 4.84-.87 6.45-2.35l-3.14-2.45c-.87.58-1.98.92-3.31.92-2.54 0-4.7-1.72-5.47-4.03H3.29v2.53A9.74 9.74 0 0 0 12 21.6Z"
+          />
+          <path
+            fill="#FBBC05"
+            d="M6.53 13.69A5.86 5.86 0 0 1 6.22 12c0-.59.1-1.16.31-1.69V7.78H3.29A9.74 9.74 0 0 0 2.25 12c0 1.53.37 2.98 1.04 4.22l3.24-2.53Z"
+          />
+          <path
+            fill="#EA4335"
+            d="M12 6.28c1.43 0 2.71.49 3.72 1.46l2.79-2.79C16.84 3.38 14.63 2.4 12 2.4a9.74 9.74 0 0 0-8.71 5.38l3.24 2.53c.77-2.31 2.93-4.03 5.47-4.03Z"
+          />
+        </svg>
+        Continue with Google
       </Button>
 
       <p className="text-center text-sm text-muted-foreground">

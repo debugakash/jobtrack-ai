@@ -39,6 +39,8 @@ model User {
   notifications Notification[]
 
   passwordResetTokens PasswordResetToken[]
+  oauthAccounts       OAuthAccount[]
+  oauthLoginCodes     OAuthLoginCode[]
 
   @@map("users")
 }
@@ -57,6 +59,37 @@ model PasswordResetToken {
   @@index([userId])
   @@index([expiresAt])
   @@map("password_reset_tokens")
+}
+
+model OAuthAccount {
+  id         String       @id @default(cuid())
+  provider   OAuthProvider
+  providerId String
+  userId     String
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([provider, providerId])
+  @@index([userId])
+  @@map("oauth_accounts")
+}
+
+model OAuthLoginCode {
+  id        String   @id @default(cuid())
+  codeHash  String   @unique
+  userId    String
+  expiresAt DateTime
+  usedAt    DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("oauth_login_codes")
 }
 
 model Job {
@@ -277,4 +310,10 @@ enum NotificationType {
   INTERVIEW
   JOB_STATUS
   SYSTEM
+}
+
+enum OAuthProvider {
+  GOOGLE
+  LINKEDIN
+  GITHUB
 }

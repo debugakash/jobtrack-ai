@@ -7,6 +7,16 @@ export interface StorageService {
     filePath: string;
   }>;
 
+  uploadBuffer(
+    buffer: Buffer,
+    fileName: string,
+    mimeType: string,
+    folder: "resumes" | "avatars",
+  ): Promise<{
+    storedName: string;
+    filePath: string;
+  }>;
+
   delete(filePath: string): Promise<void>;
 
   getFileBuffer(filePath: string): Promise<Buffer>;
