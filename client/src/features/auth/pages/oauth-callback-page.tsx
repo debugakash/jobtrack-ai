@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth-store";
 
-interface GoogleExchangeResponse {
+interface OAuthExchangeResponse {
   success: boolean;
   message: string;
   data: {
@@ -51,15 +51,25 @@ export default function OAuthCallbackPage() {
       exchangeStartedRef.current = true;
 
       const code = searchParams.get("code");
+      const provider = searchParams.get("provider") ?? "google";
 
       if (!code) {
-        setError("Google login code is missing.");
+        setError(
+          `${provider === "github" ? "GitHub" : "Google"} login code is missing.`,
+        );
         return;
       }
 
+      const exchangeEndpoint =
+        provider === "github"
+          ? "/auth/github/exchange"
+          : "/auth/google/exchange";
+
+      const providerName = provider === "github" ? "GitHub" : "Google";
+
       try {
-        const response = await api.post<GoogleExchangeResponse>(
-          "/auth/google/exchange",
+        const response = await api.post<OAuthExchangeResponse>(
+          exchangeEndpoint,
           { code },
         );
 
@@ -73,19 +83,22 @@ export default function OAuthCallbackPage() {
 
         navigate("/", { replace: true });
       } catch (err) {
-        console.error("Google OAuth exchange failed:", err);
-        setError("Google login failed. Please try again.");
+        console.error(`${providerName} OAuth exchange failed:`, err);
+        setError(`${providerName} login failed. Please try again.`);
       }
     };
 
     void exchangeCode();
   }, [loginStore, navigate, searchParams]);
 
+  const provider = searchParams.get("provider") ?? "google";
+  const providerName = provider === "github" ? "GitHub" : "Google";
+
   if (error) {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
         <div className="text-center">
-          <h1 className="text-xl font-semibold">Google login failed</h1>
+          <h1 className="text-xl font-semibold">{providerName} login failed</h1>
 
           <p className="mt-2 text-sm text-muted-foreground">{error}</p>
 

@@ -24,6 +24,11 @@ import {
   getGoogleAuthorizationUrl,
   handleGoogleCallback,
 } from "../services/google-auth.service.js";
+import {
+  exchangeGitHubLoginCode,
+  getGitHubAuthorizationUrl,
+  handleGitHubCallback,
+} from "../services/github-auth.service.js";
 import { env } from "../config/env.js";
 
 async function getAvatarUrl(avatar: string | null) {
@@ -240,6 +245,38 @@ export async function googleExchange(req: Request, res: Response) {
   res.json({
     success: true,
     message: "Google login successful",
+    data: result,
+  });
+}
+
+export async function githubAuth(_req: Request, res: Response) {
+  const authorizationUrl = getGitHubAuthorizationUrl();
+
+  res.redirect(authorizationUrl);
+}
+
+export async function githubCallback(req: Request, res: Response) {
+  const code = typeof req.query.code === "string" ? req.query.code : "";
+  const state = typeof req.query.state === "string" ? req.query.state : "";
+
+  const oauthCode = await handleGitHubCallback(code, state);
+
+  const callbackUrl = new URL("/oauth/callback", env.CLIENT_URL);
+
+  callbackUrl.searchParams.set("code", oauthCode);
+  callbackUrl.searchParams.set("provider", "github");
+
+  res.redirect(callbackUrl.toString());
+}
+
+export async function githubExchange(req: Request, res: Response) {
+  const { code } = req.body;
+
+  const result = await exchangeGitHubLoginCode(code);
+
+  res.json({
+    success: true,
+    message: "GitHub login successful",
     data: result,
   });
 }

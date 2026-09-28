@@ -3,6 +3,9 @@ import {
   changePasswordController,
   deleteAccount,
   forgotPassword,
+  githubAuth,
+  githubCallback,
+  githubExchange,
   googleAuth,
   googleCallback,
   googleExchange,
@@ -27,6 +30,10 @@ router.post("/login", authRateLimiter, login);
 router.get("/google", googleAuth);
 router.get("/google/callback", googleCallback);
 router.post("/google/exchange", googleExchange);
+
+router.get("/github", githubAuth);
+router.get("/github/callback", githubCallback);
+router.post("/github/exchange", githubExchange);
 
 router.post("/forgot-password", passwordResetRateLimiter, forgotPassword);
 router.post("/reset-password", authRateLimiter, resetPasswordController);

@@ -26,6 +26,14 @@ const envSchema = z.object({
   GOOGLE_CALLBACK_URL: z
     .string()
     .url("GOOGLE_CALLBACK_URL must be a valid URL"),
+
+  GITHUB_CLIENT_ID: z.string().min(1, "GITHUB_CLIENT_ID is required"),
+
+  GITHUB_CLIENT_SECRET: z.string().min(1, "GITHUB_CLIENT_SECRET is required"),
+
+  GITHUB_CALLBACK_URL: z
+    .string()
+    .url("GITHUB_CALLBACK_URL must be a valid URL"),
 });
 
 const parsedEnv = envSchema.parse(process.env);
@@ -40,4 +48,7 @@ export const env = {
   GOOGLE_CLIENT_ID: parsedEnv.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: parsedEnv.GOOGLE_CLIENT_SECRET,
   GOOGLE_CALLBACK_URL: parsedEnv.GOOGLE_CALLBACK_URL,
+  GITHUB_CLIENT_ID: parsedEnv.GITHUB_CLIENT_ID,
+  GITHUB_CLIENT_SECRET: parsedEnv.GITHUB_CLIENT_SECRET,
+  GITHUB_CALLBACK_URL: parsedEnv.GITHUB_CALLBACK_URL,
 };
