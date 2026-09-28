@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import { env } from "../config/env.js";
 import {
   BadRequestError,
-  ConflictError,
   UnauthorizedError,
 } from "../errors/index.js";
 import {
@@ -109,9 +108,28 @@ export async function handleGitHubCallback(
     const existingUser = await findUserByEmail(normalizedEmail);
 
     if (existingUser) {
-      throw new ConflictError(
-        "An account with this email already exists. Please sign in with your email and password.",
-      );
+      user = existingUser;
+
+      if (!user.emailVerified) {
+        user = await updateUserEmailVerified(user.id, true);
+      }
+
+      if (!user.avatar && githubUser.avatar_url) {
+        const avatarPath = await uploadGitHubAvatar(
+          githubUser.avatar_url,
+          user.id,
+        );
+
+        if (avatarPath) {
+          user = await updateUserAvatar(user.id, avatarPath);
+        }
+      }
+
+      await createOAuthAccount({
+        provider: "GITHUB",
+        providerId,
+        userId: user.id,
+      });
     }
 
     const randomPassword = crypto.randomBytes(32).toString("hex");
