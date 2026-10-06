@@ -375,27 +375,31 @@ This prevents server data from being unnecessarily copied into global client sta
 
 ## Authentication State
 
-Authentication state is managed through the Zustand authentication store.
+Authentication state is managed through the Zustand authentication store. The frontend supports both email/password authentication and OAuth authentication with Google and GitHub.
 
 The authentication flow is:
 
 ```text
-Login Form
-    │
-    ▼
-Authentication API
-    │
-    ▼
-Authentication Response
-    │
-    ▼
-Zustand Auth Store
-    │
-    ▼
-Protected Routes
-    │
-    ▼
-Authenticated Application
+Email/Password Login
+        │
+        ├──────────────┐
+        │              │
+        ▼              ▼
+Authentication API   OAuth Provider
+        │          (Google / GitHub)
+        │              │
+        └──────┬───────┘
+               ▼
+      Authentication Response
+               │
+               ▼
+        Zustand Auth Store
+               │
+               ▼
+        Protected Routes
+               │
+               ▼
+   Authenticated Application
 ```
 
 Authentication state is used by the routing layer and application UI to determine whether protected content should be accessible.
@@ -422,6 +426,10 @@ VITE_API_URL=http://localhost:5000/api
 
 The frontend does not hardcode the production backend URL into application components.
 
+Authentication supports both traditional API-based email/password authentication and OAuth authentication flows.
+
+OAuth authentication is initiated through the authentication feature and completed through the configured backend OAuth flow.
+
 The general communication flow is:
 
 ```text
@@ -443,7 +451,7 @@ Backend Services
 PostgreSQL / External Services
 ```
 
-The `services/` directory is reserved for API and external-service integration as the frontend architecture evolves.
+The `services/` directory contains shared API and external-service integration logic that is not specific to a single feature.
 
 ---
 

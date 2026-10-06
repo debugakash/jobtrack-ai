@@ -264,6 +264,41 @@ Password reset tokens are designed to be temporary and single-use.
 
 ---
 
+## OAuth Authentication
+
+JobTrack AI supports OAuth authentication with:
+
+- Google
+- GitHub
+
+OAuth authentication allows users to sign in or register using their existing provider account.
+
+### OAuth Flow
+
+```text
+User
+ ↓
+Frontend
+ ↓
+OAuth Provider (Google / GitHub)
+ ↓
+Backend OAuth Callback
+ ↓
+Find or Create User
+ ↓
+Create OAuthAccount
+ ↓
+Generate Authentication Token
+ ↓
+Frontend
+```
+
+OAuth authentication integrates with the existing JWT-based authentication system.
+
+After successful OAuth authentication, the user is authenticated and can access protected API endpoints.
+
+---
+
 ## Get Current User
 
 ```http

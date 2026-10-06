@@ -8,6 +8,8 @@ The current Prisma schema contains:
 
 - User
 - PasswordResetToken
+- OAuthAccount
+- OAuthLoginCode
 - Job
 - JobActivity
 - Interview
@@ -86,7 +88,9 @@ User
 ├── jobs[]
 ├── resumes[]
 ├── notifications[]
-└── passwordResetTokens[]
+├── passwordResetTokens[]
+├── oauthAccounts[]
+└── oauthLoginCodes[]
 ```
 
 ---
@@ -124,6 +128,101 @@ expiresAt
 The token hash is unique.
 
 The raw reset token is not stored.
+
+---
+
+# OAuthAccount
+
+The `OAuthAccount` model stores the association between a JobTrack AI user and an OAuth provider account.
+
+### Main fields
+
+```text
+id
+provider
+providerId
+userId
+createdAt
+updatedAt
+```
+
+### Relationship
+
+```text
+User (1) ───── (*) OAuthAccount
+```
+
+A user can have OAuth accounts from multiple supported providers.
+
+### Supported providers
+
+```text
+GOOGLE
+LINKEDIN
+GITHUB
+```
+
+### Constraints and Indexes
+
+```text
+@@unique([provider, providerId])
+@@index([userId])
+```
+
+The unique constraint ensures that the same provider account cannot be linked to multiple users.
+
+This accurately reflects:
+
+```prisma
+@@unique([provider, providerId])
+@@index([userId])
+```
+
+---
+
+# OAuthLoginCode
+
+The `OAuthLoginCode` model stores short-lived, securely hashed login codes used during the OAuth authentication flow.
+
+### Main fields
+
+```text
+id
+codeHash
+userId
+expiresAt
+usedAt
+createdAt
+```
+
+### Relationship
+
+```text
+User (1) ───── (*) OAuthLoginCode
+```
+
+### Indexes
+
+The schema indexes:
+
+```text
+userId
+expiresAt
+```
+
+The code hash is unique.
+
+The raw OAuth login code is not stored.
+
+Used or expired codes can no longer be used for authentication.
+
+### Supported providers
+
+```text
+GOOGLE
+LINKEDIN
+GITHUB
+```
 
 ---
 
@@ -572,6 +671,10 @@ User
 │
 ├── PasswordResetToken[]
 │
+├── OAuthAccount[]
+│
+├── OAuthLoginCode[]
+│
 ├── Job[]
 │   │
 │   ├── JobActivity[]
@@ -603,6 +706,8 @@ Jobs
 Resumes
 Notifications
 PasswordResetTokens
+OAuthAccounts
+OAuthLoginCodes
 ```
 
 ---
@@ -670,6 +775,11 @@ JobAiAnalysis.createdAt
 
 PasswordResetToken.userId
 PasswordResetToken.expiresAt
+
+OAuthAccount.userId
+
+OAuthLoginCode.userId
+OAuthLoginCode.expiresAt
 ```
 
 These indexes support common operations such as:
@@ -754,6 +864,26 @@ The Prisma configuration is defined through:
 
 ```text
 prisma.config.ts
+```
+
+### Migration Management
+
+Prisma migrations are stored in:
+
+```text
+server/prisma/migrations/
+```
+
+Development migrations can be created with:
+
+```text
+npx prisma migrate dev
+```
+
+Production migrations are applied with:
+
+```text
+npx prisma migrate deploy
 ```
 
 ---

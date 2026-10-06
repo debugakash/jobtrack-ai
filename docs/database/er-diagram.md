@@ -8,6 +8,8 @@ The current database consists of the following Prisma models:
 
 - User
 - PasswordResetToken
+- OAuthAccount
+- OAuthLoginCode
 - Job
 - JobActivity
 - Interview
@@ -31,6 +33,8 @@ Company information is stored directly on the `Job` model, while job history is 
 ```text
 User
 ├── PasswordResetToken
+├── OAuthAccount
+├── OAuthLoginCode
 ├── Job
 ├── Resume
 └── Notification
@@ -44,6 +48,28 @@ Job
 
 Resume
 └── JobAiAnalysis
+```
+
+---
+
+# Enums
+
+The Prisma schema also defines the following enums:
+
+- JobStatus
+- JobType
+- WorkMode
+- JobSource
+- JobActivityType
+- NotificationType
+- OAuthProvider
+
+## OAuthProvider
+
+```text
+GOOGLE
+LINKEDIN
+GITHUB
 ```
 
 ---
@@ -126,6 +152,88 @@ Relationship:
 
 ```text
 PasswordResetToken.userId → User.id
+```
+
+---
+
+# User → OAuthAccount
+
+```text
+User (1) ───────── (*) OAuthAccount
+```
+
+A user can have multiple OAuth provider accounts.
+
+This allows a single JobTrack AI user account to be associated with different OAuth providers, such as Google, LinkedIn, or GitHub.
+
+Relationship:
+
+```text
+OAuthAccount.userId → User.id
+```
+
+The provider and provider-specific account identifier are stored in:
+
+OAuthAccount.provider
+OAuthAccount.providerId
+
+The combination of provider and provider ID is unique.
+
+Delete behavior:
+
+User deleted
+↓
+Related OAuth accounts deleted
+
+This accurately reflects:
+
+```prisma
+@@unique([provider, providerId])
+```
+
+onDelete: Cascade
+
+---
+
+# User → OAuthLoginCode
+
+```text
+User (1) ───────── (*) OAuthLoginCode
+```
+
+OAuth login codes are short-lived records used during the OAuth authentication flow.
+
+Each OAuth login code belongs to one user.
+
+Relationship:
+
+```text
+OAuthLoginCode.userId → User.id
+```
+
+The database stores the hashed login code rather than the raw code.
+
+The record also stores:
+
+- Expiration timestamp
+- Used timestamp
+- Creation timestamp
+
+OAuth login codes are single-use and expire after a limited period.
+
+Delete behavior:
+
+User deleted
+↓
+Related OAuth login codes deleted
+
+This matches your actual fields:
+
+```prisma
+codeHash
+expiresAt
+usedAt
+createdAt
 ```
 
 ---
@@ -366,50 +474,51 @@ Job
 
 ```text
                            ┌──────────────────────┐
-                           │         User         │
+                           │        User          │
                            └──────────┬───────────┘
                                       │
-              ┌───────────────────────┼───────────────────────┐
-              │                       │                       │
-              │                       │                       │
-              ▼                       ▼                       ▼
-   ┌──────────────────┐     ┌──────────────────┐    ┌────────────────────┐
-   │ PasswordResetToken│     │       Resume     │    │    Notification    │
-   └──────────────────┘     └────────┬─────────┘    └─────────┬──────────┘
-                                     │                        │
-                                     │                        │
-                                     │                        │
-                                     ▼                        │
-                              ┌───────────────┐               │
-                              │      Job      │◄──────────────┘
-                              └───────┬───────┘
-                                      │
-                 ┌────────────────────┼────────────────────┐
-                 │                    │                    │
-                 ▼                    ▼                    ▼
-        ┌────────────────┐   ┌────────────────┐   ┌────────────────────┐
-        │  JobActivity   │   │   Interview    │   │   JobAiAnalysis    │
-        └────────────────┘   └────────────────┘   └─────────┬──────────┘
-                                                            │
-                                                            │
-                                                            ▼
-                                                         Resume
+             ┌────────────────────────┼────────────────────────┐
+             │                        │                        │
+             ▼                        ▼                        ▼
+   ┌───────────────────┐    ┌───────────────────┐    ┌──────────────────┐
+   │ PasswordResetToken│    │   OAuthAccount    │    │ OAuthLoginCode   │
+   └───────────────────┘    └───────────────────┘    └──────────────────┘
+
+
+             ┌────────────────────────┼────────────────────────┐
+             │                        │                        │
+             ▼                        ▼                        ▼
+   ┌──────────────────┐      ┌──────────────────┐     ┌────────────────────┐
+   │       Resume     │      │       Job        │     │    Notification    │
+   └────────┬─────────┘      └────────┬─────────┘     └─────────┬──────────┘
+            │                         │                         │
+            │                         │                         │
+            │             ┌───────────┼───────────┐             │
+            │             │           │           │             │
+            │             ▼           ▼           ▼             │
+            │     ┌──────────────┐ ┌──────────┐ ┌────────────────┐
+            │     │ JobActivity  │ │Interview │ │ JobAiAnalysis  │
+            │     └──────────────┘ └──────────┘ └───────┬────────┘
+            │                                           │
+            └───────────────────────────────────────────┘
 ```
 
 ---
 
 # Database Model Summary
 
-| Model              | Main Relationship                                           |
-| ------------------ | ----------------------------------------------------------- |
-| User               | Parent of Jobs, Resumes, Notifications, PasswordResetTokens |
-| PasswordResetToken | Belongs to User                                             |
-| Job                | Belongs to User                                             |
-| JobActivity        | Belongs to Job                                              |
-| Interview          | Belongs to Job                                              |
-| Notification       | Belongs to User, optionally Job                             |
-| Resume             | Belongs to User; can be associated with Jobs                |
-| JobAiAnalysis      | Belongs to Job and optionally Resume                        |
+| Model              | Main Relationship                                                                           |
+| ------------------ | ------------------------------------------------------------------------------------------- |
+| User               | Parent of Jobs, Resumes, Notifications, PasswordResetTokens, OAuthAccounts, OAuthLoginCodes |
+| PasswordResetToken | Belongs to User                                                                             |
+| OAuthAccount       | Belongs to User; stores OAuth provider account mapping                                      |
+| OAuthLoginCode     | Belongs to User; stores temporary OAuth login codes                                         |
+| Job                | Belongs to User; optionally references Resume                                               |
+| JobActivity        | Belongs to Job                                                                              |
+| Interview          | Belongs to Job                                                                              |
+| Notification       | Belongs to User, optionally Job                                                             |
+| Resume             | Belongs to User; can be associated with Jobs                                                |
+| JobAiAnalysis      | Belongs to Job and optionally Resume                                                        |
 
 ---
 

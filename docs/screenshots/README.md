@@ -32,7 +32,9 @@ docs/
     ├── dashboard.png
     ├── jobs.png
     ├── job-details.png
+    ├── job-board.png
     ├── interviews.png
+    ├── calendar.png
     ├── resumes.png
     ├── analytics.png
     ├── notifications.png

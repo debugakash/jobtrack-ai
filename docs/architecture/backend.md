@@ -6,19 +6,19 @@ JobTrack AI uses a layered backend architecture designed to separate HTTP handli
 
 The backend is built with:
 
-* Node.js
-* Express.js
-* TypeScript
-* PostgreSQL
-* Prisma ORM
-* Zod
-* JWT Authentication
-* bcrypt
-* Multer
-* Supabase Storage
-* Google Gemini API
-* Resend
-* node-cron
+- Node.js
+- Express.js
+- TypeScript
+- PostgreSQL
+- Prisma ORM
+- Zod
+- JWT Authentication
+- bcrypt
+- Multer
+- Supabase Storage
+- Google Gemini API
+- Resend
+- node-cron
 
 The architecture follows a Controller → Service → Repository → Prisma → PostgreSQL flow for application data access.
 
@@ -146,17 +146,17 @@ src/index.ts
 
 `app.ts` creates and configures the Express application, including:
 
-* Security middleware
-* CORS
-* JSON parsing
-* API routes
-* Error handling
+- Security middleware
+- CORS
+- JSON parsing
+- API routes
+- Error handling
 
 `index.ts` starts the HTTP server and manages application lifecycle concerns such as:
 
-* Notification scheduler startup
-* Graceful shutdown
-* Prisma disconnection
+- Notification scheduler startup
+- Graceful shutdown
+- Prisma disconnection
 
 This separation makes the Express application easier to test without automatically starting the HTTP server.
 
@@ -168,13 +168,13 @@ Routes define the REST API endpoints and connect them to middleware and controll
 
 Responsibilities include:
 
-* Defining HTTP methods
-* Defining API paths
-* Applying authentication middleware
-* Applying validation middleware
-* Applying rate limiting where required
-* Applying upload middleware where required
-* Connecting requests to controllers
+- Defining HTTP methods
+- Defining API paths
+- Applying authentication middleware
+- Applying validation middleware
+- Applying rate limiting where required
+- Applying upload middleware where required
+- Connecting requests to controllers
 
 Examples include:
 
@@ -203,12 +203,12 @@ Middleware handles cross-cutting application concerns.
 
 The backend currently uses middleware for:
 
-* JWT authentication
-* Request validation
-* Rate limiting
-* File upload processing
-* Error handling
-* Request preprocessing
+- JWT authentication
+- Request validation
+- Rate limiting
+- File upload processing
+- Error handling
+- Request preprocessing
 
 Protected routes use authentication middleware to identify the current user.
 
@@ -266,11 +266,11 @@ Controllers handle HTTP-specific responsibilities.
 
 They are responsible for:
 
-* Reading request parameters
-* Reading request bodies
-* Reading authenticated user information
-* Calling application services
-* Returning HTTP responses
+- Reading request parameters
+- Reading request bodies
+- Reading authenticated user information
+- Calling application services
+- Returning HTTP responses
 
 Controllers should remain thin and delegate business logic to services.
 
@@ -313,13 +313,13 @@ Services coordinate repositories and external infrastructure where necessary.
 
 Examples:
 
-* Authentication service handles login and password workflows.
-* Job service manages job application business rules.
-* Resume service coordinates resume metadata and file storage.
-* Notification service manages application notifications.
-* Email service handles transactional email delivery.
-* Storage service abstracts cloud file storage.
-* AI services coordinate resume/job analysis.
+- Authentication service handles login and password workflows.
+- Job service manages job application business rules.
+- Resume service coordinates resume metadata and file storage.
+- Notification service manages application notifications.
+- Email service handles transactional email delivery.
+- Storage service abstracts cloud file storage.
+- AI services coordinate resume/job analysis.
 
 ---
 
@@ -329,12 +329,12 @@ Repositories isolate database access from business logic.
 
 Repositories are responsible for:
 
-* Creating database records
-* Reading database records
-* Updating database records
-* Deleting database records
-* Executing Prisma queries
-* Loading related entities
+- Creating database records
+- Reading database records
+- Updating database records
+- Deleting database records
+- Executing Prisma queries
+- Loading related entities
 
 The general data-access flow is:
 
@@ -358,19 +358,19 @@ Zod is used to validate incoming application data.
 
 Validation is applied to areas such as:
 
-* User registration
-* Login
-* Password changes
-* Password reset
-* Job creation
-* Job updates
-* Job query parameters
-* Profile updates
-* Notification preferences
-* Resume metadata
-* Interview creation
-* Interview updates
-* Other API inputs
+- User registration
+- Login
+- Password changes
+- Password reset
+- Job creation
+- Job updates
+- Job query parameters
+- Profile updates
+- Notification preferences
+- Resume metadata
+- Interview creation
+- Interview updates
+- Other API inputs
 
 Invalid data is rejected before reaching business logic.
 
@@ -409,6 +409,58 @@ The authentication middleware validates the token and associates the authenticat
 
 ---
 
+# OAuth Authentication
+
+JobTrack AI supports OAuth authentication with:
+
+Google
+
+GitHub
+
+OAuth authentication is integrated with the existing JWT-based authentication system.
+
+The high-level OAuth flow is:
+
+User
+│
+▼
+Frontend
+│
+▼
+OAuth Provider
+(Google / GitHub)
+│
+▼
+Backend OAuth Callback
+│
+▼
+Find or Create User
+│
+▼
+Create / Link OAuthAccount
+│
+▼
+Generate Authentication Token
+│
+▼
+Frontend
+
+OAuth provider accounts are stored separately from the User model through the OAuthAccount model.
+
+The OAuthAccount model stores:
+
+OAuth provider
+
+Provider-specific user ID
+
+Associated application user
+
+Temporary OAuth login state is handled through the OAuthLoginCode model where required by the authentication flow.
+
+LinkedIn is currently represented in the database OAuthProvider enum but is not yet implemented as an OAuth authentication provider.
+
+---
+
 # Password Security
 
 User passwords are never stored as plain text.
@@ -434,9 +486,9 @@ The database stores the hashed reset token rather than the raw token.
 
 Reset tokens contain:
 
-* Expiration time
-* Used timestamp
-* User association
+- Expiration time
+- Used timestamp
+- User association
 
 This allows reset tokens to be temporary and single-use.
 
@@ -450,14 +502,14 @@ The backend validates required environment variables during startup.
 
 Configuration includes values for areas such as:
 
-* Server port
-* Node environment
-* Database connection
-* JWT configuration
-* Frontend origin
-* Email provider
-* AI providers
-* Supabase Storage
+- Server port
+- Node environment
+- Database connection
+- JWT configuration
+- Frontend origin
+- Email provider
+- AI providers
+- Supabase Storage
 
 Application code should access validated configuration through the configuration layer rather than reading environment variables throughout the codebase.
 
@@ -471,9 +523,9 @@ The project uses Prisma 7 with PostgreSQL.
 
 The Prisma setup uses:
 
-* `@prisma/client`
-* `@prisma/adapter-pg`
-* `pg`
+- `@prisma/client`
+- `@prisma/adapter-pg`
+- `pg`
 
 The database connection is configured through:
 
@@ -481,13 +533,7 @@ The database connection is configured through:
 prisma.config.ts
 ```
 
-The application uses the PostgreSQL adapter rather than relying on the older direct:
-
-```ts
-new PrismaClient();
-```
-
-configuration without an adapter.
+The application uses Prisma 7 with the PostgreSQL adapter for database connectivity.
 
 Database schema changes are managed through Prisma migrations.
 
@@ -504,11 +550,12 @@ The database stores structured relational data including:
 ```text
 User
 PasswordResetToken
+OAuthAccount
+OAuthLoginCode
 Job
 JobActivity
 Interview
 Notification
-NotificationPreference
 Resume
 JobAiAnalysis
 ```
@@ -538,30 +585,30 @@ A `Job` represents a job application tracked by a user.
 
 A job contains information such as:
 
-* Company
-* Job title
-* Description
-* Location
-* Job type
-* Work mode
-* Salary range
-* Status
-* Source
-* Job URL
-* Notes
-* Application date
-* Follow-up information
+- Company
+- Job title
+- Description
+- Location
+- Job type
+- Work mode
+- Salary range
+- Status
+- Source
+- Job URL
+- Notes
+- Application date
+- Follow-up information
 
 A job belongs to one user.
 
 A job can also have:
 
-* One optional resume association
-* One optional AI analysis
-* Multiple activities
-* Multiple interviews
-* Multiple notifications
-* Follow-up information
+- One optional resume association
+- One optional AI analysis
+- Multiple activities
+- Multiple interviews
+- Multiple notifications
+- Follow-up information
 
 ---
 
@@ -594,15 +641,15 @@ Job history is represented using the `JobActivity` model.
 
 Activities can represent events such as:
 
-* Job Created
-* Status Changed
-* Note
-* Follow-up
-* Interview
-* Resume
-* Offer
-* Rejected
-* Other
+- Job Created
+- Status Changed
+- Note
+- Follow-up
+- Interview
+- Resume
+- Offer
+- Rejected
+- Other
 
 The relationship is:
 
@@ -628,12 +675,12 @@ Job (1)
 
 An interview contains information such as:
 
-* Round
-* Scheduled date/time
-* Interviewer
-* Meeting link
-* Notes
-* Completion state
+- Round
+- Scheduled date/time
+- Interviewer
+- Meeting link
+- Notes
+- Completion state
 
 Interview events can also be represented in the job activity timeline.
 
@@ -667,13 +714,13 @@ Job.resumeId
 
 The resume record stores metadata such as:
 
-* Original filename
-* Stored filename
-* File path/storage path
-* MIME type
-* File size
-* Label
-* Default state
+- Original filename
+- Stored filename
+- File path/storage path
+- MIME type
+- File size
+- Label
+- Default state
 
 The actual binary file is stored separately in Supabase Storage.
 
@@ -789,14 +836,14 @@ SYSTEM
 
 Notifications support:
 
-* Title
-* Message
-* Type
-* Read/unread state
-* Action URL
-* Reminder date
-* User association
-* Optional job association
+- Title
+- Message
+- Type
+- Read/unread state
+- Action URL
+- Reminder date
+- User association
+- Optional job association
 
 ---
 
@@ -806,9 +853,9 @@ Users can configure notification preferences for supported notification channels
 
 Current preference areas include:
 
-* Email Notifications
-* Interview Reminders
-* Follow-up Reminders
+- Email Notifications
+- Interview Reminders
+- Follow-up Reminders
 
 These preferences are stored in the database and used when notification workflows are processed.
 
@@ -836,9 +883,9 @@ Scheduled notification processing is implemented using `node-cron`.
 
 The scheduler is responsible for periodically processing time-based notification workflows such as:
 
-* Follow-up reminders
-* Interview reminders
-* Related email notifications
+- Follow-up reminders
+- Interview reminders
+- Related email notifications
 
 The architecture is:
 
@@ -871,10 +918,10 @@ Email functionality is separated into dedicated email-related services.
 
 The email layer supports workflows such as:
 
-* Password reset
-* Follow-up reminders
-* Interview reminders
-* Other application notification emails
+- Password reset
+- Follow-up reminders
+- Interview reminders
+- Other application notification emails
 
 The application uses Resend as the email delivery provider.
 
@@ -913,14 +960,14 @@ PostgreSQL
 
 The `JobAiAnalysis` model stores information such as:
 
-* Match score
-* Matching skills
-* Missing skills
-* Suggestions
-* AI provider
-* AI model
-* Job association
-* Optional resume association
+- Match score
+- Matching skills
+- Missing skills
+- Suggestions
+- AI provider
+- AI model
+- Job association
+- Optional resume association
 
 A job can have one persisted AI analysis.
 
@@ -1011,7 +1058,9 @@ User
  ├── Jobs
  ├── Resumes
  ├── Notifications
- └── PasswordResetTokens
+ ├── PasswordResetTokens
+ ├── OAuthAccounts
+ └── OAuthLoginCodes
 ```
 
 These related records use cascading deletion where configured.
@@ -1102,13 +1151,13 @@ The backend uses Vitest for automated testing.
 
 Tests cover backend application behavior across areas such as:
 
-* Services
-* Repositories
-* Validators
-* Middleware
-* Authentication behavior
-* Business logic
-* Error handling
+- Services
+- Repositories
+- Validators
+- Middleware
+- Authentication behavior
+- Business logic
+- Error handling
 
 The current backend test suite contains:
 
@@ -1159,8 +1208,8 @@ Prisma Client generation is performed explicitly in CI because a clean CI enviro
 
 The CI workflow runs for:
 
-* Pushes to `main`
-* Pull requests targeting `main`
+- Pushes to `main`
+- Pull requests targeting `main`
 
 Successful CI acts as a quality gate before changes are considered ready for the next stage.
 
